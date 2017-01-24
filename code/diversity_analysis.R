@@ -1,18 +1,17 @@
-#First round of LRCC 16S analysis
-#3 22 16
+#LR Colon analysis
+#Kaitlin 1 24
 
 #bring in files
-metadata <- read.table(file='kws_metadata.tsv', header = T)
-simpson <- read.table(file='kws.an.0.03.subsample.groups.summary', header = T)
-nmds_sub <- read.table(file='kws.an.0.03.subsample.thetayc.0.03.lt.nmds.axes', header = T)
-nmds <- read.table(file='kws.an.thetayc.0.03.lt.nmds.axes', header = T)
-shannon <- read.table(file='kws.an.groups.summary', header = T)
-fullshan <- merge(shannon, metadata)
+metadata <- read.table(file='data/raw/kws_metadata.tsv', header = T)
+#simpson <- read.table(file='kws.an.0.03.subsample.groups.summary', header = T)
+nmds <- read.table(file='data/mothur/kws_final.an.thetayc.0.03.lt.ave.nmds.axes', header = T)
+#shannon <- read.table(file='kws.an.groups.summary', header = T)
+#fullshan <- merge(shannon, metadata)
 
 
 #load niel's script for properly , reading in thetayc distances
-source(file = 'read.dist.R')
-tyc <-read.dist(file='kws.an.thetayc.0.03.lt.dist', input = "lt", make.square=F, diag=NA)
+#source(file = 'read.dist.R')
+#tyc <-read.dist(file='kws.an.thetayc.0.03.lt.dist', input = "lt", make.square=F, diag=NA)
 
 #nmds analysis
 #first separate by organ
@@ -24,6 +23,11 @@ spon_stool <- nmds[grep('SS', nmds$group), c(2,3)]
 
 #make plot, this is probably not the best way to do it
 plot(nmds$axis1, nmds$axis2)
+
+nmds <- merge(nmds, metadata)
+
+#nmds plot of distances faceted by location
+ggplot(nmds, aes(axis1, axis2)) +geom_point(aes(color=patient, shape=side)) + facet_wrap(~location)
 
 #color points by organ 
 points(left_mucosa, pch=16, col = "blue")

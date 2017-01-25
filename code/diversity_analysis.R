@@ -26,16 +26,9 @@ plot(nmds$axis1, nmds$axis2)
 
 nmds <- merge(nmds, metadata)
 
-sharedmet <- merge(shared_file, meta_file, by.x="row.names", by.y='group')
+ggplot(nmds, aes(x=axis1, y=axis2)) +geom_point(aes(color=side))
 
-
-#ok this is looking better. if can make for all sides/comparisons, then can determine if donors are closer to each other or locations. actually probably need to subset shared first, then do nmds each time 
-leftside <- subset(nmds, side=='left')
-rightsidenmds <- subset(nmds, side=='right')
-
-ggplot(leftside, aes(x=axis1, y=axis2)) + geom_point(aes(color=as.factor(patient), shape=site, size = 2)) +theme_bw() + ggtitle("Left colon comparison")
-
-ggplot(rightsidenmds, aes(x=axis1, y=axis2)) + geom_point(aes(color=as.factor(patient), shape=site, size = 2)) +theme_bw() + ggtitle("Right colon comparison")
+ggplot(nmds, aes(x=axis1, y=axis2)) +geom_point(aes(color=site))
 
 #subset shared and then do distance, nmds to get comparisons of just those samples 
 
@@ -63,11 +56,29 @@ stoolshared <- add_rownames(stoolshared, var = "group")
 stoolshared <- stoolshared[-2]
 stoolshared <- cbind(label=0.03, stoolshared[1:ncol(stoolshared)])
 
-
 write.table(leftshared, file='data/process/leftshared.shared', sep='\t', quote=F, row.names=F)
 write.table(rightshared, file='data/process/rightshared.shared', sep='\t', quote=F, row.names=F)
 write.table(mucosashared, file='data/process/mucosashared.shared', sep='\t', quote=F, row.names=F)
 write.table(stoolshared, file='data/process/stoolshared.shared', sep='\t', quote=F, row.names=F)
+
+#run all in mothur, dist.shared and then nmds. import back in. plot. dance! 
+
+leftnmds <- read.table(file='data/process/leftshared.thetayc.0.03.lt.ave.nmds.axes', sep='\t', header=T)
+leftnmds <- merge(leftnmds, meta_file)
+ggplot(leftnmds, aes(x=axis1, y=axis2)) + geom_point(aes(color=as.factor(patient), shape=site, size = 1.5)) +theme_bw() + ggtitle("Left colon comparison")
+
+rightnmds <- read.table(file='data/process/rightshared.thetayc.0.03.lt.ave.nmds.axes', sep='\t', header=T)
+rightnmds <- merge(rightnmds, meta_file)
+ggplot(rightnmds, aes(x=axis1, y=axis2)) + geom_point(aes(color=as.factor(patient), shape=site, size = 1.5)) +theme_bw() + ggtitle("Right colon comparison")
+
+mucosanmds <- read.table(file='data/process/mucosashared.thetayc.0.03.lt.ave.nmds.axes', sep='\t', header=T)
+mucosanmds <- merge(mucosanmds, meta_file)
+ggplot(mucosanmds, aes(x=axis1, y=axis2)) + geom_point(aes(color=as.factor(patient), shape=side, size = 1.5)) +theme_bw() + ggtitle("Mucosa samples comparison")
+
+stoolnmds <- read.table(file='data/process/stoolshared.thetayc.0.03.lt.ave.nmds.axes', sep='\t', header=T)
+stoolnmds <- merge(stoolnmds, meta_file)
+ggplot(stoolnmds, aes(x=axis1, y=axis2)) + geom_point(aes(color=as.factor(patient), shape=side, size = 1.5)) +theme_bw() + ggtitle("Stool samples comparison")
+
 
 #nmds plot of distances faceted by location
 ggplot(nmds, aes(axis1, axis2)) +geom_point(aes(color=patient, shape=side)) + facet_wrap(~location)

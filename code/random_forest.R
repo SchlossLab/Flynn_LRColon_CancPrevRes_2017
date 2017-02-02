@@ -89,14 +89,57 @@ rf_lumen <- randomForest(location ~ ., data = select(LR_lumen, location, contain
 #to get what is higher in LS vs RS 
 lumen_importance <- sort(importance(rf_lumen)[,1], decreasing=T)
 
-#ok now move on to looking at aucrf and roc curves 
 
-#predicted
-otu_euth_probs <- predict(rf_early_aucrf$RFopt, type = 'prob')
+
+#now do aucrf model 
+# remove cage/inocula OTUs from prediction dataframes
+#1 is stool, 0 is mucosa
+classification_labels <- levels(left_bs$location) # save level labels as a vector for reference
+levels(left_bs$location) <- c(1:length(levels(left_bs$location))-1) # convert levels to numeric based on number of levels
+
+classification_labelsLR <- levels(LR_bowel$location) # save level labels as a vector for reference
+levels(LR_bowel$location) <- c(1:length(levels(LR_bowel$location))-1) # convert levels to numeric based on number of levels
+
+classification_labelsR <- levels(right_bs$location) # save level labels as a vector for reference
+levels(right_bs$location) <- c(1:length(levels(right_bs$location))-1) # convert levels to numeric based on number of levels
+
+
+# create RF model
+set.seed(seed)
+rf_left_aucrf <- AUCRF(location ~ ., data = select(left_bs, location, contains("Otu")),
+                        ntree = n_trees, pdel = 0.05, ranking = 'MDA')
+
+rf_LRbowel_aucrf <- AUCRF(location ~ ., data = select(LR_bowel, location, contains("Otu")),
+                       ntree = n_trees, pdel = 0.05, ranking = 'MDA')
+
+
+#this is just left stool vs mucosa  
+otu_left_probs <- predict(rf_left_aucrf$RFopt, type = 'prob')
+
+otu_LRbowel_probs <- predict(rf_LRbowel_aucrf$RFopt, type ='prob')
+
+all_left_probs <- data.frame(obs = left_bs$location,
+                             pred = otu_left_probs[,2])
+
+all_LRbowel_probs <- data.frame(obs = LR_bowel$location,
+                             pred = otu_left_probs[,2])
+
 
 #compare real with predicted with ROC
-otu_euth_roc <- roc(Predict_early_euth_df$Euth_Early ~ otu_euth_probs[ , 2])
+otu_left_roc <- roc(left_bs$location ~ otu_left_probs[ , 2])
+left_otu_feat <- rf_left_aucrf$Xopt
+
+otu_LRbowel_roc <- roc(LR_bowel$location ~ otu_LRbowel_probs[ , 2])
+LRbowel_otu_feat <- rf_LRbowel_aucrf$Xopt
+
+#now do for all other combinations and compare?
+
 
 #draw blank plot, plot each line over it individually 
+par(mar=c(4,4,1,1))
+plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
+plot(otu_left_roc, col='red', lwd=2, add=T, lty=2) #left stool vs mucosa
+plot(otu_LRbowel_roc, col='blue', lwd=2, add=T, lty=2) #left stool vs mucosa
+
 
 #also run AUCRF

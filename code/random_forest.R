@@ -110,13 +110,11 @@ exit_Llum <- subset(rel_meta, location %in% c("LS", "SS"))
 exit_Llum$location <- factor(exit_Llum$location)
 rf_exitLlum <- randomForest(location ~ ., data=select(exit_Llum, location, contains("Otu")), importance=T, ntree=n_trees)
 
-
-
-#exit vs L mucosa
-
 #exit vs R lumen
+exit_Rlum <- subset(rel_meta, location %in% c("RS", "SS"))
+exit_Rlum$location <- factor(exit_Rlum$location)
+rf_exitRlum <- randomForest(location ~ ., data=select(exit_Rlum, location, contains("Otu")), importance=T, ntree=n_trees)
 
-#exit vs R mucosa
 
 
 #now do aucrf model 
@@ -146,6 +144,9 @@ levels(exit_muc$site) <- c(1:length(levels(exit_muc$site))-1)
 classification_labelsexitLlum <- levels(exit_Llum$location) # save level labels as a vector for reference
 levels(exit_Llum$location) <- c(1:length(levels(exit_Llum$location))-1) 
 
+classification_labelsexitRlum <- levels(exit_Rlum$location) # save level labels as a vector for reference
+levels(exit_Rlum$location) <- c(1:length(levels(exit_Rlum$location))-1) 
+
 # create RF model
 set.seed(seed)
 rf_left_aucrf <- AUCRF(location ~ ., data = select(left_bs, location, contains("Otu")),
@@ -168,6 +169,10 @@ rf_exitlum_aucrf <- AUCRF(site ~ ., data = select(exit_lum, site, contains("Otu"
 set.seed(seed)
 rf_exitLlum_aucrf <- AUCRF(location ~ ., data = select(exit_Llum, location, contains("Otu")),
                           ntree = n_trees, pdel = 0.05, ranking = 'MDA')
+set.seed(seed)
+rf_exitRlum_aucrf <- AUCRF(location ~ ., data = select(exit_Rlum, location, contains("Otu")),
+                           ntree = n_trees, pdel = 0.05, ranking = 'MDA')
+
 
 #this is just left stool vs mucosa  
 otu_left_probs <- predict(rf_left_aucrf$RFopt, type = 'prob')
@@ -185,6 +190,8 @@ otu_exitlum_probs <- predict(rf_exitlum_aucrf$RFopt, type = 'prob')
 otu_exitmuc_probs <- predict(rf_exitmuc_aucrf$RFopt, type = 'prob')
 
 otu_exitLlum_probs <- predict(rf_exitLlum_aucrf$RFopt, type ='prob')
+
+otu_exitRlum_probs <- predict(rf_exitRlum_aucrf$RFopt, type ='prob')
 
 all_left_probs <- data.frame(obs = left_bs$location,
                              pred = otu_left_probs[,2])
@@ -209,6 +216,9 @@ all_exitmuc_probs <- data.frame(obs = exit_muc$site,
 
 all_exitLlum_probs <- data.frame(obs = exit_Llum$location,
                                 pred = otu_exitLlum_probs[,2])
+
+all_exitRlum_probs <- data.frame(obs = exit_Rlum$location,
+                                 pred = otu_exitRlum_probs[,2])
 
 #compare real with predicted with ROC
 otu_left_roc <- roc(left_bs$location ~ otu_left_probs[ , 2])
@@ -236,6 +246,9 @@ exitmuc_feat <- rf_exitmuc_aucrf$Xopt
 otu_exitLlum_roc <- roc(exit_Llum$location ~ otu_exitLlum_probs[,2])
 exitLlum_feat <- rf_exitLlum_aucrf$Xopt
 
+otu_exitRlum_roc <- roc(exit_Rlum$location ~ otu_exitRlum_probs[,2])
+exitRlum_feat <- rf_exitRlum_aucrf$Xopt
+
 #really should make that a function 
 
 #generate entire figure just of exit comparisons ? 
@@ -244,18 +257,18 @@ plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i
 plot(otu_exitlum_roc, col='red', lwd=2, add=T, lty=1) #all lumen vs exit 
 plot(otu_exitmuc_roc, col='blue', lwd=2, add=T, lty=1) #all mucosa vs exit
 plot(otu_exitLlum_roc, col='green4', lwd=2, add=T, lty=1) #left lumen vs exit 
-#plot(otu_LRlumen_roc, col='purple', lwd=2, add=T, lty=1) #right lumen vs left lumen 
+plot(otu_exitRlum_roc, col='purple', lwd=2, add=T, lty=1) #right lumen vs left lumen 
 #plot(otu_all_roc, col = 'pink', lwd=2, add =T, lty=1)
 mtext(side=2, text="Sensitivity", line=2.5)
 mtext(side=1, text="Specificity", line=2.5)
 legend('bottom', legend=c(sprintf('All lumen vs exit, AUC = 0.882'),
                           sprintf('All mucosa vs exit, AUC = 0.991'),
-                          sprintf('R lumen vs R mucosa, AUC = 0.802')
-                         # sprintf('R lumen vs L lumen, AUC = 0.773', otu_LRlumen_roc$auc),
+                          sprintf('L lumen vs exit, AUC = 0.802'),
+                          sprintf('R lumen vs exit, AUC = 0.934')
                           # sprintf('all lumen vs all mucosa, AUC = 0.922')#,
                           #                               sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
                           #                               sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
-), lty=1, lwd=2, col=c('red','blue', 'green4'), bty='n')
+), lty=1, lwd=2, col=c('red','blue', 'green4', 'purple'), bty='n')
 
 
 

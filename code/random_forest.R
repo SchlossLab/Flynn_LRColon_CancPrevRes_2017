@@ -89,6 +89,34 @@ rf_lumen <- randomForest(location ~ ., data = select(LR_lumen, location, contain
 #to get what is higher in LS vs RS 
 lumen_importance <- sort(importance(rf_lumen)[,1], decreasing=T)
 
+#all mucosa vs all lumen
+
+all_lum <- subset(rel_meta, site %in% c("stool", "mucosa"))
+all_lum$site <- factor(all_lum$site)
+rf_all <- randomForest(site ~ ., data=select(all_lum, site, contains("Otu")), importance = T, ntree=n_trees)
+
+# exit vs all lumen
+exit_lum <- subset(rel_meta, site %in% c("stool", "exit"))
+exit_lum$site <- factor(exit_lum$site)
+rf_exitlum <- randomForest(site ~ ., data=select(exit_lum, site, contains("Otu")), importance=T, ntree=n_trees)
+
+# exit vs all mucosa
+exit_muc <- subset(rel_meta, site %in% c("mucosa", "exit"))
+exit_muc$site <- factor(exit_muc$site)
+rf_exitmuc <- randomForest(site ~ ., data=select(exit_muc, site, contains("Otu")), importance=T, ntree=n_trees)
+
+#exit vs L lumen
+exit_Llum <- subset(rel_meta, location %in% c("LS", "SS"))
+exit_Llum$location <- factor(exit_Llum$location)
+rf_exitLlum <- randomForest(location ~ ., data=select(exit_Llum, location, contains("Otu")), importance=T, ntree=n_trees)
+
+
+
+#exit vs L mucosa
+
+#exit vs R lumen
+
+#exit vs R mucosa
 
 
 #now do aucrf model 
@@ -106,7 +134,17 @@ levels(right_bs$location) <- c(1:length(levels(right_bs$location))-1) # convert 
 classification_labelslumen <- levels(LR_lumen$location) # save level labels as a vector for reference
 levels(LR_lumen$location) <- c(1:length(levels(LR_lumen$location))-1) # convert levels to numeric based on number of levels
 
+classification_labelsall <- levels(all_lum$site)
+levels(all_lum$site) <- c(1:length(levels(all_lum$site)) - 1)
 
+classification_labelsexitlum <- levels(exit_lum$site)
+levels(exit_lum$site) <- c(1:length(levels(exit_lum$site))-1)
+
+classification_labelsexitmuc <- levels(exit_muc$site)
+levels(exit_muc$site) <- c(1:length(levels(exit_muc$site))-1)
+
+classification_labelsexitLlum <- levels(exit_Llum$location) # save level labels as a vector for reference
+levels(exit_Llum$location) <- c(1:length(levels(exit_Llum$location))-1) 
 
 # create RF model
 set.seed(seed)
@@ -121,6 +159,15 @@ rf_right_aucrf <- AUCRF(location ~ ., data = select(right_bs, location, contains
 set.seed(seed)
 rf_LRlumen_aucrf <- AUCRF(location ~ ., data = select(LR_lumen, location, contains("Otu")),
                         ntree = n_trees, pdel = 0.05, ranking = 'MDA')
+set.seed(seed)
+rf_all_aucrf <- AUCRF(site ~ ., data = select(all_lum, site, contains("Otu")),
+                          ntree = n_trees, pdel = 0.05, ranking = 'MDA')
+set.seed(seed)
+rf_exitlum_aucrf <- AUCRF(site ~ ., data = select(exit_lum, site, contains("Otu")),
+                      ntree = n_trees, pdel = 0.05, ranking = 'MDA')
+set.seed(seed)
+rf_exitLlum_aucrf <- AUCRF(location ~ ., data = select(exit_Llum, location, contains("Otu")),
+                          ntree = n_trees, pdel = 0.05, ranking = 'MDA')
 
 #this is just left stool vs mucosa  
 otu_left_probs <- predict(rf_left_aucrf$RFopt, type = 'prob')
@@ -130,6 +177,14 @@ otu_LRbowel_probs <- predict(rf_LRbowel_aucrf$RFopt, type ='prob')
 otu_right_probs <- predict(rf_right_aucrf$RFopt, type = 'prob')
 
 otu_LRlumen_probs <- predict(rf_LRlumen_aucrf$RFopt, type = 'prob')
+
+otu_all_probs <- predict(rf_all_aucrf$RFopt, type = 'prob')
+
+otu_exitlum_probs <- predict(rf_exitlum_aucrf$RFopt, type = 'prob')
+
+otu_exitmuc_probs <- predict(rf_exitmuc_aucrf$RFopt, type = 'prob')
+
+otu_exitLlum_probs <- predict(rf_exitLlum_aucrf$RFopt, type ='prob')
 
 all_left_probs <- data.frame(obs = left_bs$location,
                              pred = otu_left_probs[,2])
@@ -143,6 +198,17 @@ all_right_probs <- data.frame(obs = right_bs$location,
 all_LRlumen_probs <- data.frame(obs = LR_lumen$location,
                               pred = otu_LRlumen_probs[,2])
 
+all_all_probs <- data.frame(obs = all_lum$site,
+                                pred = otu_all_probs[,2])
+
+all_exitlum_probs <- data.frame(obs = exit_lum$site,
+                            pred = otu_exitlum_probs[,2])
+
+all_exitmuc_probs <- data.frame(obs = exit_muc$site,
+                                pred = otu_exitmuc_probs[,2])
+
+all_exitLlum_probs <- data.frame(obs = exit_Llum$location,
+                                pred = otu_exitLlum_probs[,2])
 
 #compare real with predicted with ROC
 otu_left_roc <- roc(left_bs$location ~ otu_left_probs[ , 2])
@@ -158,7 +224,40 @@ right_otu_feat <- rf_right_aucrf$Xopt
 otu_LRlumen_roc <- roc(LR_lumen$location ~ otu_LRlumen_probs[ , 2])
 LRlumen_otu_feat <- rf_LRlumen_aucrf$Xopt
 
-#now do for all other combinations and compare?
+otu_all_roc <- roc(all_lum$site ~ otu_all_probs[,2])
+all_otu_feat <- rf_all_aucrf$Xopt
+
+otu_exitlum_roc <- roc(exit_lum$site ~ otu_exitlum_probs[,2])
+exitlum_feat <- rf_exitlum_aucrf$Xopt
+
+otu_exitmuc_roc <- roc(exit_muc$site ~ otu_exitmuc_probs[,2])
+exitmuc_feat <- rf_exitmuc_aucrf$Xopt
+
+otu_exitLlum_roc <- roc(exit_Llum$location ~ otu_exitLlum_probs[,2])
+exitLlum_feat <- rf_exitLlum_aucrf$Xopt
+
+#really should make that a function 
+
+#generate entire figure just of exit comparisons ? 
+par(mar=c(4,4,1,1))
+plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
+plot(otu_exitlum_roc, col='red', lwd=2, add=T, lty=1) #all lumen vs exit 
+plot(otu_exitmuc_roc, col='blue', lwd=2, add=T, lty=1) #all mucosa vs exit
+plot(otu_exitLlum_roc, col='green4', lwd=2, add=T, lty=1) #left lumen vs exit 
+#plot(otu_LRlumen_roc, col='purple', lwd=2, add=T, lty=1) #right lumen vs left lumen 
+#plot(otu_all_roc, col = 'pink', lwd=2, add =T, lty=1)
+mtext(side=2, text="Sensitivity", line=2.5)
+mtext(side=1, text="Specificity", line=2.5)
+legend('bottom', legend=c(sprintf('All lumen vs exit, AUC = 0.882'),
+                          sprintf('All mucosa vs exit, AUC = 0.991'),
+                          sprintf('R lumen vs R mucosa, AUC = 0.802')
+                         # sprintf('R lumen vs L lumen, AUC = 0.773', otu_LRlumen_roc$auc),
+                          # sprintf('all lumen vs all mucosa, AUC = 0.922')#,
+                          #                               sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
+                          #                               sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
+), lty=1, lwd=2, col=c('red','blue', 'green4'), bty='n')
+
+
 
 
 #draw blank plot, plot each line over it individually 
@@ -168,13 +267,15 @@ plot(otu_left_roc, col='red', lwd=2, add=T, lty=1) #left stool vs mucosa
 plot(otu_LRbowel_roc, col='blue', lwd=2, add=T, lty=1) #left mucosa vs right mucosa
 plot(otu_right_roc, col='green4', lwd=2, add=T, lty=1) #right stool vs mucosa
 plot(otu_LRlumen_roc, col='purple', lwd=2, add=T, lty=1) #right lumen vs left lumen 
+plot(otu_all_roc, col = 'pink', lwd=2, add =T, lty=1)
 mtext(side=2, text="Sensitivity", line=2.5)
 mtext(side=1, text="Specificity", line=2.5)
 legend('bottom', legend=c(sprintf('L lumen vs L mucosa, AUC = 0.984', otu_left_roc$auc),
                                sprintf('L mucosa vs R mucosa, AUC = 0.926',otu_LRbowel_roc$auc),
                                sprintf('R lumen vs R mucosa, AUC = 0.860',otu_right_roc$auc),
-                               sprintf('R lumen vs L lumen, AUC = 0.773', otu_LRlumen_roc$auc)#,
+                               sprintf('R lumen vs L lumen, AUC = 0.773', otu_LRlumen_roc$auc),
+                                sprintf('all lumen vs all mucosa, AUC = 0.922')#,
                                #                               sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
                                #                               sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
-),lty=1, lwd=2, col=c('red','blue','green4', 'purple'), bty='n')
+),lty=1, lwd=2, col=c('red','blue','green4', 'purple', 'pink'), bty='n')
 

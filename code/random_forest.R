@@ -277,18 +277,18 @@ legend('bottom', legend=c(sprintf('All lumen vs exit, AUC = 0.882'),
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
 plot(otu_left_roc, col='red', lwd=2, add=T, lty=1) #left stool vs mucosa
-plot(otu_LRbowel_roc, col='blue', lwd=2, add=T, lty=1) #left mucosa vs right mucosa
-plot(otu_right_roc, col='green4', lwd=2, add=T, lty=1) #right stool vs mucosa
-plot(otu_LRlumen_roc, col='purple', lwd=2, add=T, lty=1) #right lumen vs left lumen 
-plot(otu_all_roc, col = 'pink', lwd=2, add =T, lty=1)
+#plot(otu_LRbowel_roc, col='blue', lwd=2, add=T, lty=1) #left mucosa vs right mucosa
+plot(otu_right_roc, col='blue', lwd=2, add=T, lty=1) #right stool vs mucosa
+#plot(otu_LRlumen_roc, col='purple', lwd=2, add=T, lty=1) #right lumen vs left lumen 
+plot(otu_all_roc, col = 'purple', lwd=2, add =T, lty=1)
 mtext(side=2, text="Sensitivity", line=2.5)
 mtext(side=1, text="Specificity", line=2.5)
 legend('bottom', legend=c(sprintf('L lumen vs L mucosa, AUC = 0.984', otu_left_roc$auc),
-                               sprintf('L mucosa vs R mucosa, AUC = 0.926',otu_LRbowel_roc$auc),
+                               #sprintf('L mucosa vs R mucosa, AUC = 0.926',otu_LRbowel_roc$auc),
                                sprintf('R lumen vs R mucosa, AUC = 0.860',otu_right_roc$auc),
-                               sprintf('R lumen vs L lumen, AUC = 0.773', otu_LRlumen_roc$auc),
+                               #sprintf('R lumen vs L lumen, AUC = 0.773', otu_LRlumen_roc$auc),
                                 sprintf('all lumen vs all mucosa, AUC = 0.922')#,
                                #                               sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
                                #                               sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
-),lty=1, lwd=2, col=c('red','blue','green4', 'purple', 'pink'), bty='n')
+),lty=1, lwd=2, col=c('red','blue', 'purple'), bty='n')
 

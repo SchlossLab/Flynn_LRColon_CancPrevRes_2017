@@ -24,7 +24,7 @@ spon_stool <- nmds[grep('SS', nmds$group), c(2,3)]
 #make plot, this is probably not the best way to do it
 plot(nmds$axis1, nmds$axis2)
 
-nmds <- merge(nmds, metadata)
+nmds <- merge(nmds, meta_file)
 
 ggplot(nmds, aes(x=axis1, y=axis2)) +geom_point(aes(color=side))
 
@@ -81,7 +81,10 @@ ggplot(stoolnmds, aes(x=axis1, y=axis2)) + geom_point(aes(color=as.factor(patien
 
 
 #nmds plot of distances faceted by location
-ggplot(nmds, aes(axis1, axis2)) +geom_point(aes(color=patient, shape=side)) + facet_wrap(~location)
+ggplot(nmds, aes(axis1, axis2)) +geom_point(aes(color=as.factor(patient), shape=side)) + facet_wrap(~location) +theme_bw()
+
+ggplot(nmds, aes(axis1, axis2)) +geom_point(aes(color=as.factor(patient), shape=side, size = 0.1)) + facet_wrap(~site) +theme_bw()
+
 
 #color points by organ 
 points(left_mucosa, pch=nmds$patient, col = "blue")
@@ -192,15 +195,19 @@ plot(justbiop$location, justbiop$shannon, main= "Shannon diversity by location",
 axis(1, at=1:5, labels=c("left biopsy", " ", "right biopsy", " ", "spon. stool"))
 
 
+#plotting simpson again this time in 2017
+#somewhere simpmeta gets defined and idk where
+
+simpmeta <- merge(meta_file, simps)
+
+ggplot(simpmeta, aes(x=location, y=invsimpson, fill=site)) +geom_boxplot() +theme_bw()
+
+boxplot(simpmeta[,'invsimpson'] ~ simpmeta[,'location'])
+
+ggplot(simpmeta, aes(x=location, y=invsimpson)) +geom_dotplot(binaxis='y', stackdir='center', dotsize=0.5)
 
 
 
-#Random forest results just trying these data sets a little. used mothur's classify.rf
-#to compare LB/RB and LB/LS. takes some finagling of design files
-#found that for LB/LS most predictive is Ecoli/Shigella (but for which side?)
-#found for LB/RB most predictive is Enterococcus. But both of these have low values (under 1)
-#found for RB/RS most predictive is OTU007 Bacteriodes 
-#with the caveat that this is probably wrong/off/will retry with better dataset
 
 
 

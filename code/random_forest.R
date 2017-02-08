@@ -292,3 +292,64 @@ legend('bottom', legend=c(sprintf('L lumen vs L mucosa, AUC = 0.984', otu_left_r
                                #                               sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
 ),lty=1, lwd=2, col=c('red','blue', 'purple'), bty='n')
 
+
+par(mar=c(4,4,1,1))
+plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
+#plot(otu_left_roc, col='red', lwd=2, add=T, lty=1) #left stool vs mucosa
+plot(otu_LRbowel_roc, col='green4', lwd=2, add=T, lty=1) #left mucosa vs right mucosa
+#plot(otu_right_roc, col='blue', lwd=2, add=T, lty=1) #right stool vs mucosa
+plot(otu_LRlumen_roc, col='orange', lwd=2, add=T, lty=1) #right lumen vs left lumen 
+#plot(otu_all_roc, col = 'purple', lwd=2, add =T, lty=1)
+mtext(side=2, text="Sensitivity", line=2.5)
+mtext(side=1, text="Specificity", line=2.5)
+legend('bottom', legend=c(#sprintf('L lumen vs L mucosa, AUC = 0.984', otu_left_roc$auc),
+                          sprintf('L mucosa vs R mucosa, AUC = 0.926',otu_LRbowel_roc$auc),
+                          #sprintf('R lumen vs R mucosa, AUC = 0.860',otu_right_roc$auc),
+                          sprintf('R lumen vs L lumen, AUC = 0.773', otu_LRlumen_roc$auc)
+                          #sprintf('all lumen vs all mucosa, AUC = 0.922')#,
+                          #                               sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
+                          #                               sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
+),lty=1, lwd=2, col=c('green4', 'orange'), bty='n')
+
+
+
+#importance plots for OTUs
+
+#do this for all combinations??
+
+tax_function <- 'code/tax_level.R'
+source(tax_function)
+
+#add nicks looping back in. store all plots in a list. then call from the list. but will need a list of rf_names first 
+n_features <- 10
+#just going to start with rf_left
+importance_sorted_rfleft <- sort(importance(rf_left)[,1], decreasing = T)
+top_important_OTU_rfleft <- data.frame(head(importance_sorted_rfleft, n_features))
+colnames(top_important_OTU_rfleft) <- 'Importance'
+top_important_OTU_rfleft$OTU <- rownames(top_important_OTU_rfleft)
+otu_taxa_rfleft <- get_tax(1, top_important_OTU_rfleft$OTU, tax_file)
+
+#importance_plot_day_rfleft <- 
+  ggplot(data = top_important_OTU_rfleft, aes(x = factor(OTU), y = Importance)) + 
+  geom_point() + scale_x_discrete(limits = rev(top_important_OTU_rfleft$OTU),
+                                  labels = rev(paste(otu_taxa_rfleft[,1],' (',
+                                                     rownames(otu_taxa_rfleft),')',
+                                                     sep=''))) +
+  labs(x= '', y = '% Increase in MSE') + theme_bw() + coord_flip() + ggtitle('LB vs LS')
+
+  
+#RB vs RS
+importance_sorted_rfright <- sort(importance(rf_right)[,1], decreasing = T)
+top_important_OTU_rfright <- data.frame(head(importance_sorted_rfright, n_features))
+colnames(top_important_OTU_rfright) <- 'Importance'
+top_important_OTU_rfright$OTU <- rownames(top_important_OTU_rfright)
+otu_taxa_rfright <- get_tax(1, top_important_OTU_rfright$OTU, tax_file)
+  
+  #importance_plot_day_rfleft <- 
+ggplot(data = top_important_OTU_rfright, aes(x = factor(OTU), y = Importance)) + 
+    geom_point() + scale_x_discrete(limits = rev(top_important_OTU_rfright$OTU),
+                                    labels = rev(paste(otu_taxa_rfright[,1],' (',
+                                                       rownames(otu_taxa_rfright),')',
+                                                       sep=''))) +
+    labs(x= '', y = '% Increase in MSE') + theme_bw() + coord_flip() + ggtitle('RB vs RS')
+  

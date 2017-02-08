@@ -353,3 +353,54 @@ ggplot(data = top_important_OTU_rfright, aes(x = factor(OTU), y = Importance)) +
                                                        sep=''))) +
     labs(x= '', y = '% Increase in MSE') + theme_bw() + coord_flip() + ggtitle('RB vs RS')
   
+#all lumen vs mucosa 
+
+importance_sorted_rfall <- sort(importance(rf_all)[,1], decreasing = T)
+top_important_OTU_rfall <- data.frame(head(importance_sorted_rfall, n_features))
+colnames(top_important_OTU_rfall) <- 'Importance'
+top_important_OTU_rfall$OTU <- rownames(top_important_OTU_rfall)
+otu_taxa_rfall <- get_tax(1, top_important_OTU_rfall$OTU, tax_file)
+
+#importance_plot_day_rfleft <- 
+ggplot(data = top_important_OTU_rfall, aes(x = factor(OTU), y = Importance)) + 
+  geom_point() + scale_x_discrete(limits = rev(top_important_OTU_rfall$OTU),
+                                  labels = rev(paste(otu_taxa_rfall[,1],' (',
+                                                     rownames(otu_taxa_rfall),')',
+                                                     sep=''))) +
+  labs(x= '', y = '% Increase in MSE') + theme_bw() + coord_flip() + ggtitle('All mucosa vs lumen')
+
+
+#L mucosa vs R mucosa 
+importance_sorted_rfbowel <- sort(importance(rf_bowel)[,1], decreasing = T)
+top_important_OTU_rfbowel <- data.frame(head(importance_sorted_rfbowel, n_features))
+colnames(top_important_OTU_rfbowel) <- 'Importance'
+top_important_OTU_rfbowel$OTU <- rownames(top_important_OTU_rfbowel)
+otu_taxa_rfbowel <- get_tax(1, top_important_OTU_rfbowel$OTU, tax_file)
+
+#importance_plot_day_rfleft <- 
+ggplot(data = top_important_OTU_rfbowel, aes(x = factor(OTU), y = Importance)) + 
+  geom_point() + scale_x_discrete(limits = rev(top_important_OTU_rfbowel$OTU),
+                                  labels = rev(paste(otu_taxa_rfbowel[,1],' (',
+                                                     rownames(otu_taxa_rfbowel),')',
+                                                     sep=''))) +
+  labs(x= '', y = '% Increase in MSE') + theme_bw() + coord_flip() + ggtitle('L mucosa vs R mucosa')
+
+
+#L lumen vs R lumen 
+importance_sorted_rflumen <- sort(importance(rf_lumen)[,1], decreasing = T)
+top_important_OTU_rflumen <- data.frame(head(importance_sorted_rflumen, n_features))
+colnames(top_important_OTU_rflumen) <- 'Importance'
+top_important_OTU_rflumen$OTU <- rownames(top_important_OTU_rflumen)
+otu_taxa_rflumen <- get_tax(1, top_important_OTU_rflumen$OTU, tax_file)
+
+#importance_plot_day_rfleft <- 
+ggplot(data = top_important_OTU_rflumen, aes(x = factor(OTU), y = Importance)) + 
+  geom_point() + scale_x_discrete(limits = rev(top_important_OTU_rflumen$OTU),
+                                  labels = rev(paste(otu_taxa_rflumen[,1],' (',
+                                                     rownames(otu_taxa_rflumen),')',
+                                                     sep=''))) +
+  labs(x= '', y = '% Increase in MSE') + theme_bw() + coord_flip() + ggtitle('L lumen vs R lumen')
+
+
+
+

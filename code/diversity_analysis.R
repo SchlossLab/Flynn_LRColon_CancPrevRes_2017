@@ -83,8 +83,14 @@ ggplot(stoolnmds, aes(x=axis1, y=axis2)) + geom_point(aes(color=as.factor(patien
 #nmds plot of distances faceted by location
 ggplot(nmds, aes(axis1, axis2)) +geom_point(aes(color=as.factor(patient), shape=side)) + facet_wrap(~location) +theme_bw()
 
-ggplot(nmds, aes(axis1, axis2)) +geom_point(aes(color=as.factor(patient), shape=side, size = 0.1)) + facet_wrap(~site) +theme_bw()
+ggplot(leftnmds, aes(axis1, axis2)) +geom_point() +theme_bw() +ggtitle("Left colon comparison")
 
+p <- ggplot(nmds, aes(axis1, axis2)) +geom_point(aes(color=as.factor(patient), shape=side)) + facet_wrap(~site) +theme_bw()
+p <- p + scale_color_discrete(name="Patient")
+
+noexit <- subset(nmds, side == 'left' | side == 'right')
+g <- ggplot(noexit, aes(axis1, axis2)) +geom_point(aes(color=as.factor(patient), shape=side), size = 2.5) + facet_wrap(~site) +theme_bw()
+g <- g + scale_color_discrete(name="Patient")
 
 #color points by organ 
 points(left_mucosa, pch=nmds$patient, col = "blue")
@@ -199,12 +205,18 @@ axis(1, at=1:5, labels=c("left biopsy", " ", "right biopsy", " ", "spon. stool")
 #somewhere simpmeta gets defined and idk where
 
 simpmeta <- merge(meta_file, simps)
+#reordering data so the boxes line up
 
-ggplot(simpmeta, aes(x=location, y=invsimpson, fill=site)) +geom_boxplot() +theme_bw()
+install.packages("wesanderson")
+library("wesanderson")
+simpmeta$location <- factor(simpmeta$location, c("LB","RB", "LS", "RS", "SS"))
+ggplot(simpmeta, aes(x=location, y=invsimpson, fill=site)) +geom_boxplot() +theme_bw() +scale_fill_manual(values=wes_palette("Darjeeling"))
+
+#geofs code for adding custom team colors 
+#+scale_fill_manual(values=sort(team_colors("Tampa Bay Rays"), decreasing=T))
 
 boxplot(simpmeta[,'invsimpson'] ~ simpmeta[,'location'])
 
-ggplot(simpmeta, aes(x=location, y=invsimpson)) +geom_dotplot(binaxis='y', stackdir='center', dotsize=0.5)
 
 
 

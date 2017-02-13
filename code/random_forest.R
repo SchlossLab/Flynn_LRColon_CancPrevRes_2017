@@ -251,6 +251,34 @@ exitRlum_feat <- rf_exitRlum_aucrf$Xopt
 
 #really should make that a function 
 
+aucrf_data_allum <- all_lum[,c('site',all_otu_feat)]
+
+
+iters <- 100
+cv10f_aucs <- c()
+cv10f_all_resp <- c()
+cv10f_all_pred <- c()
+for(j in 1:iters){
+  set.seed(j)
+  sampling <- sample(1:nrow(aucrf_data_allum),nrow(aucrf_data_allum),replace=F)
+  cv10f_probs <- rep(NA,52)
+  for(i in seq(1,50,5)){
+    train <- aucrf_data_allum[sampling[-(i:(i+4))],]
+    test <- aucrf_data_allum[sampling[i:(i+4)],]
+    set.seed(seed)
+    temp_model <- AUCRF(site~., data=train, pdel=0.99, ntree=500)
+    cv10f_probs[sampling[i:(i+4)]] <- predict(temp_model$RFopt, test, type='prob')[,2]
+  }
+  cv10f_roc <- roc(aucrf_data_allum$site~cv10f_probs)
+  cv10f_all_pred <- c(cv10f_all_pred, cv10f_probs)
+  cv10f_all_resp <- c(cv10f_all_resp, aucrf_data_allum$site)
+  cv10f_aucs[j] <- cv10f_roc$auc
+}
+cv10f_roc <- roc(cv10f_all_resp~cv10f_all_pred)
+
+
+
+
 #generate entire figure just of exit comparisons ? 
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')

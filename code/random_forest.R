@@ -252,8 +252,11 @@ exitRlum_feat <- rf_exitRlum_aucrf$Xopt
 #really should make that a function 
 
 aucrf_data_allum <- all_lum[,c('site',all_otu_feat)]
+aucrf_data_LRbowel <- LR_bowel[, c('location', LRbowel_otu_feat)]
+aucrf_data_LRlumen <- LR_lumen[, c('location', LRlumen_otu_feat)]
 
 
+#10 fold cross validation for all lumen vs mucosa 
 iters <- 100
 cv10f_aucs <- c()
 cv10f_all_resp <- c()
@@ -261,20 +264,69 @@ cv10f_all_pred <- c()
 for(j in 1:iters){
   set.seed(j)
   sampling <- sample(1:nrow(aucrf_data_allum),nrow(aucrf_data_allum),replace=F)
-  cv10f_probs <- rep(NA,52)
-  for(i in seq(1,50,5)){
-    train <- aucrf_data_allum[sampling[-(i:(i+4))],]
-    test <- aucrf_data_allum[sampling[i:(i+4)],]
+  cv10f_probs <- rep(NA,78)
+  for(i in seq(1,77,7)){
+    train <- aucrf_data_allum[sampling[-(i:(i+6))],]
+    test <- aucrf_data_allum[sampling[i:(i+6)],]
     set.seed(seed)
     temp_model <- AUCRF(site~., data=train, pdel=0.99, ntree=500)
-    cv10f_probs[sampling[i:(i+4)]] <- predict(temp_model$RFopt, test, type='prob')[,2]
+    cv10f_probs[sampling[i:(i+6)]] <- predict(temp_model$RFopt, test, type='prob')[,2]
   }
   cv10f_roc <- roc(aucrf_data_allum$site~cv10f_probs)
   cv10f_all_pred <- c(cv10f_all_pred, cv10f_probs)
   cv10f_all_resp <- c(cv10f_all_resp, aucrf_data_allum$site)
-  cv10f_aucs[j] <- cv10f_roc$auc
+  cv10f_aucs[j] <- cv10f_roc$auc #stores aucs for all iterations, can use to calc IQR
 }
 cv10f_roc <- roc(cv10f_all_resp~cv10f_all_pred)
+
+#10 fold cross validation for L vs R mucosa
+
+iters <- 100
+cv10f_aucs_muc <- c()
+cv10f_all_resp_muc <- c()
+cv10f_all_pred_muc <- c()
+for(j in 1:iters){
+  set.seed(j)
+  sampling_muc <- sample(1:nrow(aucrf_data_LRbowel),nrow(aucrf_data_LRbowel),replace=F)
+  cv10f_probs_muc <- rep(NA,39)
+  for(i in seq(1,36,4)){
+    train_muc <- aucrf_data_LRbowel[sampling_muc[-(i:(i+3))],]
+    test_muc <- aucrf_data_LRbowel[sampling_muc[i:(i+3)],]
+    set.seed(seed)
+    temp_model_muc <- AUCRF(location~., data=train_muc, pdel=0.99, ntree=500)
+    cv10f_probs_muc[sampling_muc[i:(i+3)]] <- predict(temp_model_muc$RFopt, test_muc, type='prob')[,2]
+  }
+  cv10f_roc_muc <- roc(aucrf_data_LRbowel$location~cv10f_probs_muc)
+  cv10f_all_pred_muc <- c(cv10f_all_pred_muc, cv10f_probs_muc)
+  cv10f_all_resp_muc <- c(cv10f_all_resp_muc, aucrf_data_LRbowel$location)
+  cv10f_aucs_muc[j] <- cv10f_roc_muc$auc #stores aucs for all iterations, can use to calc IQR
+}
+cv10f_roc_muc <- roc(cv10f_all_resp_muc~cv10f_all_pred_muc)
+
+
+#10 fold cross validation for L vs R lumen
+
+iters <- 100
+cv10f_aucs_lum <- c()
+cv10f_all_resp_lum <- c()
+cv10f_all_pred_lum <- c()
+for(j in 1:iters){
+  set.seed(j)
+  sampling_lum <- sample(1:nrow(aucrf_data_LRlumen),nrow(aucrf_data_LRlumen),replace=F)
+  cv10f_probs_lum <- rep(NA,39)
+  for(i in seq(1,36,4)){
+    train_lum <- aucrf_data_LRlumen[sampling_lum[-(i:(i+3))],]
+    test_lum <- aucrf_data_LRlumen[sampling_lum[i:(i+3)],]
+    set.seed(seed)
+    temp_model_lum <- AUCRF(location~., data=train_lum, pdel=0.99, ntree=500)
+    cv10f_probs_lum[sampling_lum[i:(i+3)]] <- predict(temp_model_lum$RFopt, test_lum, type='prob')[,2]
+  }
+  cv10f_roc_lum <- roc(aucrf_data_LRlumen$location~cv10f_probs_lum)
+  cv10f_all_pred_lum <- c(cv10f_all_pred_lum, cv10f_probs_lum)
+  cv10f_all_resp_lum <- c(cv10f_all_resp_lum, aucrf_data_LRlumen$location)
+  cv10f_aucs_lum[j] <- cv10f_roc_lum$auc #stores aucs for all iterations, can use to calc IQR
+}
+cv10f_roc_lum <- roc(cv10f_all_resp_lum~cv10f_all_pred_lum)
 
 
 
@@ -301,7 +353,7 @@ legend('bottom', legend=c(sprintf('All lumen vs exit, AUC = 0.882'),
 
 
 
-#draw blank plot, plot each line over it individually 
+#Lumen vs mucosa plot 
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
 plot(otu_left_roc, col='red', lwd=2, add=T, lty=1) #left stool vs mucosa
@@ -309,35 +361,42 @@ plot(otu_left_roc, col='red', lwd=2, add=T, lty=1) #left stool vs mucosa
 plot(otu_right_roc, col='blue', lwd=2, add=T, lty=1) #right stool vs mucosa
 #plot(otu_LRlumen_roc, col='purple', lwd=2, add=T, lty=1) #right lumen vs left lumen 
 plot(otu_all_roc, col = 'purple', lwd=2, add =T, lty=1)
+plot(cv10f_roc, col = 'purple', lwd=2, add=T, lty=2)
 mtext(side=2, text="Sensitivity", line=2.5)
 mtext(side=1, text="Specificity", line=2.5)
 legend('bottom', legend=c(sprintf('L lumen vs L mucosa, AUC = 0.984', otu_left_roc$auc),
                                #sprintf('L mucosa vs R mucosa, AUC = 0.926',otu_LRbowel_roc$auc),
                                sprintf('R lumen vs R mucosa, AUC = 0.860',otu_right_roc$auc),
                                #sprintf('R lumen vs L lumen, AUC = 0.773', otu_LRlumen_roc$auc),
-                                sprintf('all lumen vs all mucosa, AUC = 0.922')#,
+                                sprintf('all lumen vs all mucosa, AUC = 0.922'),
+                                sprintf('all vs all 10-fold CV, AUC = 0.925')#,
                                #                               sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
                                #                               sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
-),lty=1, lwd=2, col=c('red','blue', 'purple'), bty='n')
+),lty=c(1, 1, 1, 2), lwd=2, col=c('red','blue', 'purple', 'purple'), bty='n')
 
 
+#left vs right mucosa and lumen plot 
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
 #plot(otu_left_roc, col='red', lwd=2, add=T, lty=1) #left stool vs mucosa
 plot(otu_LRbowel_roc, col='green4', lwd=2, add=T, lty=1) #left mucosa vs right mucosa
 #plot(otu_right_roc, col='blue', lwd=2, add=T, lty=1) #right stool vs mucosa
 plot(otu_LRlumen_roc, col='orange', lwd=2, add=T, lty=1) #right lumen vs left lumen 
+plot(cv10f_roc_muc,col = 'green4', lwd=2, add=T, lty=2) #r vs l mucosa cross validation
+plot(cv10f_roc_lum, col = 'orange', lwd=2, add=T, lty=2) #r vs l lumen cross validation
 #plot(otu_all_roc, col = 'purple', lwd=2, add =T, lty=1)
 mtext(side=2, text="Sensitivity", line=2.5)
 mtext(side=1, text="Specificity", line=2.5)
 legend('bottom', legend=c(#sprintf('L lumen vs L mucosa, AUC = 0.984', otu_left_roc$auc),
                           sprintf('L mucosa vs R mucosa, AUC = 0.926',otu_LRbowel_roc$auc),
                           #sprintf('R lumen vs R mucosa, AUC = 0.860',otu_right_roc$auc),
-                          sprintf('R lumen vs L lumen, AUC = 0.773', otu_LRlumen_roc$auc)
+                          sprintf('L lumen vs R lumen, AUC = 0.773', otu_LRlumen_roc$auc),
+                          sprintf('L mucosa vs R mucosa 10-fold CV, AUC = 0.912'),
+                          sprintf('L lumen vs R lumen 10-fold CV, AUC = 0.7551')
                           #sprintf('all lumen vs all mucosa, AUC = 0.922')#,
                           #                               sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
                           #                               sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
-),lty=1, lwd=2, col=c('green4', 'orange'), bty='n')
+),lty=c(1, 1, 2, 2), lwd=2, col=c('green4', 'orange', 'green4', 'orange'), bty='n')
 
 
 
@@ -431,4 +490,6 @@ ggplot(data = top_important_OTU_rflumen, aes(x = factor(OTU), y = Importance)) +
 
 
 
+#make all of this shit a function
 
+#also make RA plots of the choice OTUs 

@@ -22,6 +22,8 @@ tax_file <- read.table(file='data/mothur/kws_final.an.cons.taxonomy', sep = '\t'
 #Create df with relative abundances
 shared_file <- shared_file[,-1]
 shared_file <- shared_file[,-1]
+shared_meta <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
+
 rel_abund <- 100*shared_file/unique(apply(shared_file, 1, sum))
 
 #Create vector of OTUs with median abundances >1%
@@ -89,6 +91,17 @@ rf_lumen <- randomForest(location ~ ., data = select(LR_lumen, location, contain
 #to get what is higher in LS vs RS 
 lumen_importance <- sort(importance(rf_lumen)[,1], decreasing=T)
 
+#gender test, all M vs all F 
+#but i really want to look at m mucosa vs f mucosa
+
+gender_mucosa <- subset(rel_meta, site == 'mucosa')
+gender_mucosa$gender <- factor(gender_mucosa$gender)
+rf_gender_muc <- randomForest(gender~., data=select(gender_mucosa, gender, contains("Otu")), importance = T, ntree=n_trees)
+
+gender_lumen <- subset(rel_meta, site == 'stool')
+gender_lumen$gender <- factor(gender_lumen$gender)
+rf_gender_lum <- randomForest(gender~., data=select(gender_lumen, gender, contains("Otu")), importance = T, ntree=n_trees)
+
 #all mucosa vs all lumen
 
 all_lum <- subset(rel_meta, site %in% c("stool", "mucosa"))
@@ -147,6 +160,13 @@ levels(exit_Llum$location) <- c(1:length(levels(exit_Llum$location))-1)
 classification_labelsexitRlum <- levels(exit_Rlum$location) # save level labels as a vector for reference
 levels(exit_Rlum$location) <- c(1:length(levels(exit_Rlum$location))-1) 
 
+classification_labelsgendermuc <- levels(gender_mucosa$gender) # save level labels as a vector for reference
+levels(gender_mucosa$gender) <- c(1:length(levels(gender_mucosa$gender))-1)
+
+classification_labelsgenderlum <- levels(gender_lumen$gender) # save level labels as a vector for reference
+levels(gender_lumen$gender) <- c(1:length(levels(gender_lumen$gender))-1)
+
+
 # create RF model
 set.seed(seed)
 rf_left_aucrf <- AUCRF(location ~ ., data = select(left_bs, location, contains("Otu")),
@@ -172,6 +192,12 @@ rf_exitLlum_aucrf <- AUCRF(location ~ ., data = select(exit_Llum, location, cont
 set.seed(seed)
 rf_exitRlum_aucrf <- AUCRF(location ~ ., data = select(exit_Rlum, location, contains("Otu")),
                            ntree = n_trees, pdel = 0.05, ranking = 'MDA')
+set.seed(seed)
+rf_gendermuc_aucrf <- AUCRF(gender~., data = select(gender_mucosa, gender, contains("Otu")), ntree=n_trees, pdel=0.05, ranking = 'MDA')
+
+set.seed(seed)
+rf_genderlum_aucrf <- AUCRF(gender~., data = select(gender_lumen, gender, contains("Otu")), ntree=n_trees, pdel=0.05, ranking = 'MDA')
+
 
 
 #this is just left stool vs mucosa  
@@ -192,6 +218,11 @@ otu_exitmuc_probs <- predict(rf_exitmuc_aucrf$RFopt, type = 'prob')
 otu_exitLlum_probs <- predict(rf_exitLlum_aucrf$RFopt, type ='prob')
 
 otu_exitRlum_probs <- predict(rf_exitRlum_aucrf$RFopt, type ='prob')
+
+otu_gendermuc_probs <- predict(rf_gendermuc_aucrf$RFopt, type = 'prob')
+
+otu_genderlum_probs <- predict(rf_genderlum_aucrf$RFopt, type = 'prob')
+
 
 all_left_probs <- data.frame(obs = left_bs$location,
                              pred = otu_left_probs[,2])
@@ -219,6 +250,12 @@ all_exitLlum_probs <- data.frame(obs = exit_Llum$location,
 
 all_exitRlum_probs <- data.frame(obs = exit_Rlum$location,
                                  pred = otu_exitRlum_probs[,2])
+
+gender_muc_probs <- data.frame(obs=gender_mucosa$gender, pred=otu_gendermuc_probs[,2])
+
+gender_lum_probs <- data.frame(obs=gender_lumen$gender, pred=otu_genderlum_probs[,2])
+
+
 
 #compare real with predicted with ROC
 otu_left_roc <- roc(left_bs$location ~ otu_left_probs[ , 2])
@@ -248,6 +285,12 @@ exitLlum_feat <- rf_exitLlum_aucrf$Xopt
 
 otu_exitRlum_roc <- roc(exit_Rlum$location ~ otu_exitRlum_probs[,2])
 exitRlum_feat <- rf_exitRlum_aucrf$Xopt
+
+otu_gendermuc_roc <- roc(gender_mucosa$gender ~ otu_gendermuc_probs[,2])
+gendermuc_feat <- rf_gendermuc_aucrf$Xopt
+
+otu_genderlum_roc <- roc(gender_lumen$gender ~ otu_genderlum_probs[,2])
+genderlum_feat <- rf_genderlum_aucrf$Xopt
 
 #really should make that a function 
 
@@ -384,6 +427,7 @@ plot(otu_LRbowel_roc, col='green4', lwd=2, add=T, lty=1) #left mucosa vs right m
 plot(otu_LRlumen_roc, col='orange', lwd=2, add=T, lty=1) #right lumen vs left lumen 
 plot(cv10f_roc_muc,col = 'green4', lwd=2, add=T, lty=2) #r vs l mucosa cross validation
 plot(cv10f_roc_lum, col = 'orange', lwd=2, add=T, lty=2) #r vs l lumen cross validation
+plot(otu_gendermuc_roc, col = 'pink', lwd=2, add=T, lty=1) #gender mucosa test
 #plot(otu_all_roc, col = 'purple', lwd=2, add =T, lty=1)
 mtext(side=2, text="Sensitivity", line=2.5)
 mtext(side=1, text="Specificity", line=2.5)
@@ -397,6 +441,22 @@ legend('bottom', legend=c(#sprintf('L lumen vs L mucosa, AUC = 0.984', otu_left_
                           #                               sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
                           #                               sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
 ),lty=c(1, 1, 2, 2), lwd=2, col=c('green4', 'orange', 'green4', 'orange'), bty='n')
+
+
+#predict gender of mucosa?! new plot 
+par(mar=c(4,4,1,1))
+plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
+plot(otu_gendermuc_roc, col = 'pink', lwd=2, add=T, lty=1) #gender mucosa test
+plot(otu_genderlum_roc, col = 'blue', lwd=2, add=T, lty=1)
+mtext(side=2, text="Sensitivity", line=2.5)
+mtext(side=1, text="Specificity", line=2.5)
+legend('bottom', legend=c(#sprintf('L lumen vs L mucosa, AUC = 0.984', otu_left_roc$auc),
+  sprintf('L mucosa vs R mucosa, AUC = 0.926',otu_LRbowel_roc$auc)
+  #                               sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
+),lty=c(1, 1, 2, 2), lwd=2, col=c('pink', 'blue'), bty='n')
+
+
+
 
 
 
@@ -493,3 +553,30 @@ ggplot(data = top_important_OTU_rflumen, aes(x = factor(OTU), y = Importance)) +
 #make all of this shit a function
 
 #also make RA plots of the choice OTUs 
+
+#all_otu_feat holds the important OTUs for all lumen vs all mucosa 
+
+all_otu_feat <- rev(all_otu_feat[1:5])
+otu_taxa_all <- get_tax(1, all_otu_feat, tax_file)
+#Abundance stripchart or most predictive otus - Niel's code 
+lumen_abunds <- shared_meta[shared_meta$site=='stool', all_otu_feat]/10000 + 1e-4
+mucosa_abunds <- shared_meta[shared_meta$site=='mucosa', all_otu_feat]/10000 + 1e-4
+
+par(mar=c(4, 9, 1, 1))
+plot(1, type="n", ylim=c(0,length(all_otu_feat)*2), xlim=c(1e-4,3), log="x", ylab="", xlab="Relative Abundance (%)", xaxt="n", yaxt="n")
+index <- 1
+for(i in all_otu_feat){
+  stripchart(at=index-0.35, jitter(lumen_abunds[,i], amount=1e-5), pch=21, bg="royalblue1", method="jitter", jitter=0.2, add=T, cex=1, lwd=0.5)
+  stripchart(at=index+0.35, jitter(mucosa_abunds[,i], amount=1e-5), pch=21, bg="orange", method="jitter", jitter=0.2, add=T, cex=1, lwd=0.5)
+  segments(mean(lumen_abunds[,i]),index-0.7,mean(lumen_abunds[,i]),index, lwd=3)
+  segments(mean(mucosa_abunds[,i]),index+0.7,mean(mucosa_abunds[,i]),index, lwd=3)
+  index <- index + 2
+}
+axis(2, at=seq(1,index-2,2), labels=otu_taxa_all$tax_label, las=1, line=-0.5, tick=F, cex.axis=0.8)
+axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
+legend('topright', legend=c("mucosa", "lumen"), pch=c(21, 21), pt.bg=c("orange","royalblue1"), cex=0.7)
+mtext('C', at=1e-7, font=2, side=3)
+
+
+
+

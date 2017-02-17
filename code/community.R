@@ -6,6 +6,7 @@ library(RColorBrewer)
 meta <- 'data/raw/kws_metadata.tsv'
 shared <- 'data/mothur/kws_final.an.shared'
 tax <- 'data/mothur/kws_final.an.cons.taxonomy'
+subsample <- 'data/mothur/kws_final.an.0.03.subsample.shared'
 
 
 meta_file <- read.table(file='data/raw/kws_metadata.tsv', header = T)
@@ -32,7 +33,7 @@ source('code/Sum_OTU_by_Tax.R')
 source('code/sum_shared.R')
 
 #use this code to assign phyla to each OTU in the shared file 
-shared_phyla <- get_tax_level_shared(shared, tax, 2)
+shared_phyla <- get_tax_level_shared(subsample, tax, 2)
 phyla_met <- merge(meta_file, shared_phyla, by.x='group', by.y='row.names')
 
 #get median of all OTUs by location
@@ -41,12 +42,20 @@ phyla_loc <- aggregate(phyla_met[, 7:ncol(phyla_met)], list(phyla_met$location),
 #remove phylA we dont want
 phyla_loc <- phyla_loc[, c("Group.1","Firmicutes","Bacteroidetes","Proteobacteria","Verrucomicrobia","Actinobacteria","Fusobacteria")]
 
-
 #get rel abundance
+rownames(phyla_loc) <- phyla_loc$Group.1
+phyla_loc <- phyla_loc[,-1]
+phyla_abund <- 100*phyla_loc/1900
 
-#gather
+#gather AND PLOT OMG :D
+#put rownames back in their own column 
+phyla_abund <- cbind(group=rownames(phyla_abund), phyla_abund)
+rownames(phyla_abund) <- c()
+phylanames <- colnames(phyla_abund[,1:7])
+phylamelt <- melt(phyla_abund[, phylanames], id.vars=1)
 
-
+#aaand heres the plot! ignore most of the code below 
+ggplot(phylamelt, aes(x=group, y=value)) + geom_bar(aes(fill=variable), position='dodge', stat='identity')
 
 
 family <- sum_OTU_by_tax_level(2, rel_abund_top, tax_file)

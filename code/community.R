@@ -3,10 +3,16 @@
 
 install.packages("RColorBrewer")
 library(RColorBrewer)
+meta <- 'data/raw/kws_metadata.tsv'
+shared <- 'data/mothur/kws_final.an.shared'
+tax <- 'data/mothur/kws_final.an.cons.taxonomy'
+
 
 meta_file <- read.table(file='data/raw/kws_metadata.tsv', header = T)
 shared_file <- read.table(file='data/mothur/kws_final.an.shared', sep = '\t', header=T, row.names=2)
 tax_file <- read.table(file='data/mothur/kws_final.an.cons.taxonomy', sep = '\t', header=T, row.names=1)
+
+shared_meta <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
 
 #make OTU abundance file
 #Create df with relative abundances
@@ -23,6 +29,25 @@ rel_abund_top <- rel_abund[, OTUs_1]
 rel_abund_top <- na.omit(rel_abund_top)
 
 source('code/Sum_OTU_by_Tax.R')
+source('code/sum_shared.R')
+
+#use this code to assign phyla to each OTU in the shared file 
+shared_phyla <- get_tax_level_shared(shared, tax, 2)
+phyla_met <- merge(meta_file, shared_phyla, by.x='group', by.y='row.names')
+
+#get median of all OTUs by location
+phyla_loc <- aggregate(phyla_met[, 7:ncol(phyla_met)], list(phyla_met$location), median)
+
+#remove phylA we dont want
+phyla_loc <- phyla_loc[, c("Group.1","Firmicutes","Bacteroidetes","Proteobacteria","Verrucomicrobia","Actinobacteria","Fusobacteria")]
+
+
+#get rel abundance
+
+#gather
+
+
+
 
 family <- sum_OTU_by_tax_level(2, rel_abund_top, tax_file)
 

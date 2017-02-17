@@ -38,14 +38,27 @@ phyla_met <- merge(meta_file, shared_phyla, by.x='group', by.y='row.names')
 
 #get median of all OTUs by location
 phyla_loc <- aggregate(phyla_met[, 7:ncol(phyla_met)], list(phyla_met$location), median)
+phyla_upper <- aggregate(phyla_met[, 7:ncol(phyla_met)], list(phyla_met$location), FUN= quantile, probs =0.75)
+phyla_lower <- aggregate(phyla_met[, 7:ncol(phyla_met)], list(phyla_met$location), FUN= quantile, probs =0.25)
 
 #remove phylA we dont want
 phyla_loc <- phyla_loc[, c("Group.1","Firmicutes","Bacteroidetes","Proteobacteria","Verrucomicrobia","Actinobacteria","Fusobacteria")]
+phyla_upper <- phyla_upper[, c("Group.1","Firmicutes","Bacteroidetes","Proteobacteria","Verrucomicrobia","Actinobacteria","Fusobacteria")]
+phyla_lower <- phyla_lower[, c("Group.1","Firmicutes","Bacteroidetes","Proteobacteria","Verrucomicrobia","Actinobacteria","Fusobacteria")]
 
 #get rel abundance
 rownames(phyla_loc) <- phyla_loc$Group.1
 phyla_loc <- phyla_loc[,-1]
 phyla_abund <- 100*phyla_loc/1900
+
+rownames(phyla_lower) <- phyla_lower$Group.1
+phyla_lower <- phyla_lower[,-1]
+phyla_lower <- 100*phyla_lower/1900
+
+rownames(phyla_upper) <- phyla_upper$Group.1
+phyla_upper <- phyla_upper[,-1]
+phyla_upper <- 100*phyla_upper/1900
+
 
 #gather AND PLOT OMG :D
 #put rownames back in their own column 
@@ -54,8 +67,27 @@ rownames(phyla_abund) <- c()
 phylanames <- colnames(phyla_abund[,1:7])
 phylamelt <- melt(phyla_abund[, phylanames], id.vars=1)
 
-#aaand heres the plot! ignore most of the code below 
-ggplot(phylamelt, aes(x=group, y=value)) + geom_bar(aes(fill=variable), position='dodge', stat='identity')
+phyla_abund_up <- cbind(group=rownames(phyla_upper), phyla_upper)
+rownames(phyla_abund_up) <- c()
+phylamelt_up <- melt(phyla_abund_up[, phylanames], id.vars=1)
+
+#this isnt working but 
+phyla_abund_low <- cbind(group=rownames(phyla_lower), phyla_lower)
+rownames(phyla_abund_low) <- c()
+phylamelt_low <- melt(phyla_abund_low[, phylanames], id.vars=1)
+
+#merge them riiite
+names(phylamelt_up)[3] <- "upper"
+phylamelt <- merge(phylamelt, phylamelt_up)
+
+names(phylamelt_low)[3] <- "lower"
+phylamelt <- merge(phylamelt, phylamelt_low)
+
+
+#aaand heres the plot! IT WORKS
+ggplot(phylamelt, aes(x=group, y=value, ymin=lower, ymax=upper, fill=variable)) + geom_bar(position=position_dodge(), stat='identity') +geom_errorbar(position=position_dodge(0.9), width=0.2) +theme_bw()
+
+
 
 
 family <- sum_OTU_by_tax_level(2, rel_abund_top, tax_file)

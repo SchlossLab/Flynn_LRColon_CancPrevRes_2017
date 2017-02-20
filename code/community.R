@@ -83,11 +83,16 @@ phylamelt <- merge(phylamelt, phylamelt_up)
 names(phylamelt_low)[3] <- "lower"
 phylamelt <- merge(phylamelt, phylamelt_low)
 
+colors <- as.list(wes_palette("Darjeeling"))
+colors <- colors + as.list(wes_palette("Darjeeling2"))
+
 
 #aaand heres the plot! IT WORKS
-ggplot(phylamelt, aes(x=group, y=value, ymin=lower, ymax=upper, fill=variable)) + geom_bar(position=position_dodge(), stat='identity') +geom_errorbar(position=position_dodge(0.9), width=0.2) +theme_bw()
-
-
+ggplot(phylamelt, aes(x=group, y=value, ymin=lower, ymax=upper, fill=variable)) + geom_bar(position=position_dodge(), stat='identity') + 
+  geom_errorbar(position=position_dodge(0.9), width=0.2) +theme_bw() + 
+  scale_x_discrete(breaks=c("LB", "LS", "RB", "RS", "SS"), labels=c("L Mucosa", "L Lumen", "R Mucosa", "R Lumen", "Stool")) +theme(axis.title.x=element_blank(), panel.grid.major.x = element_blank(),
+                                                                                                                                   panel.grid.minor.x = element_blank()) +
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1)) + scale_fill_brewer(palette="Dark2", name="Phylum") +ylab("% Relative Abundance")
 
 
 family <- sum_OTU_by_tax_level(2, rel_abund_top, tax_file)

@@ -223,6 +223,8 @@ exitRtyc <- subset(exittyc, samp1 == 'LS' | samp1 == 'RS')
 
 leftandrighttyc <- subset(tyc, match=='LB_LS' | match== 'RB_RS')
 
+lvsr <- rbind(stooltyc, leftandrighttyc)
+
 ggplot(lefttyc, aes(x=match, y=thetayc)) + geom_boxplot() +theme_bw() +ggtitle("Left")
 
 ggplot(righttyc, aes(x=match, y=thetayc)) + geom_boxplot() +theme_bw() +ggtitle("Right")
@@ -241,6 +243,16 @@ ggplot(leftandrighttyc, aes(x=match, y=thetayc, fill=match)) + geom_boxplot() +t
 leftandrighttyc <- leftandrighttyc[-25,]
 wilcox.test(thetayc ~ match, data=leftandrighttyc, paired = T)
 
+#thetayc plot for figure 3
+#lvsr$match <- factor(lvsr$match, levels=lvsr$match[order(lvsr$samp1)])
+ggplot(lvsr, aes(x=match, y=thetayc, color=match)) + geom_point() + geom_jitter(width= 0.5) +theme_bw() +scale_color_brewer(palette='Set1') +
+  theme(legend.position="none") +scale_x_discrete(labels=c("L Mucosa vs L Lumen", "L Mucosa vs R Lumen", "L Lumen vs R Lumen", "R Mucosa vs R Lumen")) +
+  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")
+
+
+ggplot(exittyc, aes(x=match, y=thetayc, color=match)) + geom_point() + geom_jitter(width= 0.5) +theme_bw() +scale_color_manual(values=wes_palette("Darjeeling")) +
+  theme(legend.position="none") +scale_x_discrete(labels=c("L Mucosa vs Stool", "L Lumen vs Stool", "R Mucosa vs Stool", "R Lumen vs Stool")) +
+  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")
 
 
 #cant i just do a fuckin box plot?

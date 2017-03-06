@@ -254,6 +254,8 @@ ggplot(exittyc, aes(x=match, y=thetayc, color=match)) + geom_point() + geom_jitt
   theme(legend.position="none") +scale_x_discrete(labels=c("L Mucosa vs Stool", "L Lumen vs Stool", "R Mucosa vs Stool", "R Lumen vs Stool")) +
   theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")
 
+#this is a test
+
 
 #cant i just do a fuckin box plot?
 boxplot(tyc[,"thetayc"] ~ tyc[,"match"])

@@ -3,6 +3,10 @@
 
 install.packages("RColorBrewer")
 library(RColorBrewer)
+
+
+
+
 meta <- 'data/raw/kws_metadata.tsv'
 shared <- 'data/mothur/kws_final.an.shared'
 tax <- 'data/mothur/kws_final.an.cons.taxonomy'

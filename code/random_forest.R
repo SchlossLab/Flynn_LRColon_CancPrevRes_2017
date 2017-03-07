@@ -297,7 +297,8 @@ genderlum_feat <- rf_genderlum_aucrf$Xopt
 aucrf_data_allum <- all_lum[,c('site',all_otu_feat)]
 aucrf_data_LRbowel <- LR_bowel[, c('location', LRbowel_otu_feat)]
 aucrf_data_LRlumen <- LR_lumen[, c('location', LRlumen_otu_feat)]
-
+aucrf_data_left_bs <- left_bs[, c('location', left_otu_feat)]
+aucrf_data_right_bs <- right_bs[, c('site', right_otu_feat)]
 
 #10 fold cross validation for all lumen vs mucosa 
 iters <- 100
@@ -321,6 +322,31 @@ for(j in 1:iters){
   cv10f_aucs[j] <- cv10f_roc$auc #stores aucs for all iterations, can use to calc IQR
 }
 cv10f_roc <- roc(cv10f_all_resp~cv10f_all_pred)
+
+#10fold CV for L lumen vs L mucosa
+iters <- 100
+cv10f_aucs <- c()
+cv10f_all_resp_left_bs <- c()
+cv10f_all_pred_left_bs <- c()
+for(j in 1:iters){
+  set.seed(j)
+  sampling <- sample(1:nrow(aucrf_data_left_bs),nrow(aucrf_data_left_bs),replace=F)
+  cv10f_probs <- rep(NA,39)
+  for(i in seq(1,36,4)){
+    train_left_bs <- aucrf_data_left_bs[sampling[-(i:(i+3))],]
+    test_left_bs <- aucrf_data_left_bs[sampling[i:(i+3)],]
+    set.seed(seed)
+    temp_model_left_bs <- AUCRF(location~., data=train_left_bs, pdel=0.99, ntree=500)
+    cv10f_probs[sampling[i:(i+3)]] <- predict(temp_model_left_bs$RFopt, test_left_bs, type='prob')[,2]
+  }
+  cv10f_roc_left_bs <- roc(aucrf_data_left_bs$location~cv10f_probs)
+  cv10f_all_pred_left_bs <- c(cv10f_all_pred_left_bs, cv10f_probs)
+  cv10f_all_resp_left_bs <- c(cv10f_all_resp_left_bs, aucrf_data_left_bs$location)
+  cv10f_aucs[j] <- cv10f_roc_left_bs$auc #stores aucs for all iterations, can use to calc IQR
+}
+cv10f_roc_left_bs <- roc(cv10f_all_resp_left_bs~cv10f_all_pred_left_bs)
+
+
 
 #10 fold cross validation for L vs R mucosa
 
@@ -399,23 +425,25 @@ legend('bottom', legend=c(sprintf('All lumen vs exit, AUC = 0.882'),
 #Lumen vs mucosa plot 
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
-plot(otu_left_roc, col='red', lwd=2, add=T, lty=1) #left stool vs mucosa
+#plot(otu_left_roc, col='red', lwd=2, add=T, lty=1) #left stool vs mucosa
 #plot(otu_LRbowel_roc, col='blue', lwd=2, add=T, lty=1) #left mucosa vs right mucosa
-plot(otu_right_roc, col='blue', lwd=2, add=T, lty=1) #right stool vs mucosa
+#plot(otu_right_roc, col='blue', lwd=2, add=T, lty=1) #right stool vs mucosa
 #plot(otu_LRlumen_roc, col='purple', lwd=2, add=T, lty=1) #right lumen vs left lumen 
-plot(otu_all_roc, col = 'purple', lwd=2, add =T, lty=1)
-plot(cv10f_roc, col = 'purple', lwd=2, add=T, lty=2)
+#plot(otu_all_roc, col = 'purple', lwd=2, add =T, lty=1)
+plot(cv10f_roc, col = 'purple', lwd=2, add=T, lty=1)
+plot(cv10f_roc_left_bs, col = 'red', lwd=2, add=T, lty=1)
 mtext(side=2, text="Sensitivity", line=2.5)
 mtext(side=1, text="Specificity", line=2.5)
-legend('bottom', legend=c(sprintf('L lumen vs L mucosa, AUC = 0.984', otu_left_roc$auc),
+legend('bottom', legend=c(#sprintf('L lumen vs L mucosa, AUC = 0.984', otu_left_roc$auc),
                                #sprintf('L mucosa vs R mucosa, AUC = 0.926',otu_LRbowel_roc$auc),
-                               sprintf('R lumen vs R mucosa, AUC = 0.860',otu_right_roc$auc),
+                               #sprintf('R lumen vs R mucosa, AUC = 0.860',otu_right_roc$auc),
                                #sprintf('R lumen vs L lumen, AUC = 0.773', otu_LRlumen_roc$auc),
-                                sprintf('all lumen vs all mucosa, AUC = 0.922'),
-                                sprintf('all vs all 10-fold CV, AUC = 0.925')#,
+                                #sprintf('all lumen vs all mucosa, AUC = 0.922'),
+                                sprintf('Lumen vs Mucosa, 10-fold CV, AUC = 0.925'),
+                                sprintf('L Lumen vs L Mucosa, 10-fold CV, AUC =')
                                #                               sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
                                #                               sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
-),lty=c(1, 1, 1, 2), lwd=2, col=c('red','blue', 'purple', 'purple'), bty='n')
+),lty=c(1, 1, 1, 2), lwd=2, col=c('purple','blue', 'purple', 'purple'), bty='n')
 
 
 #left vs right mucosa and lumen plot 

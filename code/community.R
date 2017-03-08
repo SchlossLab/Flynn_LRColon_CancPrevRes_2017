@@ -247,12 +247,16 @@ wilcox.test(thetayc ~ match, data=leftandrighttyc, paired = T)
 #lvsr$match <- factor(lvsr$match, levels=lvsr$match[order(lvsr$samp1)])
 ggplot(lvsr, aes(x=match, y=thetayc, color=match)) + geom_point() + geom_jitter(width= 0.5) +theme_bw() +scale_color_brewer(palette='Set1') +
   theme(legend.position="none") +scale_x_discrete(labels=c("L Mucosa vs L Lumen", "L Mucosa vs R Lumen", "L Lumen vs R Lumen", "R Mucosa vs R Lumen")) +
-  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")
+  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance") + stat_summary(aes(x=match, y=thetayc), data = lvsr, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 
 
-ggplot(exittyc, aes(x=match, y=thetayc, color=match)) + geom_point() + geom_jitter(width= 0.5) +theme_bw() +scale_color_manual(values=wes_palette("Darjeeling")) +
+
+ggplot(exittyc, aes(x=match, y=thetayc, color=match)) + geom_point() + geom_jitter(width= 0.5) +theme_bw() +scale_color_brewer(palette="Set1") +
   theme(legend.position="none") +scale_x_discrete(labels=c("L Mucosa vs Stool", "L Lumen vs Stool", "R Mucosa vs Stool", "R Lumen vs Stool")) +
   theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")
+
+#this is being stupid and wont work, idk why 
++ stat_summary(aes(x=match, y=thetayc), data = lvsr, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 
 #this is a test
 

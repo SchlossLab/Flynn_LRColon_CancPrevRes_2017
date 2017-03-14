@@ -21,21 +21,31 @@ left_stool <- nmds[grep('LS', nmds$group), c(2,3)]
 right_stool <- nmds[grep('RS', nmds$group), c(2,3)]
 spon_stool <- nmds[grep('SS', nmds$group), c(2,3)]
 
-#make plot, this is probably not the best way to do it
-plot(nmds$axis1, nmds$axis2)
-
 nmds <- merge(nmds, meta_file)
-
+#nmds plots for all samples
 ggplot(nmds, aes(x=axis1, y=axis2)) +geom_point(aes(color=side))
-
 ggplot(nmds, aes(x=axis1, y=axis2)) +geom_point(aes(color=site))
 
 #subset shared and then do distance, nmds to get comparisons of just those samples 
+#could name this shared subsetting thing a function also 
+
+separate_nmds <- function(m_file, colname, observation, s_file){
+  temp <- m_file$group[m_file$colname=='observation']
+  tempshared <- s_file[row.names(s_file) %in% temp]
+  tempshared <- add_rownames(tempshared, var = 'group')
+  #tempshared <- tempshared[-2] #i dont think we need this 
+  tempshared <- cbind(label=0.03, tempshared[1:ncol(tempshared)])
+  #fix that, how to get variable into stringname in function 
+  write.table(tempshared, file='data/process/observation.shared', sep='\t', quote=F, row.names=F)
+}
+
+separate_nmds(meta_file, side, 'left', shared_file)
+
 
 left <- meta_file$group[meta_file$side=='left']
 leftshared <- shared_file[row.names(shared_file) %in% left,]
 leftshared <- add_rownames(leftshared, var = "group")
-leftshared <- leftshared[-2]
+leftshared <- leftshared[-2] #? maybe dont do this
 leftshared <- cbind(label=0.03, leftshared[1:ncol(leftshared)])
 
 right <- meta_file$group[meta_file$side=='right']
@@ -203,9 +213,7 @@ axis(1, at=1:5, labels=c("left biopsy", " ", "right biopsy", " ", "spon. stool")
 
 #plotting simpson again this time in 2017
 #somewhere simpmeta gets defined and idk where
-
 simpmeta <- merge(meta_file, simps)
-#reordering data so the boxes line up
 
 install.packages("wesanderson")
 library("wesanderson")
@@ -214,10 +222,6 @@ ggplot(simpmeta, aes(x=location, y=invsimpson, group =1,  color=site)) +geom_poi
   scale_color_manual(values=wes_palette("Darjeeling")) + scale_x_discrete(labels=c("L Mucosa", "R Mucosa", "L Lumen", "R Lumen", "Stool")) +theme(legend.position='none', axis.title.x=element_blank())+
   stat_summary(aes(x=location, y=invsimpson), data = simpmeta, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 
-#geofs code for adding custom team colors 
-#+scale_fill_manual(values=sort(team_colors("Tampa Bay Rays"), decreasing=T))
-
-boxplot(simpmeta[,'invsimpson'] ~ simpmeta[,'location'])
 
 
 

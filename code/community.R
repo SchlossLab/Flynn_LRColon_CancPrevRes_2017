@@ -1,17 +1,12 @@
 # OTU bar plots to look at community membership
-#for KWS stuff
 
 install.packages("RColorBrewer")
 library(RColorBrewer)
-
-
-
 
 meta <- 'data/raw/kws_metadata.tsv'
 shared <- 'data/mothur/kws_final.an.shared'
 tax <- 'data/mothur/kws_final.an.cons.taxonomy'
 subsample <- 'data/mothur/kws_final.an.0.03.subsample.shared'
-
 
 meta_file <- read.table(file='data/raw/kws_metadata.tsv', header = T)
 shared_file <- read.table(file='data/mothur/kws_final.an.shared', sep = '\t', header=T, row.names=2)
@@ -20,11 +15,11 @@ tax_file <- read.table(file='data/mothur/kws_final.an.cons.taxonomy', sep = '\t'
 shared_meta <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
 
 #make OTU abundance file
+#remove numOTUs column 
 #Create df with relative abundances
-rel_abund <- 100*shared_file/unique(apply(shared_file, 1, sum))
-#remove numOTUs column
-rel_abund <- rel_abund[,-1] 
-rel_abund <- rel_abund[,-1] 
+
+test <- subset(shared_file, select = -c(numOtus, label))
+rel_abund <- 100*test/unique(apply(test, 1, sum))
 
 #Create vector of OTUs with median abundances >1%
 OTUs_1 <- apply(rel_abund, 2, max) > 1
@@ -45,25 +40,25 @@ phyla_loc <- aggregate(phyla_met[, 7:ncol(phyla_met)], list(phyla_met$location),
 phyla_upper <- aggregate(phyla_met[, 7:ncol(phyla_met)], list(phyla_met$location), FUN= quantile, probs =0.75)
 phyla_lower <- aggregate(phyla_met[, 7:ncol(phyla_met)], list(phyla_met$location), FUN= quantile, probs =0.25)
 
-#remove phylA we dont want
+#only get top 6 phyla
 phyla_loc <- phyla_loc[, c("Group.1","Firmicutes","Bacteroidetes","Proteobacteria","Verrucomicrobia","Actinobacteria","Fusobacteria")]
 phyla_upper <- phyla_upper[, c("Group.1","Firmicutes","Bacteroidetes","Proteobacteria","Verrucomicrobia","Actinobacteria","Fusobacteria")]
 phyla_lower <- phyla_lower[, c("Group.1","Firmicutes","Bacteroidetes","Proteobacteria","Verrucomicrobia","Actinobacteria","Fusobacteria")]
 
-#get rel abundance
+#get rel abundance - subsampled to 4231
 rownames(phyla_loc) <- phyla_loc$Group.1
 phyla_loc <- phyla_loc[,-1]
-phyla_abund <- 100*phyla_loc/1900
+phyla_abund <- 100*phyla_loc/4231
 
 rownames(phyla_lower) <- phyla_lower$Group.1
 phyla_lower <- phyla_lower[,-1]
-phyla_lower <- 100*phyla_lower/1900
+phyla_lower <- 100*phyla_lower/4231
 
 rownames(phyla_upper) <- phyla_upper$Group.1
 phyla_upper <- phyla_upper[,-1]
-phyla_upper <- 100*phyla_upper/1900
+phyla_upper <- 100*phyla_upper/4231
 
-
+##stopped here 
 #gather AND PLOT OMG :D
 #put rownames back in their own column 
 phyla_abund <- cbind(group=rownames(phyla_abund), phyla_abund)

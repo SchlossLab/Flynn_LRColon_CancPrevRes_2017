@@ -1,7 +1,13 @@
 # OTU bar plots to look at community membership
 
-install.packages("RColorBrewer")
-library(RColorBrewer)
+pack_used <- c('randomForest','ggplot2', 'pROC', 'knitr','dplyr','AUCRF', 'tidyr', 'caret', 'RColorBrewer', 'reshape2', 'wesanderson')
+for (dep in pack_used){
+  if (dep %in% installed.packages()[,"Package"] == FALSE){
+    install.packages(as.character(dep), repos = 'http://cran.us.r-project.org', 
+                     quiet=TRUE);
+  }
+  library(dep, verbose=FALSE, character.only=TRUE)
+}
 
 meta <- 'data/raw/kws_metadata.tsv'
 shared <- 'data/mothur/kws_final.an.shared'
@@ -27,6 +33,7 @@ OTU_list <- colnames(rel_abund)[OTUs_1]
 #get df of just top OTUs
 rel_abund_top <- rel_abund[, OTUs_1]
 rel_abund_top <- na.omit(rel_abund_top)
+rel_meta <- merge(meta_file, rel_abund_top, by.x='group', by.y="row.names")
 
 source('code/Sum_OTU_by_Tax.R')
 source('code/sum_shared.R')
@@ -58,7 +65,6 @@ rownames(phyla_upper) <- phyla_upper$Group.1
 phyla_upper <- phyla_upper[,-1]
 phyla_upper <- 100*phyla_upper/4231
 
-##stopped here 
 #gather AND PLOT OMG :D
 #put rownames back in their own column 
 phyla_abund <- cbind(group=rownames(phyla_abund), phyla_abund)
@@ -85,7 +91,6 @@ phylamelt <- merge(phylamelt, phylamelt_low)
 colors <- as.list(wes_palette("Darjeeling"))
 colors <- colors + as.list(wes_palette("Darjeeling2"))
 
-
 #aaand heres the plot! IT WORKS
 ggplot(phylamelt, aes(x=group, y=value, ymin=lower, ymax=upper, fill=variable)) + geom_bar(position=position_dodge(), stat='identity') + 
   geom_errorbar(position=position_dodge(0.9), width=0.2) +theme_bw() + 
@@ -94,10 +99,9 @@ ggplot(phylamelt, aes(x=group, y=value, ymin=lower, ymax=upper, fill=variable)) 
   theme(legend.justification = c(1, 1), legend.position = c(1, 1)) + scale_fill_brewer(palette="Dark2", name="Phylum") +ylab("% Relative Abundance")
 
 
-family <- sum_OTU_by_tax_level(2, rel_abund_top, tax_file)
 
 #actually need to aggregate/medians first from shared file, then put into sumotubytaxa
-
+source('code/tax_level.R')
 gathered <- gather(rel_meta, key, abundance, contains("Otu"))
 
 phyla_otu <- get_tax(5, df=tax_file)
@@ -130,6 +134,11 @@ lower_names <- colnames(phy_lower_error[,1:8])
 rownames(phy_lower_error) <- c()
 low_melt <- melt(phy_lower_error[,lower_names], id.var=1)
 
+phy_upper_error <- cbind(group=rownames(phy_upper_error), phy_upper_error)
+upper_names <- colnames(phy_upper_error[,1:8])
+rownames(phy_upper_error) <- c()
+upper_melt <- melt(phy_upper_error[,upper_names], id.var=1)
+
 #now try plotting this 
 phylumnames <- cbind(group=rownames(phylum), phylum)
 phylanames <- colnames(phylumnames[,1:8])
@@ -137,35 +146,21 @@ rownames(phylumnames) <- c()
 med_phyla <- melt(phylumnames[, phylanames], id.var=1)
 
 #merge
+med_error <- merge(med_phyla, low_melt, by=c('variable', 'group'))
+med_error <- merge(med_error, upper_melt, by=c('variable', 'group'))
 
-#WOO FINALLY FUCKIN WORKS 
-ggplot(med_phyla, aes(x=group, y=value)) +geom_bar(aes(fill=variable), position='dodge', stat='identity') +geom_errorbar(aes(ymin=low_melt, ymax=low_melt))
+
+low_melt$value <- as.numeric(low_melt$value)
+upper_melt$value <- as.numeric(upper_melt$value)
+
+#WOO 
+ggplot(med_phyla, aes(x=group, y=value)) +geom_bar(aes(fill=variable), position='dodge', stat='identity') +geom_errorbar(aes(ymin=low_melt, ymax=upper_melt))
+
+ggplot(med_error, aes(x=group, y=value.x)) +geom_bar(aes(fill=variable), position='dodge', stat='identity') +geom_errorbar(aes(ymin=value.y, ymax=value))
+
 
 #add error bars with geom_error_bar. do i get them from summary or what 
 
-#If you are trying to do a base version of this plot 
-family_melt <- melt(family, id.var='group')
-family_names <- cbind(group=rownames(family), family)
-transposed_family <- t(family)
-transposed_family <- transposed_family[-1,]
-
-#ggplot(transposed_family, aes(x=colnames(transposed_family), y))
-
-#colorbrewer
-getPalette = colorRampPalette(brewer.pal(9, "Set1"))
-
-barplot(t(family), ylim=c(0,100), col=getPalette(nrow(family)))
-
-#subset dataframe to get just sides 
-rightside <- family_names[meta_file$side == 'right',]
-rightside <- rightside[-1]
-barplot(t(rightside), ylim=c(0,100), col=getPalette(nrow(family)), cex.axis = 0.8, cex.names = 0.8)
-
-#right side is still too busy. lets just do one pt at a time
-
-pt6 <- family_names[meta_file$patient == 6,]
-pt6 <- pt6[-1]
-barplot(t(pt6), ylim=c(0,100), col = getPalette(nrow(family)))
 
 
 #Ok lets forget the community stuff for right now. let's plot inv. simpson diversity by location 
@@ -265,22 +260,6 @@ boxplot(tyc[,"thetayc"] ~ tyc[,"match"])
 medians <- matrix(nrow=1, ncol=2)
 colnames(medians) <- c("median", "iqr")
 medians <- as.data.frame(medians)
-
-#this was only working for medians. maybe try piping all data like nick did - this works but doesnt plot yet. 
-for(i in (tyc$match)){
-  compar <- subset(tyc, match==i)
-  theta <- compar["thetayc"]
-  med <- apply(theta, 2, median)
-  iqr <- apply(theta, 2, IQR)
-  medians[i, "median"] <- med
-  medians[i, "iqr"] <- iqr
-  }
-
-medians <- as.data.frame(medians)
-medians <- add_rownames(medians, var = "comparison")
-
-ggplot(medians, aes(x=comparison, y=medians)) +geom_point()
-
 
 
 

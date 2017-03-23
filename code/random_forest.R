@@ -28,23 +28,25 @@ OTUs_1 <- apply(rel_abund, 2, max) > 1
 OTU_list <- colnames(rel_abund)[OTUs_1]
 #get df of just top OTUs
 rel_abund_top <- rel_abund[, OTUs_1]
-rel_abund_top <- na.omit(rel_abund_top)
 
 rel_meta <- merge(meta_file, rel_abund_top, by.x='group', by.y="row.names")
 
 seed <- 1
 n_trees <- 2001
 
+#finish writing and testing 
 
-#write this as a whole function - TEST when you fix the package problem 
-
-randomize <- function(data, colname, samp1, samp2, n_trees){
-  subsetted <- subset(data, colname %in% c(samp1, samp2))
-  subsetted$colname <- factor(subsetted$colname)
-  rf_out <- randomForest(colname ~ ., data = select(subsetted, colname, contains("Otu")), importance = T, ntree=n_trees)
-  important_otus <- sort(importance(rf_out)[,1], decreasing=T)
-  #need to store the output of these somewhere
+randomize <- function(yourdata, colname, samp1, samp2, n_trees){
+  subsetted <- subset(yourdata, colname %in% c(samp1, samp2))
+  #subsetted$colname <- factor(subsetted$colname)
+  return(subsetted)
+  #rf_out <- randomForest(colname ~ ., data = select(subsetted, colname, contains("Otu")), importance = T, ntree=n_trees)
+  #important_otus <- sort(importance(rf_out)[,1], decreasing=T)
+  # need to store the output of these somewhere
 }
+
+testing <- randomize(rel_meta, colname = "location", samp1 ="LB", samp2="LS", n_trees=n_trees)
+
 
 #separate function for aucRF stuff
 

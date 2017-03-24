@@ -17,8 +17,7 @@ tax_file <- read.table(file='data/mothur/kws_final.an.cons.taxonomy', sep = '\t'
 
 #make OTU abundance file
 #Create df with relative abundances
-shared_file <- shared_file[,-1]
-shared_file <- shared_file[,-1]
+shared_file <- subset(shared_file, select = -c(numOtus, label))
 shared_meta <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
 
 rel_abund <- 100*shared_file/unique(apply(shared_file, 1, sum))
@@ -34,334 +33,46 @@ rel_meta <- merge(meta_file, rel_abund_top, by.x='group', by.y="row.names")
 seed <- 1
 n_trees <- 2001
 
-#finish writing and testing 
+source('code/random_functions.R')
 
-randomize <- function(yourdata, colname, samp1, samp2, n_trees){
-  #colname1 <- as.symbol(colname)
-  subsetted <- yourdata[yourdata[[colname]] == samp1 | yourdata[[colname]] == samp2,]
-  subsetted[[colname]] <- factor(subsetted[[colname]])
-  #rf_out <- randomForest(colname1 ~ ., data = select(subsetted, contains(colname1), contains("Otu")), importance = T, ntree=n_trees)
-  #important_otus <- sort(importance(rf_out)[,1], decreasing=T)
-  #return(colname1) 
-   # need to store the output of these somewhere
-}
+#build randomForest model for each location comparison using randomize_loc function 
+rf_left <- randomize_loc(rel_meta, "LB", "LS") #OOB 10.26%
+rf_right <- randomize_loc(rel_meta, "RB", "RS") #OOB 53%
+rf_bowel <- randomize_loc(rel_meta, "LB", "RB") #OOB 25.64%
+rf_lumen <- randomize_loc(rel_meta, "LS", "RS") #OOB 69.23%
+rf_exitRlum <- randomize_loc(rel_meta, "RS", "SS")
+rf_exitLlum <- randomize_loc(rel_meta, "LS", "SS")
 
-testing <- randomize(rel_meta, "location", samp1 ="LB", samp2="LS", n_trees=n_trees)
+#and for each site
+rf_all <- randomize_site(rel_meta, "mucosa", "stool")
+rf_exitlum <- randomize_site(rel_meta, "stool", "exit")
+rf_exitmuc <- randomize_site(rel_meta, "mucosa", "exit")
 
 
-#separate function for aucRF stuff
-
-auc_kf <- function(subsetted, colname, seed, n_trees){
-  classification_labels <- levels(subsetted$colname) #change levels of variable of interest to 0/1
-  levels(subsetted$colname) <- c(1:length(levels(subsetted$colname))-1)
-  # create RF model
-  set.seed(seed)
-  rf_aucrf <- AUCRF(colname ~ ., data = select(subsetted, colname, contains("Otu")),
-                         ntree = n_trees, pdel = 0.05, ranking = 'MDA')
-  otu_probs <- predict(rf_aucrf$RFopt, type = 'prob') #pull out predictive OTUs
-  all_probs <- data.frame(obs = subsetted$colname, pred = otu_probs[,2])
-  #compare real with predicted with ROC
-  otu_roc <- roc(subsetted$colname ~ otu_probs[,2])
-  otu_feat <- rf_aucrf$Xopt
-  #also should store this data somewhere. maybe as unique values or within a list?
-}
-
-#cross validation function 
-cross <- function(subsetted, colname, otu_feat){
-  aucrf_data <- subsetted[, c('colname', otu_feat)]
-  #10 fold cross validation for all lumen vs mucosa 
-  iters <- 100
-  cv10f_aucs <- c()
-  cv10f_all_resp <- c()
-  cv10f_all_pred <- c()
-  for(j in 1:iters){
-    set.seed(j)
-    sampling <- sample(1:nrow(aucrf_data),nrow(aucrf_data),replace=F)
-    #gotta do something about these numbers to not have them hardcoded 
-    cv10f_probs <- rep(NA,nrow(aucrf_data))
-    total <- (1 - nrow(aucrf_data))
-    divisible <- if(total/10 == whole){
-      divisible <- (total/10) else 
-    } #this is just psuedocode, gotta fix
-    for(i in seq(1,total,7)){
-      train <- aucrf_data[sampling[-(i:(i+6))],]
-      test <- aucrf_data[sampling[i:(i+6)],]
-      set.seed(seed)
-      temp_model <- AUCRF(colname~., data=train, pdel=0.99, ntree=500)
-      cv10f_probs[sampling[i:(i+6)]] <- predict(temp_model$RFopt, test, type='prob')[,2]
-    }
-    cv10f_roc <- roc(aucrf_data$colname ~ cv10f_probs)
-    cv10f_all_pred <- c(cv10f_all_pred, cv10f_probs)
-    cv10f_all_resp <- c(cv10f_all_resp, aucrf_data$colname)
-    cv10f_aucs[j] <- cv10f_roc$auc #stores aucs for all iterations, can use to calc IQR
-  }
-  cv10f_roc <- roc(cv10f_all_resp~cv10f_all_pred)
-  #get this stuff stored somewhere as well 
-}
-another <- rel_meta[rel_meta$location == "LB" | rel_meta$location == "LS",]
-
-left_bs <- subset(rel_meta, location %in% c("LB", "LS"))
-left_bs$location <- factor(left_bs$location)
-
-rf_left <- randomForest(location ~ ., data = select(left_bs, location, contains("Otu")), importance=T, ntree=n_trees)
-#OOB estimate of  error rate: 10.26%
-#Confusion matrix:
- # LB LS class.error
-#LB 16  3   0.1578947
-#LS  1 19   0.0500000
 
 #for left, these OTUS are higher in LM than in LL, also (see below) higher in LB than RB 
 left_importance <- sort(importance(rf_left)[,1], decreasing = T)
 
-right_bs <- subset(rel_meta, location %in% c("RB", "RS"))
-right_bs$location <- factor(right_bs$location)
-
-rf_right <- randomForest(location ~ ., data = select(right_bs, location, contains("Otu")), importance=T, ntree=n_trees)
-#OOB estimate of  error rate: 53.85%
-#Confusion matrix:
- # RB RS class.error
-#RB 11  9   0.4500000
-#RS 12  7   0.6315789
-
-LR_bowel <- subset(rel_meta, location %in% c("LB", "RB"))
-LR_bowel$location <- factor(LR_bowel$location)
-
-rf_bowel <- randomForest(location ~ ., data = select(LR_bowel, location, contains("Otu")), importance=T, ntree=n_trees)
-
-#OOB estimate of  error rate: 25.64%
-#Confusion matrix:
- # LB RB class.error
-#LB 13  6   0.3157895
-#RB  4 16   0.2000000
-
 #sort importance to show which OTUs are higher in Left than right bowel
 bowel_importance <- sort(importance(rf_bowel)[,1], decreasing = T)
-
-
-LR_lumen <- subset(rel_meta, location %in% c("LS", "RS"))
-LR_lumen$location <- factor(LR_lumen$location)
-rf_lumen <- randomForest(location ~ ., data = select(LR_lumen, location, contains("Otu")), importance=T, ntree=n_trees)
-
-#OOB estimate of  error rate: 69.23%
-#Confusion matrix:
- # LS RS class.error
-#LS  7 13   0.6500000
-#RS 14  5   0.7368421
 
 #to get what is higher in LS vs RS 
 lumen_importance <- sort(importance(rf_lumen)[,1], decreasing=T)
 
-#gender test, all M vs all F 
-#model is very overfit
-gender_mucosa <- subset(rel_meta, site == 'mucosa')
-gender_mucosa$gender <- factor(gender_mucosa$gender)
-rf_gender_muc <- randomForest(gender~., data=select(gender_mucosa, gender, contains("Otu")), importance = T, ntree=n_trees)
 
-gender_lumen <- subset(rel_meta, site == 'stool')
-gender_lumen$gender <- factor(gender_lumen$gender)
-rf_gender_lum <- randomForest(gender~., data=select(gender_lumen, gender, contains("Otu")), importance = T, ntree=n_trees)
+# create RF model with AUCRF outputs top OTUs
+aucrf_data_left_bs <- auc_loc(rel_meta, "LB", "LS")
+aucrf_data_LRbowel <- auc_loc(rel_meta, "LB", "RB")
+aucrf_data_right_bs <- auc_loc(rel_meta, "RB", "RS")
+aucrf_data_LRlumen <- auc_loc(rel_meta, "LS", "RS")
+aucrf_data_allum <- auc_site(rel_meta, "mucosa", "stool")
 
-#run after fixing package problem 
-gender_rb <- subset(rel_meta, location == 'RB')
-gender_rb$gender <- factor(gender_rb$gender)
-rf_gender_rb <- randomForest(gender~., data=select(gender_rb, gender, contains("Otu")), importance=T, ntree=n_trees)
+#need to fix specific function for these to output just the rf object 
+rf_exitlum_aucrf <- auc_site(rel_meta, "stool", "exit") # not working 
+rf_exitLlum_aucrf <- auc_loc(rel_meta, "LB", "SS")
+rf_exitRlum_aucrf <- auc_loc(rel_meta, "RB", "SS")
 
-#all mucosa vs all lumen
 
-all_lum <- subset(rel_meta, site %in% c("stool", "mucosa"))
-all_lum$site <- factor(all_lum$site)
-rf_all <- randomForest(site ~ ., data=select(all_lum, site, contains("Otu")), importance = T, ntree=n_trees)
-
-# exit vs all lumen
-exit_lum <- subset(rel_meta, site %in% c("stool", "exit"))
-exit_lum$site <- factor(exit_lum$site)
-rf_exitlum <- randomForest(site ~ ., data=select(exit_lum, site, contains("Otu")), importance=T, ntree=n_trees)
-
-# exit vs all mucosa
-exit_muc <- subset(rel_meta, site %in% c("mucosa", "exit"))
-exit_muc$site <- factor(exit_muc$site)
-rf_exitmuc <- randomForest(site ~ ., data=select(exit_muc, site, contains("Otu")), importance=T, ntree=n_trees)
-
-#exit vs L lumen
-exit_Llum <- subset(rel_meta, location %in% c("LS", "SS"))
-exit_Llum$location <- factor(exit_Llum$location)
-rf_exitLlum <- randomForest(location ~ ., data=select(exit_Llum, location, contains("Otu")), importance=T, ntree=n_trees)
-
-#exit vs R lumen
-exit_Rlum <- subset(rel_meta, location %in% c("RS", "SS"))
-exit_Rlum$location <- factor(exit_Rlum$location)
-rf_exitRlum <- randomForest(location ~ ., data=select(exit_Rlum, location, contains("Otu")), importance=T, ntree=n_trees)
-
-
-
-#now do aucrf model - need to make variables of interest 0 and 1 
-#1 is stool, 0 is mucosa
-classification_labels <- levels(left_bs$location) # save level labels as a vector for reference
-levels(left_bs$location) <- c(1:length(levels(left_bs$location))-1) # convert levels to numeric based on number of levels
-
-classification_labelsLR <- levels(LR_bowel$location) # save level labels as a vector for reference
-levels(LR_bowel$location) <- c(1:length(levels(LR_bowel$location))-1) # convert levels to numeric based on number of levels
-
-classification_labelsR <- levels(right_bs$location) # save level labels as a vector for reference
-levels(right_bs$location) <- c(1:length(levels(right_bs$location))-1) # convert levels to numeric based on number of levels
-
-classification_labelslumen <- levels(LR_lumen$location) # save level labels as a vector for reference
-levels(LR_lumen$location) <- c(1:length(levels(LR_lumen$location))-1) # convert levels to numeric based on number of levels
-
-classification_labelsall <- levels(all_lum$site)
-levels(all_lum$site) <- c(1:length(levels(all_lum$site)) - 1)
-
-classification_labelsexitlum <- levels(exit_lum$site)
-levels(exit_lum$site) <- c(1:length(levels(exit_lum$site))-1)
-
-classification_labelsexitmuc <- levels(exit_muc$site)
-levels(exit_muc$site) <- c(1:length(levels(exit_muc$site))-1)
-
-classification_labelsexitLlum <- levels(exit_Llum$location) # save level labels as a vector for reference
-levels(exit_Llum$location) <- c(1:length(levels(exit_Llum$location))-1) 
-
-classification_labelsexitRlum <- levels(exit_Rlum$location) # save level labels as a vector for reference
-levels(exit_Rlum$location) <- c(1:length(levels(exit_Rlum$location))-1) 
-
-classification_labelsgendermuc <- levels(gender_mucosa$gender) # save level labels as a vector for reference
-levels(gender_mucosa$gender) <- c(1:length(levels(gender_mucosa$gender))-1)
-
-classification_labelsgenderlum <- levels(gender_lumen$gender) # save level labels as a vector for reference
-levels(gender_lumen$gender) <- c(1:length(levels(gender_lumen$gender))-1)
-
-
-# create RF model
-set.seed(seed)
-rf_left_aucrf <- AUCRF(location ~ ., data = select(left_bs, location, contains("Otu")),
-                        ntree = n_trees, pdel = 0.05, ranking = 'MDA')
-set.seed(seed)
-rf_LRbowel_aucrf <- AUCRF(location ~ ., data = select(LR_bowel, location, contains("Otu")),
-                       ntree = n_trees, pdel = 0.05, ranking = 'MDA')
-set.seed(seed)
-rf_right_aucrf <- AUCRF(location ~ ., data = select(right_bs, location, contains("Otu")),
-                          ntree = n_trees, pdel = 0.05, ranking = 'MDA')
-set.seed(seed)
-rf_LRlumen_aucrf <- AUCRF(location ~ ., data = select(LR_lumen, location, contains("Otu")),
-                        ntree = n_trees, pdel = 0.05, ranking = 'MDA')
-set.seed(seed)
-rf_all_aucrf <- AUCRF(site ~ ., data = select(all_lum, site, contains("Otu")),
-                          ntree = n_trees, pdel = 0.05, ranking = 'MDA')
-set.seed(seed)
-rf_exitlum_aucrf <- AUCRF(site ~ ., data = select(exit_lum, site, contains("Otu")),
-                      ntree = n_trees, pdel = 0.05, ranking = 'MDA')
-set.seed(seed)
-rf_exitLlum_aucrf <- AUCRF(location ~ ., data = select(exit_Llum, location, contains("Otu")),
-                          ntree = n_trees, pdel = 0.05, ranking = 'MDA')
-set.seed(seed)
-rf_exitRlum_aucrf <- AUCRF(location ~ ., data = select(exit_Rlum, location, contains("Otu")),
-                           ntree = n_trees, pdel = 0.05, ranking = 'MDA')
-set.seed(seed)
-rf_gendermuc_aucrf <- AUCRF(gender~., data = select(gender_mucosa, gender, contains("Otu")), ntree=n_trees, pdel=0.05, ranking = 'MDA')
-
-set.seed(seed)
-rf_genderlum_aucrf <- AUCRF(gender~., data = select(gender_lumen, gender, contains("Otu")), ntree=n_trees, pdel=0.05, ranking = 'MDA')
-
-
-
-#this is just left stool vs mucosa  
-otu_left_probs <- predict(rf_left_aucrf$RFopt, type = 'prob')
-
-otu_LRbowel_probs <- predict(rf_LRbowel_aucrf$RFopt, type ='prob')
-
-otu_right_probs <- predict(rf_right_aucrf$RFopt, type = 'prob')
-
-otu_LRlumen_probs <- predict(rf_LRlumen_aucrf$RFopt, type = 'prob')
-
-otu_all_probs <- predict(rf_all_aucrf$RFopt, type = 'prob')
-
-otu_exitlum_probs <- predict(rf_exitlum_aucrf$RFopt, type = 'prob')
-
-otu_exitmuc_probs <- predict(rf_exitmuc_aucrf$RFopt, type = 'prob')
-
-otu_exitLlum_probs <- predict(rf_exitLlum_aucrf$RFopt, type ='prob')
-
-otu_exitRlum_probs <- predict(rf_exitRlum_aucrf$RFopt, type ='prob')
-
-otu_gendermuc_probs <- predict(rf_gendermuc_aucrf$RFopt, type = 'prob')
-
-otu_genderlum_probs <- predict(rf_genderlum_aucrf$RFopt, type = 'prob')
-
-
-all_left_probs <- data.frame(obs = left_bs$location,
-                             pred = otu_left_probs[,2])
-
-all_LRbowel_probs <- data.frame(obs = LR_bowel$location,
-                             pred = otu_LRbowel_probs[,2])
-
-all_right_probs <- data.frame(obs = right_bs$location,
-                                pred = otu_right_probs[,2])
-
-all_LRlumen_probs <- data.frame(obs = LR_lumen$location,
-                              pred = otu_LRlumen_probs[,2])
-
-all_all_probs <- data.frame(obs = all_lum$site,
-                                pred = otu_all_probs[,2])
-
-all_exitlum_probs <- data.frame(obs = exit_lum$site,
-                            pred = otu_exitlum_probs[,2])
-
-all_exitmuc_probs <- data.frame(obs = exit_muc$site,
-                                pred = otu_exitmuc_probs[,2])
-
-all_exitLlum_probs <- data.frame(obs = exit_Llum$location,
-                                pred = otu_exitLlum_probs[,2])
-
-all_exitRlum_probs <- data.frame(obs = exit_Rlum$location,
-                                 pred = otu_exitRlum_probs[,2])
-
-gender_muc_probs <- data.frame(obs=gender_mucosa$gender, pred=otu_gendermuc_probs[,2])
-
-gender_lum_probs <- data.frame(obs=gender_lumen$gender, pred=otu_genderlum_probs[,2])
-
-
-
-#compare real with predicted with ROC
-otu_left_roc <- roc(left_bs$location ~ otu_left_probs[ , 2])
-left_otu_feat <- rf_left_aucrf$Xopt
-
-otu_LRbowel_roc <- roc(LR_bowel$location ~ otu_LRbowel_probs[ , 2])
-LRbowel_otu_feat <- rf_LRbowel_aucrf$Xopt
-
-otu_right_roc <- roc(right_bs$location ~ otu_right_probs[ , 2])
-right_otu_feat <- rf_right_aucrf$Xopt
-
-
-otu_LRlumen_roc <- roc(LR_lumen$location ~ otu_LRlumen_probs[ , 2])
-LRlumen_otu_feat <- rf_LRlumen_aucrf$Xopt
-
-otu_all_roc <- roc(all_lum$site ~ otu_all_probs[,2])
-all_otu_feat <- rf_all_aucrf$Xopt
-
-otu_exitlum_roc <- roc(exit_lum$site ~ otu_exitlum_probs[,2])
-exitlum_feat <- rf_exitlum_aucrf$Xopt
-
-otu_exitmuc_roc <- roc(exit_muc$site ~ otu_exitmuc_probs[,2])
-exitmuc_feat <- rf_exitmuc_aucrf$Xopt
-
-otu_exitLlum_roc <- roc(exit_Llum$location ~ otu_exitLlum_probs[,2])
-exitLlum_feat <- rf_exitLlum_aucrf$Xopt
-
-otu_exitRlum_roc <- roc(exit_Rlum$location ~ otu_exitRlum_probs[,2])
-exitRlum_feat <- rf_exitRlum_aucrf$Xopt
-
-otu_gendermuc_roc <- roc(gender_mucosa$gender ~ otu_gendermuc_probs[,2])
-gendermuc_feat <- rf_gendermuc_aucrf$Xopt
-
-otu_genderlum_roc <- roc(gender_lumen$gender ~ otu_genderlum_probs[,2])
-genderlum_feat <- rf_genderlum_aucrf$Xopt
-
-#really should make that a function 
-
-aucrf_data_allum <- all_lum[,c('site',all_otu_feat)]
-aucrf_data_LRbowel <- LR_bowel[, c('location', LRbowel_otu_feat)]
-aucrf_data_LRlumen <- LR_lumen[, c('location', LRlumen_otu_feat)]
-aucrf_data_left_bs <- left_bs[, c('location', left_otu_feat)]
-aucrf_data_right_bs <- right_bs[, c('location', right_otu_feat)]
 
 #10 fold cross validation for all lumen vs mucosa 
 iters <- 100
@@ -432,13 +143,6 @@ for(j in 1:iters){
 }
 cv10f_roc_right_bs <- roc(cv10f_all_resp_right_bs~cv10f_all_pred_right_bs)
 
-
-
-
-
-
-
-
 #10 fold cross validation for L vs R mucosa
 
 iters <- 100
@@ -490,8 +194,7 @@ cv10f_roc_lum <- roc(cv10f_all_resp_lum~cv10f_all_pred_lum)
 
 
 
-
-#generate entire figure just of exit comparisons ? 
+#generate entire figure just of exit comparisons 
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
 plot(otu_exitlum_roc, col='red', lwd=2, add=T, lty=1) #all lumen vs exit 
@@ -509,8 +212,6 @@ legend('bottom', legend=c(sprintf('All lumen vs exit, AUC = 0.882'),
                           #                               sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
                           #                               sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
 ), lty=1, lwd=2, col=c('red','blue', 'green4', 'purple'), bty='n')
-
-
 
 
 #Lumen vs mucosa plot 
@@ -542,18 +243,6 @@ legend('bottom', legend=c(sprintf('L mucosa vs R mucosa 10-fold CV, AUC = 0.912'
                           # sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
 ),lty=c(1, 1), lwd=2, col=c('green4', 'orange'), bty='n')
 
-
-#predict gender of mucosa?! new plot- update with better prediction thing 
-par(mar=c(4,4,1,1))
-plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
-plot(otu_gendermuc_roc, col = 'pink', lwd=2, add=T, lty=1) #gender mucosa test
-plot(otu_genderlum_roc, col = 'blue', lwd=2, add=T, lty=1)
-mtext(side=2, text="Sensitivity", line=2.5)
-mtext(side=1, text="Specificity", line=2.5)
-legend('bottom', legend=c(#sprintf('L lumen vs L mucosa, AUC = 0.984', otu_left_roc$auc),
-  sprintf('L mucosa vs R mucosa, AUC = 0.926',otu_LRbowel_roc$auc)
-  #sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
-),lty=c(1, 1, 2, 2), lwd=2, col=c('pink', 'blue'), bty='n')
 
 #importance plots for OTUs
 tax_function <- 'code/tax_level.R'
@@ -640,14 +329,11 @@ ggplot(data = top_important_OTU_rflumen, aes(x = factor(OTU), y = Importance)) +
   labs(x= '', y = '% Increase in MSE') + theme_bw() + coord_flip() + ggtitle('L lumen vs R lumen')
 
 
-#make all of this shit a function
-#also make RA plots of the choice OTUs 
-
 #all_otu_feat holds the important OTUs for all lumen vs all mucosa 
 
 all_otu_feat <- rev(all_otu_feat[1:5])
 otu_taxa_all <- get_tax(1, all_otu_feat, tax_file)
-#Abundance stripchart or most predictive otus - Niel's code 
+#Abundance stripchart or most predictive otus 
 lumen_abunds <- shared_meta[shared_meta$site=='stool', all_otu_feat]/10000 + 1e-4
 mucosa_abunds <- shared_meta[shared_meta$site=='mucosa', all_otu_feat]/10000 + 1e-4
 
@@ -670,7 +356,7 @@ legend('topright', legend=c("mucosa", "lumen"), pch=c(21, 21), pt.bg=c("orange",
 
 left_otu_feat <- rev(left_otu_feat[1:5])
 otu_taxa_left <- get_tax(1, left_otu_feat, tax_file)
-#Abundance stripchart or most predictive otus - Niel's code 
+#Abundance stripchart or most predictive otus
 ls_abunds <- shared_meta[shared_meta$location=='LS', left_otu_feat]/10000 + 1e-4
 lb_abunds <- shared_meta[shared_meta$location=='LB', left_otu_feat]/10000 + 1e-4
 
@@ -692,7 +378,7 @@ legend('topright', legend=c("left mucosa", "left lumen"), pch=c(21, 21), pt.bg=c
 
 right_otu_feat <- rev(right_otu_feat[1:5])
 otu_taxa_right <- get_tax(1, right_otu_feat, tax_file)
-#Abundance stripchart or most predictive otus - Niel's code 
+#Abundance stripchart or most predictive otus
 rs_abunds <- shared_meta[shared_meta$location=='RS', right_otu_feat]/10000 + 1e-4
 rb_abunds <- shared_meta[shared_meta$location=='RB', right_otu_feat]/10000 + 1e-4
 
@@ -714,7 +400,7 @@ legend('topright', legend=c("right mucosa", "right lumen"), pch=c(21, 21), pt.bg
 #Lb vs Rb
 LRbowel_otu_feat <- rev(LRbowel_otu_feat[1:5])
 otu_taxa_LRbowel <- get_tax(1, LRbowel_otu_feat, tax_file)
-#Abundance stripchart or most predictive otus - Niel's code 
+#Abundance stripchart or most predictive otus 
 lb_abunds <- shared_meta[shared_meta$location=='LB', LRbowel_otu_feat]/10000 + 1e-4
 rblb_abunds <- shared_meta[shared_meta$location=='RB', LRbowel_otu_feat]/10000 + 1e-4
 
@@ -736,7 +422,7 @@ legend('topright', legend=c("left mucosa", "right mucosa"), pch=c(21, 21), pt.bg
 #LS vs RS
 LRlumen_otu_feat <- rev(LRlumen_otu_feat[1:5])
 otu_taxa_LRlumen <- get_tax(1, LRlumen_otu_feat, tax_file)
-#Abundance stripchart or most predictive otus - Niel's code 
+#Abundance stripchart or most predictive otus 
 lsrs_abunds <- shared_meta[shared_meta$location=='LS', LRlumen_otu_feat]/10000 + 1e-4
 rsls_abunds <- shared_meta[shared_meta$location=='RS', LRlumen_otu_feat]/10000 + 1e-4
 

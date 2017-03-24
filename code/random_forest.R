@@ -37,15 +37,16 @@ n_trees <- 2001
 #finish writing and testing 
 
 randomize <- function(yourdata, colname, samp1, samp2, n_trees){
-  subsetted <- subset(yourdata, colname %in% c(samp1, samp2))
-  #subsetted$colname <- factor(subsetted$colname)
-  return(subsetted)
-  #rf_out <- randomForest(colname ~ ., data = select(subsetted, colname, contains("Otu")), importance = T, ntree=n_trees)
+  #colname1 <- as.symbol(colname)
+  subsetted <- yourdata[yourdata[[colname]] == samp1 | yourdata[[colname]] == samp2,]
+  subsetted[[colname]] <- factor(subsetted[[colname]])
+  #rf_out <- randomForest(colname1 ~ ., data = select(subsetted, contains(colname1), contains("Otu")), importance = T, ntree=n_trees)
   #important_otus <- sort(importance(rf_out)[,1], decreasing=T)
-  # need to store the output of these somewhere
+  #return(colname1) 
+   # need to store the output of these somewhere
 }
 
-testing <- randomize(rel_meta, colname = "location", samp1 ="LB", samp2="LS", n_trees=n_trees)
+testing <- randomize(rel_meta, "location", samp1 ="LB", samp2="LS", n_trees=n_trees)
 
 
 #separate function for aucRF stuff
@@ -97,6 +98,7 @@ cross <- function(subsetted, colname, otu_feat){
   cv10f_roc <- roc(cv10f_all_resp~cv10f_all_pred)
   #get this stuff stored somewhere as well 
 }
+another <- rel_meta[rel_meta$location == "LB" | rel_meta$location == "LS",]
 
 left_bs <- subset(rel_meta, location %in% c("LB", "LS"))
 left_bs$location <- factor(left_bs$location)

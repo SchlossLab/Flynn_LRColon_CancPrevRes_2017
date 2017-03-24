@@ -1,5 +1,6 @@
 # random forest and AUCRF of left vs right, stool vs mucosa
-#load packages- code swiped from nick
+#Kaitlin Flynn, Schloss lab, updated 3 24 17
+#load packages
 pack_used <- c('randomForest','ggplot2', 'pROC', 'knitr','dplyr','AUCRF', 'tidyr', 'caret')
 for (dep in pack_used){
   if (dep %in% installed.packages()[,"Package"] == FALSE){
@@ -27,7 +28,6 @@ OTUs_1 <- apply(rel_abund, 2, max) > 1
 OTU_list <- colnames(rel_abund)[OTUs_1]
 #get df of just top OTUs
 rel_abund_top <- rel_abund[, OTUs_1]
-
 rel_meta <- merge(meta_file, rel_abund_top, by.x='group', by.y="row.names")
 
 seed <- 1
@@ -35,6 +35,7 @@ n_trees <- 2001
 
 source('code/random_functions.R')
 
+#####RandomForest###########################################################################################
 #build randomForest model for each location comparison using randomize_loc function 
 rf_left <- randomize_loc(rel_meta, "LB", "LS") #OOB 10.26%
 rf_right <- randomize_loc(rel_meta, "RB", "RS") #OOB 53%
@@ -49,16 +50,7 @@ rf_exitlum <- randomize_site(rel_meta, "stool", "exit")
 rf_exitmuc <- randomize_site(rel_meta, "mucosa", "exit")
 
 
-
-#for left, these OTUS are higher in LM than in LL, also (see below) higher in LB than RB 
-left_importance <- sort(importance(rf_left)[,1], decreasing = T)
-
-#sort importance to show which OTUs are higher in Left than right bowel
-bowel_importance <- sort(importance(rf_bowel)[,1], decreasing = T)
-
-#to get what is higher in LS vs RS 
-lumen_importance <- sort(importance(rf_lumen)[,1], decreasing=T)
-
+#####AUCRF#####################################################################################
 
 # create RF model with AUCRF outputs top OTUs
 aucrf_data_left_bs <- auc_loc(rel_meta, "LB", "LS")
@@ -73,7 +65,7 @@ rf_exitLlum_aucrf <- auc_loc(rel_meta, "LB", "SS")
 rf_exitRlum_aucrf <- auc_loc(rel_meta, "RB", "SS")
 
 
-
+########Cross-Validation#################################################################
 #10 fold cross validation for all lumen vs mucosa 
 iters <- 100
 cv10f_aucs <- c()
@@ -169,7 +161,6 @@ cv10f_roc_muc <- roc(cv10f_all_resp_muc~cv10f_all_pred_muc)
 
 
 #10 fold cross validation for L vs R lumen
-
 iters <- 100
 cv10f_aucs_lum <- c()
 cv10f_all_resp_lum <- c()
@@ -193,33 +184,13 @@ for(j in 1:iters){
 cv10f_roc_lum <- roc(cv10f_all_resp_lum~cv10f_all_pred_lum)
 
 
-
-#generate entire figure just of exit comparisons 
-par(mar=c(4,4,1,1))
-plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
-plot(otu_exitlum_roc, col='red', lwd=2, add=T, lty=1) #all lumen vs exit 
-plot(otu_exitmuc_roc, col='blue', lwd=2, add=T, lty=1) #all mucosa vs exit
-plot(otu_exitLlum_roc, col='green4', lwd=2, add=T, lty=1) #left lumen vs exit 
-plot(otu_exitRlum_roc, col='purple', lwd=2, add=T, lty=1) #right lumen vs left lumen 
-#plot(otu_all_roc, col = 'pink', lwd=2, add =T, lty=1)
-mtext(side=2, text="Sensitivity", line=2.5)
-mtext(side=1, text="Specificity", line=2.5)
-legend('bottom', legend=c(sprintf('All lumen vs exit, AUC = 0.882'),
-                          sprintf('All mucosa vs exit, AUC = 0.991'),
-                          sprintf('L lumen vs exit, AUC = 0.802'),
-                          sprintf('R lumen vs exit, AUC = 0.934')
-                          # sprintf('all lumen vs all mucosa, AUC = 0.922')#,
-                          #                               sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
-                          #                               sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
-), lty=1, lwd=2, col=c('red','blue', 'green4', 'purple'), bty='n')
-
-
+########Plots!#######################################################################################################
 #Lumen vs mucosa plot 
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
-plot(cv10f_roc_right_bs, col='blue', lwd=2, add=T, lty=1)
+#plot(cv10f_roc_right_bs, col='blue', lwd=2, add=T, lty=1)
 plot(cv10f_roc, col = 'purple', lwd=2, add=T, lty=1)
-plot(cv10f_roc_left_bs, col = 'red', lwd=2, add=T, lty=1)
+#plot(cv10f_roc_left_bs, col = 'red', lwd=2, add=T, lty=1)
 mtext(side=2, text="True Positive (Sensitivity)", line=2.5)
 mtext(side=1, text="True Negative (Specificity)", line=2.5)
 legend('bottom', legend=c(sprintf('Lumen vs Mucosa, 10-fold CV, AUC = 0.925'),
@@ -243,37 +214,50 @@ legend('bottom', legend=c(sprintf('L mucosa vs R mucosa 10-fold CV, AUC = 0.912'
                           # sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
 ),lty=c(1, 1), lwd=2, col=c('green4', 'orange'), bty='n')
 
+#generate entire figure just of exit comparisons 
+par(mar=c(4,4,1,1))
+plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
+plot(otu_exitlum_roc, col='red', lwd=2, add=T, lty=1) #all lumen vs exit 
+plot(otu_exitmuc_roc, col='blue', lwd=2, add=T, lty=1) #all mucosa vs exit
+plot(otu_exitLlum_roc, col='green4', lwd=2, add=T, lty=1) #left lumen vs exit 
+plot(otu_exitRlum_roc, col='purple', lwd=2, add=T, lty=1) #right lumen vs left lumen 
+#plot(otu_all_roc, col = 'pink', lwd=2, add =T, lty=1)
+mtext(side=2, text="Sensitivity", line=2.5)
+mtext(side=1, text="Specificity", line=2.5)
+legend('bottom', legend=c(sprintf('All lumen vs exit, AUC = 0.882'),
+                          sprintf('All mucosa vs exit, AUC = 0.991'),
+                          sprintf('L lumen vs exit, AUC = 0.802'),
+                          sprintf('R lumen vs exit, AUC = 0.934')
+                          # sprintf('all lumen vs all mucosa, AUC = 0.922')#,
+                          #                               sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
+                          #                               sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
+), lty=1, lwd=2, col=c('red','blue', 'green4', 'purple'), bty='n')
 
-#importance plots for OTUs
+
+###########Importance plots for OTUs!##############################################################################################################################
 tax_function <- 'code/tax_level.R'
 source(tax_function)
 
-#add nicks looping back in. store all plots in a list. then call from the list. but will need a list of rf_names first 
 n_features <- 10
-#just going to start with rf_left
+#importance for left bowel vs lumen 
 importance_sorted_rfleft <- sort(importance(rf_left)[,1], decreasing = T)
 top_important_OTU_rfleft <- data.frame(head(importance_sorted_rfleft, n_features))
 colnames(top_important_OTU_rfleft) <- 'Importance'
 top_important_OTU_rfleft$OTU <- rownames(top_important_OTU_rfleft)
 otu_taxa_rfleft <- get_tax(1, top_important_OTU_rfleft$OTU, tax_file)
-
-#importance_plot_day_rfleft <- 
-  ggplot(data = top_important_OTU_rfleft, aes(x = factor(OTU), y = Importance)) + 
+ggplot(data = top_important_OTU_rfleft, aes(x = factor(OTU), y = Importance)) + 
   geom_point() + scale_x_discrete(limits = rev(top_important_OTU_rfleft$OTU),
                                   labels = rev(paste(otu_taxa_rfleft[,1],' (',
                                                      rownames(otu_taxa_rfleft),')',
                                                      sep=''))) +
   labs(x= '', y = '% Increase in MSE') + theme_bw() + coord_flip() + ggtitle('LB vs LS')
 
-  
 #RB vs RS
 importance_sorted_rfright <- sort(importance(rf_right)[,1], decreasing = T)
 top_important_OTU_rfright <- data.frame(head(importance_sorted_rfright, n_features))
 colnames(top_important_OTU_rfright) <- 'Importance'
 top_important_OTU_rfright$OTU <- rownames(top_important_OTU_rfright)
 otu_taxa_rfright <- get_tax(1, top_important_OTU_rfright$OTU, tax_file)
-  
-  #importance_plot_day_rfleft <- 
 ggplot(data = top_important_OTU_rfright, aes(x = factor(OTU), y = Importance)) + 
     geom_point() + scale_x_discrete(limits = rev(top_important_OTU_rfright$OTU),
                                     labels = rev(paste(otu_taxa_rfright[,1],' (',
@@ -281,15 +265,12 @@ ggplot(data = top_important_OTU_rfright, aes(x = factor(OTU), y = Importance)) +
                                                        sep=''))) +
     labs(x= '', y = '% Increase in MSE') + theme_bw() + coord_flip() + ggtitle('RB vs RS')
   
-#all lumen vs mucosa 
-
+#all lumen vs mucosa importance
 importance_sorted_rfall <- sort(importance(rf_all)[,1], decreasing = T)
 top_important_OTU_rfall <- data.frame(head(importance_sorted_rfall, n_features))
 colnames(top_important_OTU_rfall) <- 'Importance'
 top_important_OTU_rfall$OTU <- rownames(top_important_OTU_rfall)
 otu_taxa_rfall <- get_tax(1, top_important_OTU_rfall$OTU, tax_file)
-
-#importance_plot_day_rfleft <- 
 ggplot(data = top_important_OTU_rfall, aes(x = factor(OTU), y = Importance)) + 
   geom_point() + scale_x_discrete(limits = rev(top_important_OTU_rfall$OTU),
                                   labels = rev(paste(otu_taxa_rfall[,1],' (',
@@ -298,14 +279,12 @@ ggplot(data = top_important_OTU_rfall, aes(x = factor(OTU), y = Importance)) +
   labs(x= '', y = '% Increase in MSE') + theme_bw() + coord_flip() + ggtitle('All mucosa vs lumen')
 
 
-#L mucosa vs R mucosa 
+#L mucosa vs R mucosa importance
 importance_sorted_rfbowel <- sort(importance(rf_bowel)[,1], decreasing = T)
 top_important_OTU_rfbowel <- data.frame(head(importance_sorted_rfbowel, n_features))
 colnames(top_important_OTU_rfbowel) <- 'Importance'
 top_important_OTU_rfbowel$OTU <- rownames(top_important_OTU_rfbowel)
 otu_taxa_rfbowel <- get_tax(1, top_important_OTU_rfbowel$OTU, tax_file)
-
-#importance_plot_day_rfleft <- 
 ggplot(data = top_important_OTU_rfbowel, aes(x = factor(OTU), y = Importance)) + 
   geom_point() + scale_x_discrete(limits = rev(top_important_OTU_rfbowel$OTU),
                                   labels = rev(paste(otu_taxa_rfbowel[,1],' (',
@@ -328,12 +307,13 @@ ggplot(data = top_important_OTU_rflumen, aes(x = factor(OTU), y = Importance)) +
                                                      sep=''))) +
   labs(x= '', y = '% Increase in MSE') + theme_bw() + coord_flip() + ggtitle('L lumen vs R lumen')
 
-
-#all_otu_feat holds the important OTUs for all lumen vs all mucosa 
-
-all_otu_feat <- rev(all_otu_feat[1:5])
+##############################################################################################################################
+#####Relative abundance plots#####
+#get top 5 OTUs and plot relative abundance
+all_otu_feat <- colnames(aucrf_data_allum[2:6])
 otu_taxa_all <- get_tax(1, all_otu_feat, tax_file)
-#Abundance stripchart or most predictive otus 
+
+#Abundance stripchart for most predictive otus 
 lumen_abunds <- shared_meta[shared_meta$site=='stool', all_otu_feat]/10000 + 1e-4
 mucosa_abunds <- shared_meta[shared_meta$site=='mucosa', all_otu_feat]/10000 + 1e-4
 
@@ -353,8 +333,7 @@ legend('topright', legend=c("mucosa", "lumen"), pch=c(21, 21), pt.bg=c("orange",
 
 
 #just LB vs LS 
-
-left_otu_feat <- rev(left_otu_feat[1:5])
+left_otu_feat <- colnames(aucrf_data_left_bs[2:6])
 otu_taxa_left <- get_tax(1, left_otu_feat, tax_file)
 #Abundance stripchart or most predictive otus
 ls_abunds <- shared_meta[shared_meta$location=='LS', left_otu_feat]/10000 + 1e-4
@@ -376,7 +355,7 @@ legend('topright', legend=c("left mucosa", "left lumen"), pch=c(21, 21), pt.bg=c
 
 #RB vs RS
 
-right_otu_feat <- rev(right_otu_feat[1:5])
+right_otu_feat <- colnames(aucrf_data_right_bs[2:6])
 otu_taxa_right <- get_tax(1, right_otu_feat, tax_file)
 #Abundance stripchart or most predictive otus
 rs_abunds <- shared_meta[shared_meta$location=='RS', right_otu_feat]/10000 + 1e-4
@@ -398,7 +377,7 @@ legend('topright', legend=c("right mucosa", "right lumen"), pch=c(21, 21), pt.bg
 
 
 #Lb vs Rb
-LRbowel_otu_feat <- rev(LRbowel_otu_feat[1:5])
+LRbowel_otu_feat <- colnames(aucrf_data_LRbowel[2:6])
 otu_taxa_LRbowel <- get_tax(1, LRbowel_otu_feat, tax_file)
 #Abundance stripchart or most predictive otus 
 lb_abunds <- shared_meta[shared_meta$location=='LB', LRbowel_otu_feat]/10000 + 1e-4
@@ -420,7 +399,7 @@ legend('topright', legend=c("left mucosa", "right mucosa"), pch=c(21, 21), pt.bg
 
 
 #LS vs RS
-LRlumen_otu_feat <- rev(LRlumen_otu_feat[1:5])
+LRlumen_otu_feat <- colnames(aucrf_data_LRlumen[2:6])
 otu_taxa_LRlumen <- get_tax(1, LRlumen_otu_feat, tax_file)
 #Abundance stripchart or most predictive otus 
 lsrs_abunds <- shared_meta[shared_meta$location=='LS', LRlumen_otu_feat]/10000 + 1e-4

@@ -1,0 +1,38 @@
+---
+title: "**Machine learning identifies unique taxa differentiating proximal and distal human colonic microbiota**"
+bibliography: references.bib
+output:
+  pdf_document:
+    includes:
+      in_header: header.tex
+    keep_tex: yes
+csl: plos.csl #Get themes at https://github.com/citation-style-language/styles
+fontsize: 11pt
+geometry: margin=1.0in
+---
+\vspace{35mm}
+
+Running title: Unique taxa differentiate proximal and distal human colon microbiota
+
+\vspace{35mm}
+
+
+Kaitlin J. Flynn^1^, Charles C. Koumpouras^1^, Mack T. Ruffin IV^2^, Danielle Kimberly Turgeon^3^, and Patrick D. Schloss^1$\dagger$^
+
+\vspace{35mm}
+
+$\dagger$ Corresponding author: pschloss@umich.edu
+
+
+1\. Department of Microbiology and Immunology, University of Michigan Medical School, Ann Arbor, Michigan 48109
+
+2\. Pennslyvania State University, Hershey, Pennslyvania ??
+
+3\. Department of Internal Medicine, Division of Gastroenterology, University of Michigan Medical School, Ann Arbor, Michigan
+
+
+\newpage
+\linenumbers
+
+
+### Abstract

@@ -36,3 +36,46 @@ $\dagger$ Corresponding author: pschloss@umich.edu
 
 
 ### Abstract
+
+Colorectal cancer (CRC) remains a leading cause of death worldwide. Tumors of the proximal (right) and distal (left) colon are morpologically and genetically distinct. Previous work from our group found that microbial dysbiosis is associated with the development of colorectal cancer tumors in studies of both mice and humans. Analysis of the fecal microbiota from healthy and CRC patients further revealed different microbial signatures associated with disease. In this study, we extended our observations of the fecal microbiome to analysis of the proximal and distal human colon. We used a two-colonoscope approach on subjects that had not undergone standard bowel preparation procedure. This technique allowed us to characterize the native proximal and distal luminal and mucosal microbiome without prior chemical disruption. 16S rRNA gene sequencing was performed on proximal and distal mucosal biopsies, luminal and exit stool for 20 healthy individuals. Diversity analysis of each location revealed that each site contained a diverse community, and that a patient’s samples were more similar to each other than to that of other individuals. Since we could not differentiate sites along the colon based on community structure or community membership alone, we employed the machine-learning algorithm Random Forest to identify key species that distinguish biogeographical sites. Random Forest classification models were built using taxa abundance and sample location revealed distinct populations that were found in each location. Peptoniphilus, Anaerococcus, Enterobacteraceae, Pseudomonas and Actinomyces were most likely to be found in mucosal samples versus luminal samples (AUC = 0.925). The classification model performed well (AUC = 0.912) when classifying mucosal samples into proximal or distal sides, but separating luminal samples from each side proved more challenging (AUC = 0.755). The left mucosa was found to have high populations of Finegoldia, Murdochiella and Porphyromonas. Proximal and distal luminal samples were comprised of many of the same taxa, likely reflecting the fact that stool moves along the colon from the proximal to distal end. Finally, comparison of all samples to fecal samples taken at exit uncovered that the feces were most similar to samples taken from the left lumen, again reflecting the anatomical structure of the colon. Taken together, our results have identified distinct bacterial populations distinct of the proximal and distal colon. Further investigation of these bacteria may elucidate if and how these groups contribute to differential oncogenesis processes on the respective sides of the colon. 
+
+### Introduction
+
+- colon cancer 
+- right and left tumors are morphologically and genetically distinct
+- the microbiome is of healthy people and patients with CRC is distinguishable at the OTU level
+- specific keystone species are associated with CRC tumors
+- do the populations of bacteria in the left and right colon contribute to the development of specific subtypes of CRC? 
+- nearly all studies of the gut microbiome have been from shed stool or colonoscopy with bowel prep
+- bowel prep changes the mucosal/fecal microbiome and what can be analyzed from it. 
+- first, need to characterize healthy species that are specific to each location. then we can ask, if/how disruption affects tumorigenesis? 
+- how does the microbiome vary spatially along the colon?
+
+
+
+
+### Results
+
+### Discussion
+
+### Acknowledgments 
+
+### Methods
+
+### Figure Legends
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

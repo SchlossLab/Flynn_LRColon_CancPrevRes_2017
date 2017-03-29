@@ -42,27 +42,32 @@ Colorectal cancer (CRC) remains a leading cause of death worldwide. Tumors of th
 ### Introduction
 
 - colon cancer 
-- right and left tumors are morphologically and genetically distinct
+- right and left tumors are morphologically and genetically distinct (why Q is important)
 - the microbiome of healthy people and patients with CRC is distinguishable at the OTU level
 - specific keystone species are associated with CRC tumors
-- do the populations of bacteria in the left and right colon contribute to the development of specific subtypes of CRC? 
+- do the populations of bacteria in the left and right colon contribute to the development of specific subtypes of CRC? (central Q)
 - nearly all studies of the gut microbiome have been from shed stool or colonoscopy with bowel prep
 - bowel prep changes the mucosal/fecal microbiome and what can be analyzed from it. 
-- first, need to characterize healthy species that are specific to each location. then we can ask, if/how disruption affects tumorigenesis? 
-- mucosal vs lumenal populations studies have also been complicated by bowel prep 
+- first, need to characterize healthy species that are specific to each location. then we can ask, if/how disruption affects tumorigenesis? (data needed to answer Q)
+- mucosal vs lumenal populations studies have also been complicated by bowel prep (what methods are used to get data? what analysis must be applied?- ML)
 - how does the microbiome vary spatially along the colon? we know that the environment varies dramatically but we dont know how those environmental factors specifically affect bacterial populations 
 - hypothesis: there are distinct bacteria on the left and right side that can be distinguished by 16S sequencing of stool
 
 
 ### Results
 
-
+- what data were obtained? what were the results of the analyses?
 
 
 
 
 
 ### Discussion
+
+-how did the analyses answer the central question?
+
+-what does this answer tell us about the broader field?
+
 
 ### Acknowledgments 
 

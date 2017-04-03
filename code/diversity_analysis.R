@@ -29,6 +29,8 @@ ggplot(nmds, aes(x=axis1, y=axis2)) +geom_point(aes(color=site))
 #subset shared and then do distance, nmds to get comparisons of just those samples 
 #could name this shared subsetting thing a function also 
 
+#fix this function 
+
 separate_nmds <- function(m_file, colname, observation, s_file){
   temp <- m_file$group[m_file$colname=='observation']
   tempshared <- s_file[row.names(s_file) %in% temp]
@@ -99,8 +101,27 @@ p <- ggplot(nmds, aes(axis1, axis2)) +geom_point(aes(color=as.factor(patient), s
 p <- p + scale_color_discrete(name="Patient")
 
 noexit <- subset(nmds, side == 'left' | side == 'right')
-g <- ggplot(noexit, aes(axis1, axis2)) +geom_point(aes(color=as.factor(patient), shape=side), size = 2.5) + facet_wrap(~site) +theme_bw()
-g <- g + scale_color_discrete(name="Patient")
+ggplot(noexit, aes(axis1, axis2)) +geom_point(aes(color=as.factor(patient), shape=as.factor(patient)), size = 2.5) +
+                                                facet_wrap(~site) +theme_bw() + scale_color_discrete(name="Patient") + scale_shape_manual(values=seq(0,20))
+
+#testing plot options - two colors for side, each patient a shape
+ggplot(noexit, aes(axis1, axis2)) +geom_point(aes(color=side, shape=as.factor(patient)), size = 3, stroke = 1.5) +
+  facet_wrap(~site) +theme_bw() + scale_color_discrete(name="Patient") + scale_shape_manual(values=seq(0,20))
+
+#testing plot - each patient a letter 
+letters <- c(seq(80,90), seq(65,75))
+ggplot(noexit, aes(axis1, axis2)) +geom_point(aes(color=side, shape=as.factor(patient)), size = 3, stroke =3) +
+  facet_wrap(~site) +theme_bw() + scale_color_discrete(name="Patient") + scale_shape_manual(values=letters)
+
+#NMDS connected lines plot 
+ggplot(noexit, aes(axis1, axis2, group=patient)) +
+  geom_point(aes(color=side), size = 2.5) +
+  facet_wrap(~site, labeller=labeller(site = c(`mucosa` = "Muocsa", `stool` = "Lumen"))) +theme_bw() +
+  geom_line(size=0.25, color='grey') +
+  theme(legend.position = c(0.95, 0.92), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.text = element_text(size= 12), axis.title= element_text(size=14), 
+        strip.text=element_text(size=14), legend.text=element_text(size=12)) 
+
 
 #color points by organ 
 points(left_mucosa, pch=nmds$patient, col = "blue")

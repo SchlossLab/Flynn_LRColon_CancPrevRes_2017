@@ -26,7 +26,7 @@ shared_meta <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
 
 test <- subset(shared_file, select = -c(numOtus, label))
 rel_abund <- 100*test/unique(apply(test, 1, sum)) #unique is bad
-apply(test, 1, sum)
+
 
 #Create vector of OTUs with median abundances >1%
 OTUs_1 <- apply(rel_abund, 2, max) > 1
@@ -91,12 +91,17 @@ names(phylamelt_low)[3] <- "lower"
 phylamelt <- merge(phylamelt, phylamelt_low)
 
 #aaand heres the plot! IT WORKS
+#set positions to order bars by R to L 
+positions <- c("RB", "RS", "LB", "LS", "SS")
 ggplot(phylamelt, aes(x=group, y=value, ymin=lower, ymax=upper, fill=variable)) + 
   geom_bar(position=position_dodge(), stat='identity') + 
-  geom_errorbar(position=position_dodge(0.9), width=0.2) +theme_bw() + 
-  scale_x_discrete(breaks=c("LB", "LS", "RB", "RS", "SS"), 
-                   labels=c("L Mucosa", "L Lumen", "R Mucosa", "R Lumen", "Stool")) +
+  geom_errorbar(position=position_dodge(0.9), width=0.2) + theme_bw() + 
+  theme(axis.text = element_text(size= 12), axis.title= element_text(size=14), legend.text=element_text(size=12), legend.title=element_text(size=14)) +
+  scale_x_discrete(limits = positions, breaks=positions, 
+                   labels=c("R Mucosa", "R Lumen", "L Mucosa", "L Lumen", "Stool")) +
   theme(axis.title.x=element_blank(), panel.grid.major.x = element_blank(),panel.grid.minor.x = element_blank()) +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1)) + scale_fill_brewer(palette="Dark2", name="Phylum") +
-  ylab("% Relative Abundance")
+  ylab("% Relative Abundance") 
+
+
 

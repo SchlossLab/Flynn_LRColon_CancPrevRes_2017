@@ -18,8 +18,12 @@ tyc <- read.table("data/mothur/kws_final.an.summary", sep = '\t', header = T, ro
 simpmeta <- merge(invsimp, meta_file, by.x='group', by.y='group')
 
 simpmeta$location <- factor(simpmeta$location, c("LB","RB", "LS", "RS", "SS"))
-ggplot(simpmeta, aes(x=location, y=invsimpson, group =1,  color=site)) +geom_point() +geom_jitter(width=0.4) +theme_bw() + ylab("Inverse Simpson Diversity") +
-  scale_color_manual(values=wes_palette("Darjeeling")) + scale_x_discrete(labels=c("L Mucosa", "R Mucosa", "L Lumen", "R Lumen", "Stool")) +theme(legend.position='none', axis.title.x=element_blank())+
+positions <- c("RB", "RS", "LB", "LS", "SS")
+ggplot(simpmeta, aes(x=location, y=invsimpson, group =1,  color=site)) +geom_point() +geom_jitter(width=0.3) +theme_bw() + ylab("Inverse Simpson Diversity") +
+  scale_color_manual(values=wes_palette("Darjeeling")) + 
+  scale_x_discrete(limits = positions, breaks=positions, 
+                   labels=c("R Mucosa", "R Lumen", "L Mucosa", "L Lumen", "Stool")) +
+  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 12), axis.title= element_text(size=14)) +
   stat_summary(aes(x=location, y=invsimpson), data = simpmeta, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 
 

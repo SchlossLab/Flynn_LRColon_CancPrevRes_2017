@@ -243,7 +243,7 @@ ggplot(lvsr, aes(x=match, y=thetayc, color=match)) + geom_point() + geom_jitter(
   ylab("ThetaYC distance") + stat_summary(aes(x=match, y=thetayc), data = lvsr, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.3)
 
 exitpositions <- c("RB_SS", "RS_SS", "LB_SS", "LS_SS")
-ggplot(exittyc, aes(x=match, y=thetayc, color=match)) + geom_point() + geom_jitter(width= 0.3) +theme_bw() +scale_color_brewer(palette="Set1") +
+ggplot(exittyc, aes(x=match, y=thetayc, color=match)) + geom_point() + geom_jitter(width= 0.3) +theme_bw() +scale_color_brewer(palette="Dark2") +
   theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 12), axis.title= element_text(size=14)) +
   scale_x_discrete(limits=exitpositions, breaks=exitpositions,
                   labels=c("R Mucosa vs Stool", "R Lumen vs Stool", "L Mucosa vs Stool", "L Lumen vs Stool")) +

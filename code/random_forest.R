@@ -206,8 +206,8 @@ par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
 plot(cv10f_roc_muc,col = 'green4', lwd=2, add=T, lty=1) #r vs l mucosa cross validation
 plot(cv10f_roc_lum, col = 'orange', lwd=2, add=T, lty=1) #r vs l lumen cross validation
-mtext(side=2, text="True Positive (Sensitivity)", line=2.5)
-mtext(side=1, text="True Negative (Specificity)", line=2.5)
+mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1)
+mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1)
 legend('bottom', legend=c(sprintf('L mucosa vs R mucosa 10-fold CV, AUC = 0.912'),
                           sprintf('L lumen vs R lumen 10-fold CV, AUC = 0.7551')
                           # sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
@@ -383,17 +383,17 @@ otu_taxa_LRbowel <- get_tax(1, LRbowel_otu_feat, tax_file)
 lb_abunds <- shared_meta[shared_meta$location=='LB', LRbowel_otu_feat]/10000 + 1e-4
 rblb_abunds <- shared_meta[shared_meta$location=='RB', LRbowel_otu_feat]/10000 + 1e-4
 
-par(mar=c(4, 10, 1, 1))
+par(mar=c(4, 11, 1, 1))
 plot(1, type="n", ylim=c(0,length(LRbowel_otu_feat)*2), xlim=c(1e-4,3), log="x", ylab="", xlab="Relative Abundance (%)", xaxt="n", yaxt="n")
 index <- 1
 for(i in LRbowel_otu_feat){
   stripchart(at=index-0.35, jitter(lb_abunds[,i], amount=1e-5), pch=21, bg="darkgreen", method="jitter", jitter=0.2, add=T, cex=1, lwd=0.5)
   stripchart(at=index+0.35, jitter(rblb_abunds[,i], amount=1e-5), pch=21, bg="pink", method="jitter", jitter=0.2, add=T, cex=1, lwd=0.5)
-  segments(mean(lb_abunds[,i]),index-0.7,mean(lb_abunds[,i]),index, lwd=3)
-  segments(mean(rblb_abunds[,i]),index+0.7,mean(rblb_abunds[,i]),index, lwd=3)
+  segments(median(lb_abunds[,i]),index-0.7,median(lb_abunds[,i]),index, lwd=3)
+  segments(median(rblb_abunds[,i]),index+0.7,median(rblb_abunds[,i]),index, lwd=3)
   index <- index + 2
 }
-axis(2, at=seq(1,index-2,2), labels=otu_taxa_LRbowel$tax_label, las=1, line=-0.5, tick=F, cex.axis=0.8)
+axis(2, at=seq(1,index-2,2), labels=otu_taxa_LRbowel$tax_label, las=1, line=-0.5, tick=F, cex.axis=1)
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
 legend('topright', legend=c("left mucosa", "right mucosa"), pch=c(21, 21), pt.bg=c("darkgreen","pink"), cex=1)
 
@@ -405,17 +405,17 @@ otu_taxa_LRlumen <- get_tax(1, LRlumen_otu_feat, tax_file)
 lsrs_abunds <- shared_meta[shared_meta$location=='LS', LRlumen_otu_feat]/10000 + 1e-4
 rsls_abunds <- shared_meta[shared_meta$location=='RS', LRlumen_otu_feat]/10000 + 1e-4
 
-par(mar=c(4, 10, 1, 1))
+par(mar=c(4, 11, 1, 1))
 plot(1, type="n", ylim=c(0,length(LRlumen_otu_feat)*2), xlim=c(1e-4,3), log="x", ylab="", xlab="Relative Abundance (%)", xaxt="n", yaxt="n")
 index <- 1
 for(i in LRlumen_otu_feat){
   stripchart(at=index-0.35, jitter(lsrs_abunds[,i], amount=1e-5), pch=21, bg="brown", method="jitter", jitter=0.2, add=T, cex=1, lwd=0.5)
   stripchart(at=index+0.35, jitter(rsls_abunds[,i], amount=1e-5), pch=21, bg="magenta", method="jitter", jitter=0.2, add=T, cex=1, lwd=0.5)
-  segments(mean(lsrs_abunds[,i]),index-0.7,mean(lsrs_abunds[,i]),index, lwd=3)
-  segments(mean(rsls_abunds[,i]),index+0.7,mean(rsls_abunds[,i]),index, lwd=3)
+  segments(median(lsrs_abunds[,i]),index-0.7,median(lsrs_abunds[,i]),index, lwd=3)
+  segments(median(rsls_abunds[,i]),index+0.7,median(rsls_abunds[,i]),index, lwd=3)
   index <- index + 2
 }
-axis(2, at=seq(1,index-2,2), labels=otu_taxa_LRlumen$tax_label, las=1, line=-0.5, tick=F, cex.axis=0.8)
+axis(2, at=seq(1,index-2,2), labels=otu_taxa_LRlumen$tax_label, las=1, line=-0.5, tick=F, cex.axis=1)
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
 legend('topright', legend=c("left lumen", "right lumen"), pch=c(21, 21), pt.bg=c("brown","magenta"), cex=1)
 

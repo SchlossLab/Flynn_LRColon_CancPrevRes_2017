@@ -239,9 +239,12 @@ simpmeta <- merge(meta_file, simps)
 install.packages("wesanderson")
 library("wesanderson")
 simpmeta$location <- factor(simpmeta$location, c("LB","RB", "LS", "RS", "SS"))
-ggplot(simpmeta, aes(x=location, y=invsimpson, group =1,  color=site)) +geom_point() +geom_jitter(width=0.4) +theme_bw() + ylab("Inverse Simpson Diversity") +
-  scale_color_manual(values=wes_palette("Darjeeling")) + scale_x_discrete(labels=c("L Mucosa", "R Mucosa", "L Lumen", "R Lumen", "Stool")) +theme(legend.position='none', axis.title.x=element_blank())+
-  stat_summary(aes(x=location, y=invsimpson), data = simpmeta, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
+ggplot(simpmeta, aes(x=location, y=invsimpson, group =1)) +geom_point() +geom_jitter(width=0.2) +
+  theme_bw() + ylab("Inverse Simpson Diversity") +
+  scale_x_discrete(labels=c("L Mucosa", "R Mucosa", "L Lumen", "R Lumen", "Stool")) +
+  theme(legend.position='none', axis.title.x=element_blank()) +
+  stat_summary(aes(x=location, y=invsimpson), data = simpmeta, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4) +
+  theme(axis.text = element_text(size= 16), axis.title= element_text(size=18))
 
 
 

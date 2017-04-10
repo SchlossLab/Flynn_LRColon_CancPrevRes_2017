@@ -236,18 +236,19 @@ wilcox.test(thetayc ~ match, data=leftandrighttyc, paired = T)
 #thetayc plot for figure 3
 #lvsr$match <- factor(lvsr$match, levels=lvsr$match[order(lvsr$samp1)])
 tycpositions <- c("RB_RS", "LS_RS", "LB_RB", "LB_LS")
-ggplot(lvsr, aes(x=match, y=thetayc, color=match)) + geom_point() + geom_jitter(width= 0.3) +theme_bw() + scale_color_brewer(palette='Set1') + 
-  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 12), axis.title= element_text(size=14)) + 
+ggplot(lvsr, aes(x=match, y=thetayc)) + geom_point() + geom_jitter(width= 0.2) +theme_bw() + 
+  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 16), axis.title= element_text(size=18)) + 
   scale_x_discrete(limits = tycpositions, breaks = tycpositions,
                   labels=c("R Mucosa vs R Lumen", "L Lumen vs R Lumen", "L Mucosa vs R Mucosa", "L Mucosa vs L Lumen")) +
-  ylab("ThetaYC distance") + stat_summary(aes(x=match, y=thetayc), data = lvsr, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.3)
+  ylab("ThetaYC distance") + stat_summary(aes(x=match, y=thetayc), data = lvsr, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 
 exitpositions <- c("RB_SS", "RS_SS", "LB_SS", "LS_SS")
-ggplot(exittyc, aes(x=match, y=thetayc, color=match)) + geom_point() + geom_jitter(width= 0.3) +theme_bw() +scale_color_brewer(palette="Dark2") +
-  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 12), axis.title= element_text(size=14)) +
+ggplot(exittyc, aes(x=match, y=thetayc)) + geom_point() + geom_jitter(width= 0.2) +theme_bw() +
+  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 16), axis.title= element_text(size=18)) +
   scale_x_discrete(limits=exitpositions, breaks=exitpositions,
                   labels=c("R Mucosa vs Stool", "R Lumen vs Stool", "L Mucosa vs Stool", "L Lumen vs Stool")) +
-  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")+ stat_summary(aes(x=match, y=thetayc), data = exittyc, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.3)
+  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")+ 
+  stat_summary(aes(x=match, y=thetayc), data = exittyc, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 
 
 #cant i just do a fuckin box plot?

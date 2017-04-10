@@ -19,11 +19,10 @@ simpmeta <- merge(invsimp, meta_file, by.x='group', by.y='group')
 
 simpmeta$location <- factor(simpmeta$location, c("LB","RB", "LS", "RS", "SS"))
 positions <- c("RB", "RS", "LB", "LS", "SS")
-ggplot(simpmeta, aes(x=location, y=invsimpson, group =1,  color=site)) +geom_point() +geom_jitter(width=0.3) +theme_bw() + ylab("Inverse Simpson Diversity") +
-  scale_color_manual(values=wes_palette("Darjeeling")) + 
+ggplot(simpmeta, aes(x=location, y=invsimpson, group =1)) +geom_point() +geom_jitter(width=0.2) +theme_bw() + ylab("Inverse Simpson Diversity") +
   scale_x_discrete(limits = positions, breaks=positions, 
                    labels=c("R Mucosa", "R Lumen", "L Mucosa", "L Lumen", "Stool")) +
-  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 12), axis.title= element_text(size=14)) +
+  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 16), axis.title= element_text(size=18)) +
   stat_summary(aes(x=location, y=invsimpson), data = simpmeta, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 
 
@@ -84,9 +83,10 @@ wilcox.test(thetayc ~ match, data=leftandrighttyc, paired = T)
 
 #thetayc plot for figure 3
 #lvsr$match <- factor(lvsr$match, levels=lvsr$match[order(lvsr$samp1)])
-ggplot(lvsr, aes(x=match, y=thetayc, color=match)) + geom_point() + geom_jitter(width= 0.5) +theme_bw() +scale_color_brewer(palette='Set1') +
-  theme(legend.position="none") +scale_x_discrete(labels=c("L Mucosa vs L Lumen", "L Mucosa vs R Lumen", "L Lumen vs R Lumen", "R Mucosa vs R Lumen")) +
-  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance") + stat_summary(aes(x=match, y=thetayc), data = lvsr, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
+ggplot(lvsr, aes(x=match, y=thetayc)) + geom_point() + geom_jitter(width= 0.2) +theme_bw() +
+  scale_x_discrete(labels=c("L Mucosa vs L Lumen", "L Mucosa vs R Lumen", "L Lumen vs R Lumen", "R Mucosa vs R Lumen")) +
+  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 16), axis.title= element_text(size=18)) +
+  ylab("ThetaYC distance") + stat_summary(aes(x=match, y=thetayc), data = lvsr, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 
 
 

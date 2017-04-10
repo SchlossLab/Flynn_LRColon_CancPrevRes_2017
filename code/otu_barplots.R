@@ -42,6 +42,9 @@ source('code/sum_shared.R')
 shared_phyla <- get_tax_level_shared(subsample, tax, 2)
 phyla_met <- merge(meta_file, shared_phyla, by.x='group', by.y='row.names')
 
+#try to get the df organized to work as a boxplot - no median calculation 
+phyla_test <- phyla_met[, c("location","Firmicutes","Bacteroidetes","Proteobacteria","Verrucomicrobia","Actinobacteria","Fusobacteria")]
+
 #get median of all OTUs by location
 phyla_loc <- aggregate(phyla_met[, 7:ncol(phyla_met)], list(phyla_met$location), median)
 phyla_upper <- aggregate(phyla_met[, 7:ncol(phyla_met)], list(phyla_met$location), FUN= quantile, probs =0.75)
@@ -67,6 +70,12 @@ phyla_lower <- 100*phyla_lower/4231
 rownames(phyla_upper) <- phyla_upper$Group.1
 phyla_upper <- phyla_upper[,-1]
 phyla_upper <- 100*phyla_upper/4231
+
+RA <- function(x) 100*x/4231
+
+phyla_RA <- data.frame(phyla_test[1], apply(phyla_test[2:ncol(phyla_test)],2, RA))
+phylaRAnames <- colnames(phyla_RA[,1:7])
+phyla_RAmelt <- melt(phyla_RA[, phylaRAnames], id.vars=1)
 
 #gather AND PLOT OMG :D
 #put rownames back in their own column - you can get around this w dplyr 
@@ -103,5 +112,15 @@ ggplot(phylamelt, aes(x=group, y=value, ymin=lower, ymax=upper, fill=variable)) 
   theme(legend.justification = c(1, 1), legend.position = c(1, 1)) + scale_fill_brewer(palette="Dark2", name="Phylum") +
   ylab("% Relative Abundance") 
 
-
+#for boxplot version
+positions <- c("RB", "RS", "LB", "LS", "SS")
+ggplot(phyla_RAmelt, aes(x=location, y=value)) + geom_boxplot(aes(color=variable)) + 
+  scale_color_discrete(guide=FALSE)+
+  geom_boxplot(aes(fill=variable), outlier.shape=21, outlier.size=2.5) + theme_bw() + 
+  theme(axis.text = element_text(size= 16), axis.title= element_text(size=18), legend.text=element_text(size=14), legend.title=element_text(size=16)) +
+  scale_x_discrete(limits = positions, breaks=positions, 
+                   labels=c("R Mucosa", "R Lumen", "L Mucosa", "L Lumen", "Stool")) +
+  theme(axis.title.x=element_blank(), panel.grid.major.x = element_blank(),panel.grid.minor.x = element_blank()) +
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1)) + scale_fill_brewer(palette="Dark2", name="Phylum") +
+  ylab("% Relative Abundance") 
 

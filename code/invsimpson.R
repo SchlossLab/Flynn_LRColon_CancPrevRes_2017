@@ -94,18 +94,59 @@ ggplot(exittyc, aes(x=match, y=thetayc, color=match)) + geom_point() + geom_jitt
   theme(legend.position="none") +scale_x_discrete(labels=c("L Mucosa vs Stool", "L Lumen vs Stool", "R Mucosa vs Stool", "R Lumen vs Stool")) +
   theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")
 
-#this is being stupid and wont work, idk why 
-+ stat_summary(aes(x=match, y=thetayc), data = lvsr, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
+#trying to get adonis to work for comparisons 
 
-#this is a test
+#for now just do paired wilcoxon with multiple comparisons 
 
+pvalues <- c()
 
-#cant i just do a fuckin box plot?
-boxplot(tyc[,"thetayc"] ~ tyc[,"match"])
+Atyc <- subset(tyc, match=='RB_RS' | match=='LS_RS')
+pvalues <- c(pvalues, wilcox.test(thetayc~match, data=Atyc, paired=T)$p.value)
 
+btyc <- subset(tyc, match=='RB_RS'| match=='LB_RB')
+btyc <- btyc[-25,]
+pvalues <- c(pvalues, wilcox.test(thetayc~match, data=btyc, paired=T)$p.value)
 
-#get and plot median of each match, gonna need error bars too 
+ctyc <- subset(tyc, match=='RB_RS'| match=='LB_LS')
+ctyc <- ctyc[-25,]
+pvalues <- c(pvalues, wilcox.test(thetayc~match, data=ctyc, paired=T)$p.value)
 
-medians <- matrix(nrow=1, ncol=2)
-colnames(medians) <- c("median", "iqr")
-medians <- as.data.frame(medians)
+dtyc <- subset(tyc, match == 'LS_RS' | match == 'LB_RB')
+dtyc <- dtyc[-25,]
+pvalues <- c(pvalues, wilcox.test(thetayc~match, data=dtyc, paired=T)$p.value)
+
+etyc <- subset(tyc, match == 'LS_RS' | match == 'LB_LS')
+etyc <- etyc[-25,]
+pvalues <- c(pvalues, wilcox.test(thetayc~match, data=etyc, paired=T)$p.value)
+
+ftyc <- subset(tyc, match == 'LB_RB' | match == 'LB_LS')
+pvalues <- c(pvalues, wilcox.test(thetayc~match, data=ftyc, paired=T)$p.value)
+
+pvalues <- p.adjust(pvalues, method = "BH")
+
+# now for exit comparisons
+
+stoolpvalues <- c()
+
+htyc <- subset(tyc, match=='RB_SS' | match=='RS_SS')
+htyc <- htyc[-25,]
+stoolpvalues <- c(stoolpvalues, wilcox.test(thetayc~match, data=htyc, paired=T)$p.value)
+
+ityc <- subset(tyc, match=='RB_SS' | match=='LB_SS')
+stoolpvalues <- c(stoolpvalues, wilcox.test(thetayc~match, data=ityc, paired=T)$p.value)
+
+jtyc <- subset(tyc, match=='RB_SS' | match=='LS_SS')
+stoolpvalues <- c(stoolpvalues, wilcox.test(thetayc~match, data=jtyc, paired=T)$p.value)
+
+ktyc <- subset(tyc, match=='RS_SS' | match=='LB_SS')
+ktyc <- ktyc[-25,]
+stoolpvalues <- c(stoolpvalues, wilcox.test(thetayc~match, data=ktyc, paired=T)$p.value)
+
+ltyc <- subset(tyc, match=='RS_SS' | match=='LS_SS')
+ltyc <- ltyc[-25,]
+stoolpvalues <- c(stoolpvalues, wilcox.test(thetayc~match, data=ltyc, paired=T)$p.value)
+
+mtyc <- subset(tyc, match=='LB_SS' | match=='LS_SS')
+stoolpvalues <- c(stoolpvalues, wilcox.test(thetayc~match, data=mtyc, paired=T)$p.value)
+
+stoolpvalues <- p.adjust(stoolpvalues, method = "BH")

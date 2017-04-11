@@ -189,16 +189,16 @@ cv10f_roc_lum <- roc(cv10f_all_resp_lum~cv10f_all_pred_lum)
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
 plot(cv10f_roc_right_bs, col='blue', lwd=3, add=T, lty=1)
-plot(cv10f_roc, col = 'purple', lwd=3, add=T, lty=1)
+#plot(cv10f_roc, col = 'purple', lwd=3, add=T, lty=1)
 plot(cv10f_roc_left_bs, col = 'red', lwd=3, add=T, lty=1)
 mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.5)
 mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.5)
-legend('bottom', legend=c(sprintf('Lumen vs Mucosa, 10-fold CV, AUC = 0.925'),
+legend('bottom', legend=c(#sprintf('Lumen vs Mucosa, 10-fold CV, AUC = 0.925'),
                           sprintf('L Lumen vs L Mucosa, 10-fold CV, AUC =0.980'),
                           sprintf('R Lumen vs R Mucosa, 10-fold CV, AUC = 0.797')
                                #sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
                                #sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
-),lty=c(1, 1, 1), lwd=3, col=c('purple','red', 'blue'), bty='n', cex=1.2)
+),lty=c(1, 1, 1), lwd=3, col=c('red', 'blue'), bty='n', cex=1.2)
 
 
 #left vs right mucosa and lumen plot 

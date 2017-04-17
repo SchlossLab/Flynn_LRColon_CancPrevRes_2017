@@ -1,14 +1,14 @@
 ---
-title: "**Machine learning identifies unique taxa differentiating proximal and distal human colonic microbiota**"
-bibliography: references.bib
-output:
-  pdf_document:
-    includes:
-      in_header: header.tex
-    keep_tex: yes
-csl: plos.csl #Get themes at https://github.com/citation-style-language/styles
+title: '**Machine learning identifies unique taxa differentiating proximal and distal
+  human colonic microbiota**'
 fontsize: 11pt
 geometry: margin=1.0in
+output:
+  html_document: default
+  pdf_document:
+    includes: null
+    keep_tex: yes
+csl: plos.csl
 ---
 \vspace{35mm}
 
@@ -45,38 +45,100 @@ Colorectal cancer (CRC) remains a leading cause of death worldwide. Tumors of th
 - right and left tumors are morphologically and genetically distinct (why Q is important)
 - the microbiome of healthy people and patients with CRC is distinguishable at the OTU level
 - specific keystone species are associated with CRC tumors
-- do the populations of bacteria in the left and right colon contribute to the development of specific subtypes of CRC? (central Q)
+- Central Question: do the populations of bacteria in the left and right colon contribute to the development of specific subtypes of CRC? 
 - nearly all studies of the gut microbiome have been from shed stool or colonoscopy with bowel prep
 - bowel prep changes the mucosal/fecal microbiome and what can be analyzed from it. 
-- first, need to characterize healthy species that are specific to each location. then we can ask, if/how disruption affects tumorigenesis? (data needed to answer Q)
-- mucosal vs lumenal populations studies have also been complicated by bowel prep (what methods are used to get data? what analysis must be applied?- ML)
-- how does the microbiome vary spatially along the colon? we know that the environment varies dramatically but we dont know how those environmental factors specifically affect bacterial populations 
+- how does the microbiome vary spatially along the colon? we know that the environment varies dramatically but we dont know how those environmental factors specifically affect bacterial populations
+
+- What data is needed to answer this question? first, need to characterize healthy species that are specific to each location. then we can ask, if/how disruption affects tumorigenesis? so what is needed is paired samples from healthy people that have not undergone bowel prep, from the right/left and lumen/mucosa
+
+- what methods are used to get the data? unprepped colonoscopy 
+
+- What analysis must be applied? - diversity analysis and machine learning to pull out small variations/differences among the noisy data set.
+
 - hypothesis: there are distinct bacteria on the left and right side that can be distinguished by 16S sequencing of stool
 
 
 ### Results
 
-- what data were obtained? what were the results of the analyses?
+- what data were obtained? 16S sequencing results for samples taken from healthy human colons that had not undergone bowel prep
+Figure 1: sample collection schematic 
 
+- what were the results of the analyses? the results of the analyses are as follows:
 
+#### Diversity analyses
+- there are similar levels (within error margins) of each phyla for each location, but there is noise due to interpatient variability. Overall, there is also a similar level of diversity in each location. However, each patient has a different pattern of diversity over the locations, some are high in R, some are high in L, etc. 
+Figure 2:
+* 2A: relative abundance by phyla 
+* 2B: simpson diversity 
+* 2C: NMDS/ordination of some kind 
 
+#### similarity analyses
+- we can compare sides, samples or patients by looking at distances between samples. here we used the thetayc calculator to make comparisons. The right mucosa and lumen are most similar to each other. As you move closer to the exit, the samples diverge. With the exception of the left lumen- this sample best resembles the stool collected from exit as it is... exiting. 
 
+Figure 3:
+* 3A: the right mucosa and lumen are most similar to each other 
+* 3B: the left lumen is most similar than exit stool
+
+#### Random Forest classification models 
+- we can use machine learning models to build classification models that identify specific features in noisy data sets that allow for separation.
+- we used a Random Forest model to separate samples from each side or site
+
+Figure 4:
+* 4A: Classifying lumen vs mucosal samples on each side (L vs L, R vs R)
+* 4B: Classifying side of lumen or side of mucosa (L vs R lumen, L vs R mucosa)
+
+#### Important OTUs 
+- the Random Forest model lets us pick out features that dictate the classification model separation values
+
+Figure 5:
+* 5A: There are differentially abundant OTUs in lumen vs mucosa
+* 5B: There are differentially abundant OTUs in right vs left lumen, right vs left mucosa 
+
+- There is some commonality between the OTUs - drivers of left sidedness are consistent in both lumen and mucosa (more of this in discussion)
 
 ### Discussion
 
+Recap of results, interesting discussion points about diversity and previous studies of diversity along the gut axis of healthy people
+
+Discussion of differentially abundant OTUs, how they fit the ecological regions of the gut (schematic?)
+
 -how did the analyses answer the central question?
+The analyses identified OTUs that are relatively unique to each location, among a wide variation differences between study participants 
 
 -what does this answer tell us about the broader field?
+This answer told us that there are specific differences of bacteria in each side and that we can use this information to form hypotheses about how specific microbial/ecological variations from the host can affect oncogenesis. It tells us too that sample collection methods are important, and what we have found in unprepped bowels do/do not match published findings. 
+
+-what's next? cancer associated OTUs on one side or the other, compare to previous studies. But really to understand what's going on in the various regions of the gut we need more information than just 16S 
 
 
 ### Acknowledgments 
 
 ### Methods
+Study participants/IRB
+
+Sample collection
+
+Sample processing/DNA extraction
+
+16S rRNA sequencing 
+
+Statistical analysis/Random Forest 
 
 ### Figure Legends
 
 
+Figure 1
 
+Figure 2
+
+Figure 3
+
+Figure 4
+
+Figure 5 
+
+### References 
 
 
 

@@ -31,16 +31,34 @@ rel_abund <- 100*test/unique(apply(test, 1, sum)) #unique is bad
 #Create vector of OTUs with median abundances >1%
 OTUs_1 <- apply(rel_abund, 2, max) > 1
 OTU_list <- colnames(rel_abund)[OTUs_1]
+
 #get df of just top OTUs
 rel_abund_top <- rel_abund[, OTUs_1]
+
 rel_meta <- merge(meta_file, rel_abund_top, by.x='group', by.y="row.names")
 
 source('code/Sum_OTU_by_Tax.R')
 source('code/sum_shared.R')
 
+#this code makes the df for family level RA sorted by % abundance thanks to nick 
+#add column of sites to rel_abund_top
+locat <- meta_file$location
+rel_abund_top <- cbind(site = locat, rel_abund_top)
+
+#subset file to just include location 
+
+locat <- subset
+
+#for above, just subset df from rel_meta instead to get the right location/OTU table 
+rel_fam <- sum_OTU_by_tax_level(2, rel_abund_top, tax_file)
+
 #use this code to assign phyla to each OTU in the shared file 
 shared_phyla <- get_tax_level_shared(subsample, tax, 2)
 phyla_met <- merge(meta_file, shared_phyla, by.x='group', by.y='row.names')
+
+shared_fam <- get_tax_level_shared(subsample, tax, 5)
+fam_met <- merge(meta_file, shared_fam, by.x='group', by.y='row.names')
+
 
 #try to get the df organized to work as a boxplot - no median calculation 
 phyla_test <- phyla_met[, c("location","Firmicutes","Bacteroidetes","Proteobacteria","Verrucomicrobia","Actinobacteria","Fusobacteria")]
@@ -49,6 +67,11 @@ phyla_test <- phyla_met[, c("location","Firmicutes","Bacteroidetes","Proteobacte
 phyla_loc <- aggregate(phyla_met[, 7:ncol(phyla_met)], list(phyla_met$location), median)
 phyla_upper <- aggregate(phyla_met[, 7:ncol(phyla_met)], list(phyla_met$location), FUN= quantile, probs =0.75)
 phyla_lower <- aggregate(phyla_met[, 7:ncol(phyla_met)], list(phyla_met$location), FUN= quantile, probs =0.25)
+
+fam_loc <- aggregate(fam_met[,7:ncol(fam_met)], list(fam_met$location), median)
+
+#??
+
 
 #could do all three of these lines in one line with summarize
 #could do dplyr way, start with melted DF 

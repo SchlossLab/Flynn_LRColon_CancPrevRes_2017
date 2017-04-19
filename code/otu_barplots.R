@@ -45,12 +45,19 @@ source('code/sum_shared.R')
 locat <- meta_file$location
 rel_abund_top <- cbind(site = locat, rel_abund_top)
 
-#subset file to just include location 
 
-locat <- subset
-
-#for above, just subset df from rel_meta instead to get the right location/OTU table 
+#this is what i want! 
 rel_fam <- sum_OTU_by_tax_level(2, rel_abund_top, tax_file)
+
+#add a column of locations to the df
+loc_names <- meta_file$location
+rel_fam[(ncol(rel_fam)+1)] <- loc_names
+colnames(rel_fam)[ncol(rel_fam)] <- "location"
+
+fam_med <- aggregate(rel_fam[, 1:(ncol(rel_fam)-1)], list(rel_fam$location), median)
+
+
+barplot(t(fam_med))
 
 #use this code to assign phyla to each OTU in the shared file 
 shared_phyla <- get_tax_level_shared(subsample, tax, 2)
@@ -70,7 +77,16 @@ phyla_lower <- aggregate(phyla_met[, 7:ncol(phyla_met)], list(phyla_met$location
 
 fam_loc <- aggregate(fam_met[,7:ncol(fam_met)], list(fam_met$location), median)
 
-#??
+#reorganize to make next calculations easier 
+rownames(fam_loc) <- fam_loc$Group.1
+fam_loc <- fam_loc[,-1]
+fam_abund <- 100*fam_loc/4231
+
+#need to sort fam_abund by 
+
+#do this to remove 0s
+
+fam_abund <- fam_abund[,colSums(fam_abund^2) !=0]
 
 
 #could do all three of these lines in one line with summarize
@@ -114,6 +130,14 @@ phylamelt_up <- melt(phyla_abund_up[, phylanames], id.vars=1)
 phyla_abund_low <- cbind(group=rownames(phyla_lower), phyla_lower)
 rownames(phyla_abund_low) <- c()
 phylamelt_low <- melt(phyla_abund_low[, phylanames], id.vars=1)
+
+fam_abund <- cbind(group=rownames(fam_abund), fam_abund)
+rownames(fam_abund) <- c()
+famnames <- colnames(fam_abund)
+fam_melt <- melt(fam_abund[, famnames ], id.vars=1)
+
+ggplot(fam_melt, aes(x=group, y=value, fill=variable)) +geom_bar(stat = 'identity')
+
 
 #merge them riiite
 names(phylamelt_up)[3] <- "upper"

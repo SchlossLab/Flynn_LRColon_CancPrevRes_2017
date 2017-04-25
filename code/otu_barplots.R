@@ -131,12 +131,55 @@ phyla_abund_low <- cbind(group=rownames(phyla_lower), phyla_lower)
 rownames(phyla_abund_low) <- c()
 phylamelt_low <- melt(phyla_abund_low[, phylanames], id.vars=1)
 
-fam_abund <- cbind(group=rownames(fam_abund), fam_abund)
-rownames(fam_abund) <- c()
-famnames <- colnames(fam_abund)
-fam_melt <- melt(fam_abund[, famnames ], id.vars=1)
+fam_abund2 <- cbind(group=rownames(fam_abund), fam_abund)
+rownames(fam_abund2) <- c()
+famnames <- colnames(fam_abund2)
+fam_melt <- melt(fam_abund2[, famnames ], id.vars=1)
 
-ggplot(fam_melt, aes(x=group, y=value, fill=variable)) +geom_bar(stat = 'identity')
+
+#this is a stacked bar chart, because there are like 33 groups. need to rank first then plot top 10 or so
+
+ggplot(fam_melt, aes(x=variable, y=value, fill=variable)) +geom_bar(stat = 'identity') +facet_wrap(~group) +theme_bw()
+
+#ok still need to sort these by top 10 OTUs 
+
+fam_ordered <- fam_abund[order(fam_abund[,1:ncol(fam_abund)]),]
+
+rownames(fam_abund2) <- fam_abund2$group
+fam_abund2 <- fam_abund2[,-1]
+
+decrease_sort <- function(x){
+  sort(x, decreasing = TRUE)
+}
+
+fam_ordered <- t(apply(fam_abund2, 1, FUN = function(x) decrease_sort(x)))
+
+#so the above sort (ha) of works. but we lose colnames because the distribution isnt the same for each location
+#duh 
+#maybe it would be better to order and them one at a time like in a loop
+
+LB_fam <- subset(fam_abund2, rownames(fam_abund2) == 'LB')
+rownames(LB_fam) <- LB_fam$group
+LB_fam <- LB_fam[,-1]
+LB_fam <- t(apply(LB_fam, 1, FUN = function(x) decrease_sort(x)))
+
+LB_melted <- melt(LB_fam)
+#select first ten rows
+LB_ten <- LB_melted[1:10,]
+
+ggplot(LB_ten, aes(x=Var2, y=value)) + geom_bar(stat='identity') +theme_bw()
+ 
+#use the top ten column to select on overall dataset then facet!
+
+topten <- as.character(LB_ten$Var2)
+
+fam_ten <- fam_abund2[, topten]
+fam_ten <- cbind(group=rownames(fam_ten), fam_ten)
+rownames(fam_ten) <- c()
+famtennames <- colnames(fam_ten)
+fam_tenmelt <- melt(fam_ten[, famtennames ], id.vars=1)
+
+ggplot(fam_tenmelt, aes(x=variable, y=value, fill=variable)) +geom_bar(stat = 'identity') +facet_wrap(~group) +theme_bw()
 
 
 #merge them riiite

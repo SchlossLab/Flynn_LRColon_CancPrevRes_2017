@@ -12,7 +12,7 @@ csl: plos.csl
 ---
 \vspace{35mm}
 
-Running title: Unique taxa differentiate proximal and distal human colon microbiota
+Running title: Specific taxa differentiate proximal and distal human colon microbiota
 
 \vspace{35mm}
 

@@ -116,6 +116,7 @@ phyla_RA <- data.frame(phyla_test[1], apply(phyla_test[2:ncol(phyla_test)],2, RA
 phylaRAnames <- colnames(phyla_RA[,1:7])
 phyla_RAmelt <- melt(phyla_RA[, phylaRAnames], id.vars=1)
 
+
 #gather AND PLOT OMG :D
 #put rownames back in their own column - you can get around this w dplyr 
 phyla_abund <- cbind(group=rownames(phyla_abund), phyla_abund)
@@ -154,9 +155,8 @@ decrease_sort <- function(x){
 
 fam_ordered <- t(apply(fam_abund2, 1, FUN = function(x) decrease_sort(x)))
 
-#so the above sort (ha) of works. but we lose colnames because the distribution isnt the same for each location
-#duh 
-#maybe it would be better to order and them one at a time like in a loop
+#a ridiculously long way to get the top ten families and select them. 
+#like a really ridiculously long way to go about that
 
 LB_fam <- subset(fam_abund2, rownames(fam_abund2) == 'LB')
 rownames(LB_fam) <- LB_fam$group
@@ -164,20 +164,37 @@ LB_fam <- LB_fam[,-1]
 LB_fam <- t(apply(LB_fam, 1, FUN = function(x) decrease_sort(x)))
 
 LB_melted <- melt(LB_fam)
-#select first ten rows
-LB_ten <- LB_melted[1:10,]
+LB_ten <- LB_melted[1:9,]
+LB_six <- LB_melted[1:6,]
 
-ggplot(LB_ten, aes(x=Var2, y=value)) + geom_bar(stat='identity') +theme_bw()
- 
 #use the top ten column to select on overall dataset then facet!
-
 topten <- as.character(LB_ten$Var2)
+topsix <- as.character(LB_six$Var2)
 
 fam_ten <- fam_abund2[, topten]
 fam_ten <- cbind(group=rownames(fam_ten), fam_ten)
 rownames(fam_ten) <- c()
 famtennames <- colnames(fam_ten)
 fam_tenmelt <- melt(fam_ten[, famtennames ], id.vars=1)
+
+#to get RA without median for boxplot 
+
+fam_RA <- fam_met[, c("location",topsix)]
+family_RA <- data.frame(fam_RA[1], apply(fam_RA[2:ncol(fam_RA)],2, RA))
+famRAnames <- colnames(family_RA[,1:6])
+fam_RAmelt <- melt(family_RA[, famRAnames], id.vars=1)
+
+# boxplot for top family 
+positions <- c("RB", "RS", "LB", "LS", "SS")
+ggplot(fam_RAmelt, aes(x=location, y=value)) + geom_boxplot(aes(color=variable)) + 
+  scale_color_discrete(guide=FALSE)+
+  geom_boxplot(aes(fill=variable), outlier.shape=21, outlier.size=2.5) + theme_bw() + 
+  theme(axis.text = element_text(size= 16), axis.title= element_text(size=18), legend.text=element_text(size=14), legend.title=element_text(size=16)) +
+  scale_x_discrete(limits = positions, breaks=positions, 
+                   labels=c("R Mucosa", "R Lumen", "L Mucosa", "L Lumen", "Stool")) +
+  theme(axis.title.x=element_blank(), panel.grid.major.x = element_blank(),panel.grid.minor.x = element_blank()) +
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1)) + scale_fill_brewer(palette="Dark2", name="Family") +
+  ylab("% Relative Abundance") 
 
 ggplot(fam_tenmelt, aes(x=variable, y=value, fill=variable)) +geom_bar(stat = 'identity') +facet_wrap(~group) +theme_bw()
 
@@ -214,3 +231,4 @@ ggplot(phyla_RAmelt, aes(x=location, y=value)) + geom_boxplot(aes(color=variable
   theme(legend.justification = c(1, 1), legend.position = c(1, 1)) + scale_fill_brewer(palette="Dark2", name="Phylum") +
   ylab("% Relative Abundance") 
 
+#to add log scale add +scale_y_continuous(trans = "log10")

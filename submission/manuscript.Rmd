@@ -61,41 +61,31 @@ Colorectal cancer (CRC) remains a leading cause of death worldwide. Tumors of th
 
 ### Results
 
-- what data were obtained? 16S sequencing results for samples taken from healthy human colons that had not undergone bowel prep
-Figure 1: sample collection schematic 
+#### Microbial membership and diversity of the proximal and distal colon 
+Proximal and distal lumenal and mucosal samples were collected from 20 healthy humans that had not undergone bowel preparation prior to the procedure (Figure 1). In addition, individuals collected stool at home one week prior to the procedure. To characterize the bacterial communities present at these sites, 16S rRNA gene sequencing was performed on extracted DNA from each sample. The relative abundance of each phyla for each site is shown in Figure 2A. This data combines the samples from all participants in the study. Each site is primarily dominated by Firmicutes and Bacteriodetes, consistent with known variability in human microbiome research. ((Is anything statistically significant here? use Doherty's code)). Likewise, samples had varying levels of diversity at each site, irrespective of the individual (Figure 2B). That is, while some individuals had a more diverse right mucosa, some had a more diverse left mucosa, and so on. Thus there is no clear pattern of changes in microbial diversity along the gut axis. 
 
-- what were the results of the analyses? the results of the analyses are as follows:
+* 2C: NMDS/ordination of some kind ??? maybe if i calculate inter/intrapersonal variability 
 
-#### Diversity analyses
-- there are similar levels (within error margins) of each phyla for each location, but there is noise due to interpatient variability. Overall, there is also a similar level of diversity in each location. However, each patient has a different pattern of diversity over the locations, some are high in R, some are high in L, etc. 
-Figure 2:
-* 2A: relative abundance by phyla 
-* 2B: simpson diversity 
-* 2C: NMDS/ordination of some kind 
-
-#### similarity analyses
-- we can compare sides, samples or patients by looking at distances between samples. here we used the thetayc calculator to make comparisons. The right mucosa and lumen are most similar to each other. As you move closer to the exit, the samples diverge. With the exception of the left lumen- this sample best resembles the stool collected from exit as it is... exiting. 
-
-Figure 3:
-* 3A: the right mucosa and lumen are most similar to each other 
-* 3B: the left lumen is most similar than exit stool
+To compare similarity between sides or sites, we calculated theta YC distances from OTU abundances and compared distances between sies for all patients. Again, across all patient samples we saw a range of theta YC distances when comparing sample locations (Figure 3A) and again those ranges did not follow a clear pattern on an individual basis. However, when comparing median distances between the right lumen and mucosa, the left versus right lumen, the left versus right mucosa and the left lumen and mucosa, we found that the right lumen and mucosa were most similar to each other than the other samples (P < 0.005, Wilcoxon, BH adjustment). Next, we calculated thetaYC distances to examine how each sample compares to the stool at exit. Amidst variability between patients, we did identify significantly smaller thetaYc distance between the left lumenal sample and the exit stool (P < 0.05, Wilcoxon, BH adjustment). Further, there was an even more divergent difference in the comparisons of the left mucosa to the exit stool, indicating that the mucosa is quite different from the stool as compared to lumen (P < 0.0005, Wilcoxon, BH adjustment). This indicates that the contents of the left lumen are most representative of stool at exit, and the microbes remaining on the mucosa are much different. ((mention the other 2 comparisons? "among the four comparisons made..."))
 
 #### Random Forest classification models 
-- we can use machine learning models to build classification models that identify specific features in noisy data sets that allow for separation.
-- we used a Random Forest model to separate samples from each side or site
+To identify OTUs that are distinct at each biogeographical site, we constructed several Random Forest machine-learning models built on OTU abundances. The first model we built to classify the lumen versus mucosal samples for the right and left sides, independently (Figure 4A). The constructed model used ((Xopt? need to follow up with this too)) features for the left and ((Xopt)) for the right. The models performed very well when classifying these samples (AUC X and Y). 
+
 
 Figure 4:
 * 4A: Classifying lumen vs mucosal samples on each side (L vs L, R vs R)
-* 4B: Classifying side of lumen or side of mucosa (L vs R lumen, L vs R mucosa)
+* 4B: There are differentially abundant OTUs in lumen vs mucosa
 
 #### Important OTUs 
 - the Random Forest model lets us pick out features that dictate the classification model separation values
 
 Figure 5:
-* 5A: There are differentially abundant OTUs in lumen vs mucosa
+* 5A: Classifying side of lumen or side of mucosa (L vs R lumen, L vs R mucosa)
 * 5B: There are differentially abundant OTUs in right vs left lumen, right vs left mucosa 
 
 - There is some commonality between the OTUs - drivers of left sidedness are consistent in both lumen and mucosa (more of this in discussion)
+
+### exit comparison models? other findings- fuso etc 
 
 ### Discussion
 

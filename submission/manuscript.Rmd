@@ -68,16 +68,9 @@ Proximal and distal lumenal and mucosal samples were collected from 20 healthy h
 
 To compare similarity between sides or sites, we calculated theta YC distances from OTU abundances and compared distances between sies for all patients. Again, across all patient samples we saw a range of theta YC distances when comparing sample locations (Figure 3A) and again those ranges did not follow a clear pattern on an individual basis. However, when comparing median distances between the right lumen and mucosa, the left versus right lumen, the left versus right mucosa and the left lumen and mucosa, we found that the right lumen and mucosa were most similar to each other than the other samples (P < 0.005, Wilcoxon, BH adjustment). Next, we calculated thetaYC distances to examine how each sample compares to the stool at exit. Amidst variability between patients, we did identify significantly smaller thetaYc distance between the left lumenal sample and the exit stool (P < 0.05, Wilcoxon, BH adjustment). Further, there was an even more divergent difference in the comparisons of the left mucosa to the exit stool, indicating that the mucosa is quite different from the stool as compared to lumen (P < 0.0005, Wilcoxon, BH adjustment). This indicates that the contents of the left lumen are most representative of stool at exit, and the microbes remaining on the mucosa are much different. ((mention the other 2 comparisons? "among the four comparisons made..."))
 
-#### Random Forest classification models 
-To identify OTUs that are distinct at each biogeographical site, we constructed several Random Forest machine-learning models built on OTU abundances. The first model we built to classify the lumen versus mucosal samples for the right and left sides, independently (Figure 4A). The constructed model used ((Xopt? need to follow up with this too)) features for the left and ((Xopt)) for the right. The models performed very well when classifying these samples (AUC X and Y). 
+#### Random Forest classification models identify important OTUs on each side
+To identify OTUs that are distinct at each biogeographical site, we constructed several Random Forest machine-learning models built on OTU abundances. The first model we built to classify the lumen versus mucosal samples for the right and left sides, independently (Figure 4A). The constructed model used ((Xopt? need to follow up with this too)) features for the left and ((Xopt)) for the right. The models performed very well when classifying these samples (AUC X and Y). The OTUs that were most predictive of each site are identified by their greatest mean decrease in accuracy when removed from the model. For distinguishing the right lumen and mucosa, OTUs from the _Bacteriodes_, _Actinomyces_, _Psuedomonas_ and two OTUs from the _Enterobacteraceae_ genera were differentially abundant (Figure 4B). The model classifying the left lumen and mucosa identified OTUs from _Turicibacter_, _Anaerococcus_, _Finegoldia_, _Peptoniphilus_ and two OTUs from the _Anaerococcus_ genera that could distinguish lumen from mucosal samples (Figure 4B). These results indicate that there are fine differences between the different sites of the colon, and that these can be traced down to specific OTUs on each side. 
 
-
-Figure 4:
-* 4A: Classifying lumen vs mucosal samples on each side (L vs L, R vs R)
-* 4B: There are differentially abundant OTUs in lumen vs mucosa
-
-#### Important OTUs 
-- the Random Forest model lets us pick out features that dictate the classification model separation values
 
 Figure 5:
 * 5A: Classifying side of lumen or side of mucosa (L vs R lumen, L vs R mucosa)

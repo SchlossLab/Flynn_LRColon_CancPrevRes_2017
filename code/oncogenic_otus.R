@@ -28,6 +28,26 @@ ggplot(only_fuso, aes(x=location, y=Otu00179)) +geom_point() + geom_jitter()
 ggplot(only_subsampled_fuso, aes(x=location, y=Otu00179)) +geom_point() + geom_jitter()
 
 
-#ok probably now should get seq and blast each otu to figure out which is nucleatum 
+fuso179 <- subsampled_meta[, colnames(subsampled_meta) %in% c("group", "patient", "location", "Otu00179")]
 
-#do this with subsampled file maybe too? 
+fuso179[,5] <- (fuso179[,4]/4321)*100
+names(fuso179)[5] <- "Otu00179_relAbund"
+
+ggplot(fuso179, aes(x=location, y=Otu00179_relAbund)) +geom_jitter() +theme_bw()
+
+#other oncogenic otus - Otu00152 is P. asaccharolytica. Otu00248 is p micra
+
+p_asach <- shared_meta[, colnames(shared_meta) %in% c("Group", "patient", "location", "Otu00152")]
+
+p_asach[,4] <- (p_asach[,3]/4321) *100
+names(p_asach)[4] <- "Otu00152_abund"
+
+ggplot(p_asach, aes(x=location, y=Otu00152_abund)) +geom_jitter() +theme_bw()
+
+p_micra <- shared_meta[, colnames(shared_meta) %in% c("Group", "patient", "location", "Otu00248")]
+
+p_micra[,4] <- (p_micra[,3]/4321) *100
+names(p_micra)[4] <- "Otu00248_abund"
+
+ggplot(p_micra, aes(x=location, y=Otu00248_abund)) +geom_jitter() +theme_bw()
+

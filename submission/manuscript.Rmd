@@ -76,6 +76,9 @@ Next, we built a model to differentiate the left and right microbiome. The model
 
 ### exit comparison models? other findings- fuso etc 
 
+
+##draft of oncogenic OTU paragraph, this may go in results or discussion 
+
 ### Discussion
 Here we identified bacterial taxa that are specific to the lumen and mucosa of the right and left human colon from samples collected during unprepared colonoscopy. We found that all locations contained a range of phyla and a range of diversity, but that there was a wide variability between subjects. Pairwise comparisons of each of the sites revealed that the right mucosa and lumen were most similar to each other. Further, comparison of colonoscopy-collected samples with samples collected from stool at home showed that the left lumen is most similar to stool at exit. Random Forest algorithms built on OTU abundances from each sample identified microbes that are particular to each location of the colon. 
 

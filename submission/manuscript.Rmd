@@ -74,10 +74,12 @@ To identify OTUs that are distinct at each biogeographical site, we constructed 
 Next, we built a model to differentiate the left and right microbiome. The model performed best when distinguishing the left versus right mucosa (Figure 5A) compared to the left versus right lumen. The model was able to explain ((X%)) of the variance. OTUs that were differentially abundant between the left and right mucosa included members of the _Porphyromonas_, _Murdochiella_, _Finegoldia_, _Anaerococcus_ and _Peptoniphilus_ genera (Figure 5B). The model was less-effective at classifying the right and left lumen ((AUC)). However it did identify differentially abundant OTUs such as three members of the _Bacteroides_ genus, a _Clostridium IV_ OTU and an _Oscillibacter_ OTU (Figure 5C). This analysis found that some of the same OTUs that are distinct between the mucosa and lumen also drive sidedness- such as _Anaerococcus_ and _Finegoldia_. 
 
 
-### exit comparison models? other findings- fuso etc 
+### exit comparison models? 
 
 
 ##draft of oncogenic OTU paragraph, this may go in results or discussion 
+
+Some of the healthy patients have Fusobacterium OTUs. The most frequent sequence associated wtih the _Fusobacterium_ genus was OTU179, which BLASTs to _Fusobacterium nucleatum subspecies animalis_. It is the only OTU to align with a nucleatum strain- the only species of _Fusobacterium_ known to have oncogenic properties and be found on the surfaces of colorectal cancer tumors. ((cite joe and niels work somewhere in here, maybe in the discussion?)). The _Fusobacterium_ positive samples were located on the right and left mucosa and ranged up to 1% of the sample. ((Table or something?)). OTU00152 is _Porphyromonas_ and the most frequent sequence in that OTU aligns to _Porphyromonas asacharolytica_, another bacterium commonly detected and isolated from colorectal tumors. OTU152 was only detected on the left mucosa, and in fact was one of the OTUs the classification model identified as separating left and right sides. Samples that were positive for _P. asacharolytica_ ranged in abundances from 0.01% - 16%. Finally, another commonly cancer-associated species, _Parvimonas micra_ was identified to be most similar to OTU248. Only 4 individuals had this bacteria present in their colons, three in the left mucosa and one in the right mucosa. 
 
 ### Discussion
 Here we identified bacterial taxa that are specific to the lumen and mucosa of the right and left human colon from samples collected during unprepared colonoscopy. We found that all locations contained a range of phyla and a range of diversity, but that there was a wide variability between subjects. Pairwise comparisons of each of the sites revealed that the right mucosa and lumen were most similar to each other. Further, comparison of colonoscopy-collected samples with samples collected from stool at home showed that the left lumen is most similar to stool at exit. Random Forest algorithms built on OTU abundances from each sample identified microbes that are particular to each location of the colon. 
@@ -85,16 +87,24 @@ Here we identified bacterial taxa that are specific to the lumen and mucosa of t
 Recap of results, interesting discussion points about diversity and previous studies of diversity along the gut axis of healthy people
 
 Discussion of differentially abundant OTUs, how they fit the ecological regions of the gut (schematic?)
+some of the very high OTUs BLAST to stool residents, like that one bacteriodes (OTU20)
 
 Put this stuff into context with Sears PNAS paper 
 
-Fuso found on the right side? 
+We detected _F. nucleatum_ and _P. asacharolytica_ in 7 and 5 of our patients, respectively. These bacteria have been shown to be predictive of colorectal cancer in humans (cite Niel). Interestingly, while _F. nucleatum_ was found on both sides of the colon, _P. asacharolytica_ was only detected in the left mucosa. Not much is known about the distribution of _P. asacharolytica_ but given its documented anaerobic characteristics, it might not be surprising that it resides in the less-oygen-rich left bowel (cite something). In studies examining bacteria on colorectal cancer tumors, _F. nucleatum_ is more commonly detected on right-sided tumors, and distribution of _F. nucleatum_ decreases along the colon to rectum (cite Mima 2016). Of the (8) individuals positive for _F. nucleatum_ in this study, the bacteria was spread across the right mucosa, left lumena and left mucosa. That said, in a previous study of 1,102 colorectal cancer cases, only 138 (11%) of them contained detectable _F. nucleatum_ at all (Mima 2016). 
+
+
+Fuso found on the right side? discussion about cancer-specific OTUS
+cant pull out ETBF or pks+ ecoli with 16S
+found fuso and porpyhromonas, but these are healthy people
+what is rate of colonization with these bugs in healthy in literature?
+of course presence does not precede cancer or IBD necessarily
 
 
 -what does this answer tell us about the broader field?
 This answer told us that there are specific differences of bacteria in each side and that we can use this information to form hypotheses about how specific microbial/ecological variations from the host can affect oncogenesis. It tells us too that sample collection methods are important, and what we have found in unprepped bowels do/do not match published findings. 
 
--what's next? cancer associated OTUs on one side or the other, compare to previous studies. But really to understand what's going on in the various regions of the gut we need more information than just 16S 
+-what's next?  But really to understand what's going on in the various regions of the gut we need more information than just 16S 
 
 
 ### Acknowledgments 

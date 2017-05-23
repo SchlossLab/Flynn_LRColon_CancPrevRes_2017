@@ -10,7 +10,7 @@ simps <- read.table(file='data/mothur/kws_final.an.groups.summary', header = T)
 shared_file <- read.table(file='data/mothur/kws_final.an.shared', sep = '\t', header=T, row.names=2)
 
 #load niel's script for properly , reading in thetayc distances
-#source(file = 'read.dist.R')
+source(file = 'code/read.dist.R')
 #tyc <-read.dist(file='kws.an.thetayc.0.03.lt.dist', input = "lt", make.square=F, diag=NA)
 
 #nmds analysis
@@ -68,10 +68,17 @@ stoolshared <- add_rownames(stoolshared, var = "group")
 stoolshared <- stoolshared[-2]
 stoolshared <- cbind(label=0.03, stoolshared[1:ncol(stoolshared)])
 
+all <- meta_file$group[meta_file$side=='left' | meta_file$side=='right']
+allshared <- shared_file[row.names(shared_file) %in% all,]
+allshared <- add_rownames(allshared, var = "group")
+allshared <- allshared[-2]
+allshared <- cbind(label=0.03, allshared[1:ncol(allshared)])
+
 write.table(leftshared, file='data/process/leftshared.shared', sep='\t', quote=F, row.names=F)
 write.table(rightshared, file='data/process/rightshared.shared', sep='\t', quote=F, row.names=F)
 write.table(mucosashared, file='data/process/mucosashared.shared', sep='\t', quote=F, row.names=F)
 write.table(stoolshared, file='data/process/stoolshared.shared', sep='\t', quote=F, row.names=F)
+write.table(allshared, file='data/process/allshared.shared', sep='\t', quote=F, row.names=F)
 
 #run all in mothur, dist.shared and then nmds. import back in. plot. dance! 
 
@@ -90,6 +97,27 @@ ggplot(mucosanmds, aes(x=axis1, y=axis2)) + geom_point(aes(color=as.factor(patie
 stoolnmds <- read.table(file='data/process/stoolshared.thetayc.0.03.lt.ave.nmds.axes', sep='\t', header=T)
 stoolnmds <- merge(stoolnmds, meta_file)
 ggplot(stoolnmds, aes(x=axis1, y=axis2)) + geom_point(aes(color=as.factor(patient), shape=side, size = 1.5)) +theme_bw() + ggtitle("Stool samples comparison")
+
+allnmds <- read.table(file='data/process/allshared.thetayc.0.03.lt.nmds.axes', sep = '\t', header = T)
+allnmds <- merge(allnmds, meta_file)
+ggplot(allnmds, aes(axis1, axis2, group=patient)) +
+  geom_point(aes(color=side), size = 2.5) +
+  facet_wrap(~site, labeller=labeller(site = c(mucosa = "Muocsa", stool = "Lumen"))) +theme_bw() +
+  geom_line(size=0.25, color='grey') +
+  theme(legend.position = c(0.95, 0.92), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.text = element_text(size= 12), axis.title= element_text(size=14), 
+        strip.text=element_text(size=14), legend.text=element_text(size=12)) 
+
+alljclass <- read.table(file='data/process/allshared.jclass.0.03.lt.nmds.axes', sep = '\t', header=T)
+alljclass <- merge(alljclass, meta_file)
+ggplot(alljclass, aes(axis1, axis2, group=patient)) +
+  geom_point(aes(color=side), size = 2.5) +
+  facet_wrap(~site, labeller=labeller(site = c(mucosa = "Muocsa", stool = "Lumen"))) +theme_bw() +
+  geom_line(size=0.25, color='grey') +
+  theme(legend.position = c(0.95, 0.92), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.text = element_text(size= 12), axis.title= element_text(size=14), 
+        strip.text=element_text(size=14), legend.text=element_text(size=12)) 
+
 
 
 #nmds plot of distances faceted by location
@@ -116,11 +144,13 @@ ggplot(noexit, aes(axis1, axis2)) +geom_point(aes(color=side, shape=as.factor(pa
 #NMDS connected lines plot 
 ggplot(noexit, aes(axis1, axis2, group=patient)) +
   geom_point(aes(color=side), size = 2.5) +
-  facet_wrap(~site, labeller=labeller(site = c(`mucosa` = "Muocsa", `stool` = "Lumen"))) +theme_bw() +
+  facet_wrap(~site, labeller=labeller(site = c(mucosa = "Muocsa", stool = "Lumen"))) +theme_bw() +
   geom_line(size=0.25, color='grey') +
   theme(legend.position = c(0.95, 0.92), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.text = element_text(size= 12), axis.title= element_text(size=14), 
         strip.text=element_text(size=14), legend.text=element_text(size=12)) 
+
+
 
 
 #color points by organ 

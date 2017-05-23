@@ -1,6 +1,6 @@
 # OTU bar plots to look at community membership
 
-pack_used <- c('randomForest','ggplot2', 'pROC', 'knitr','dplyr','AUCRF', 'tidyr', 'caret', 'RColorBrewer', 'reshape2', 'wesanderson')
+pack_used <- c('randomForest','ggplot2', 'pROC', 'knitr','dplyr','AUCRF', 'tidyr', 'caret', 'RColorBrewer', 'reshape2', 'wesanderson', 'vegan')
 for (dep in pack_used){
   if (dep %in% installed.packages()[,"Package"] == FALSE){
     install.packages(as.character(dep), repos = 'http://cran.us.r-project.org', 
@@ -180,6 +180,39 @@ ggplot(simpmeta, aes(x=site, y=invsimpson)) + geom_jitter(col=simpmeta$patient) 
 
 tyc <- read.table("data/mothur/kws_final.an.summary", sep = '\t', header = T, row.names=NULL)
 
+#can i quantify the distances between samples from the same patient and samples from each side? 
+
+alltyc <- read.table("data/process/allshared.summary", sep = '\t', header = T, row.names=NULL)
+alltyc <- separate(alltyc, label, into= c('pt1', 'samp1'), sep="-", remove=F)
+alltyc <- separate(alltyc, comparison, into= c('pt2', 'samp2'), sep="-", remove=F)
+alltyc <- alltyc[-1]
+alltyc <- alltyc[-7]
+
+#ultimately want a plot of all points where pt1 == pt2 in one bar and all of the others in another column 
+#unite and make column of 0/1 for matches? then can plot 1 and 0s 
+#should i separate out lumen and mucosa ? sure or no not for now
+
+alltyc["same_pt"] <- NA
+
+for (i in 1:nrow(alltyc)){
+  if (alltyc$pt1[i] == alltyc$pt2[i]){
+    alltyc$same_pt[i] <- 1
+  }
+  else alltyc$same_pt[i] <- 0
+}
+
+alltyc[10] <- as.factor(alltyc[10])
+
+ggplot(alltyc, aes(x=as.factor(same_pt), y=thetayc)) + geom_jitter(width=0.1) + theme_bw()+
+  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 16), axis.title= element_text(size=18)) +
+  scale_x_discrete(labels=c("distance between patients", "distance within a patient")) +
+  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")+ 
+  stat_summary(aes(x=as.factor(same_pt), y=thetayc), data = alltyc, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.3, col = "red")
+
+
+wilcox.test(thetayc ~ same_pt, data = alltyc)
+
+
 #separate column values for comparisons
 tyc <- separate(tyc, label, into= c('pt1', 'samp1'), sep="-", remove=F)
 tyc <- separate(tyc, comparison, into= c('pt2', 'samp2'), sep="-", remove=F)
@@ -242,6 +275,12 @@ ggplot(lvsr, aes(x=match, y=thetayc)) + geom_point() + geom_jitter(width= 0.2) +
                   labels=c("R Mucosa vs R Lumen", "L Lumen vs R Lumen", "L Mucosa vs R Mucosa", "L Mucosa vs L Lumen")) +
   ylab("ThetaYC distance") + stat_summary(aes(x=match, y=thetayc), data = lvsr, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 
+summary(aov(lvsr$thetayc~lvsr$match))
+wilcox.test(thetayc ~ match, data=lvsr, paired =T)
+
+
+
+
 exitpositions <- c("RB_SS", "RS_SS", "LB_SS", "LS_SS")
 ggplot(exittyc, aes(x=match, y=thetayc)) + geom_point() + geom_jitter(width= 0.2) +theme_bw() +
   theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 16), axis.title= element_text(size=18)) +
@@ -250,6 +289,7 @@ ggplot(exittyc, aes(x=match, y=thetayc)) + geom_point() + geom_jitter(width= 0.2
   theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")+ 
   stat_summary(aes(x=match, y=thetayc), data = exittyc, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 
+summary(aov(exittyc$thetayc ~ exittyc$match))
 
 #cant i just do a fuckin box plot?
 boxplot(tyc[,"thetayc"] ~ tyc[,"match"])

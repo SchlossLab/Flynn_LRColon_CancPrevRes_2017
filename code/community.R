@@ -203,11 +203,11 @@ for (i in 1:nrow(alltyc)){
 
 alltyc[10] <- as.factor(alltyc[10])
 
-ggplot(alltyc, aes(x=as.factor(same_pt), y=thetayc)) + geom_jitter(width=0.1) + theme_bw()+
+ggplot(alltyc, aes(x=as.factor(same_pt), y=thetayc)) + geom_jitter(width=0.15, shape=21, size=3, fill='grey', col='black') + theme_bw()+
   theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 16), axis.title= element_text(size=18)) +
-  scale_x_discrete(labels=c("distance between patients", "distance within a patient")) +
+  scale_x_discrete(labels=c("interpersonal", "intrapersonal")) +
   theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")+ 
-  stat_summary(aes(x=as.factor(same_pt), y=thetayc), data = alltyc, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.3, col = "red")
+  stat_summary(aes(x=as.factor(same_pt), y=thetayc), data = alltyc, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4, col = "black")
 
 
 wilcox.test(thetayc ~ same_pt, data = alltyc)

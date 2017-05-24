@@ -83,6 +83,9 @@ We identified a range of Simpson diversity values between patients and between e
 
 discussion of diversity results- different patterns in each person. ref previous studies of diversity along gut axis of healthy people. in this same paper ( I think) can also reference difference in NMDS... if I end up including that. 
 
+this is a really good paper, good for framing intro and discussion : Numerical ecology validates a biogeographical distribution and gender-based effect on mucosa-associated bacteria along the human colon
+
+
 discussion of similarity results- may combine with previous paragraph here, prior studies, again underscore extreme variability of humans 
 
 Discussion of RF models, how they compare to FIT, Joe's check joes paper, how well does model do in L vs R for FIT?

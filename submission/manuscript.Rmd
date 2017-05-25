@@ -52,6 +52,8 @@ Colorectal cancer (CRC) remains a leading cause of death worldwide. Tumors of th
 
 - What data is needed to answer this question? first, need to characterize healthy species that are specific to each location. then we can ask, if/how disruption affects tumorigenesis? so what is needed is paired samples from healthy people that have not undergone bowel prep, from the right/left and lumen/mucosa
 
+this is a really good paper, good for framing intro and discussion : Numerical ecology validates a biogeographical distribution and gender-based effect on mucosa-associated bacteria along the human colon
+
 - what methods are used to get the data? unprepped colonoscopy 
 
 - What analysis must be applied? - diversity analysis and machine learning to pull out small variations/differences among the noisy data set.
@@ -79,19 +81,13 @@ Some of the healthy patients have Fusobacterium OTUs. The most frequent sequence
 ### Discussion
 Here we identified bacterial taxa that are specific to the lumen and mucosa of the right and left human colon from samples collected during unprepared colonoscopy. We found that all locations contained a range of phyla and a range of diversity, but that there was a wide variability between subjects. Pairwise comparisons of each of the sites revealed that the right mucosa and lumen were most similar to each other. Further, comparison of colonoscopy-collected samples with samples collected from stool at home showed that the left lumen is most similar to stool at exit. Random Forest algorithms built on OTU abundances from each sample identified microbes that are particular to each location of the colon. Finally, we were able to detect some bacterial OTUs associated with colorectal cancer in our healthy patient cohort. Using unprepped colonoscopy and machine learning, we have identified bacterial phyla specific to the healthy proximal and distal human colon. 
 
-We identified a range of Simpson diversity values between patients and between each anatomical site. As this measurement takes both number of species and abundance of species into account, it seems that there is a varied level of each component along the human colon. There was no clear pattern of diversity when comparing patients- some patients had a higher level of diversity in the proximal than the distal, some patients had the opposite. An early study of microbial diversity and membership of three human subjects found a varied level of diversity in each subject, but that subjects were overall more similar to themselves than to each other (Eckberg 2005). When ordinating the subject communities to compare the right and left sides, we found that more than half of the samples from the same patient clustered near each other (Figure 2C). However, there were a few patients whose samples were very different from each other and did not ordinate in that manner. One explanation for this ____ - human diversity, sampling locations arent perfectly matched (but so what?)
+We identified a range of Simpson diversity values between patients and between each anatomical site. As this measurement takes both number of species and abundance of species into account, it seems that there is a varied level of each component along the human colon. There was no clear pattern of diversity when comparing patients- some patients had a higher level of diversity in the proximal than the distal, some patients had the opposite. An early study of microbial diversity and membership of three human subjects found a varied level of diversity in each subject, but that subjects were overall more similar to themselves than to each other (Eckberg 2005). We next used the thetaYC dissimilarity metric to compare the communities present at each anatomical location to each other. We found that while there was a wide range of similarity of each site within a person, the study participants were ultimately more similar to themselves than all of the other participants. This finding is consistent with numerous studies examining the biogeography of the colon in healthy humans (Eckberg 2005, Aguierre de Carcer, 2015). 
 
-discussion of diversity results- different patterns in each person. ref previous studies of diversity along gut axis of healthy people. in this same paper ( I think) can also reference difference in NMDS... if I end up including that. 
+To get around the noisiness created by a diverse set of samples, we employed machine learning algorithms to identify microbes specific to each side. 
 
-this is a really good paper, good for framing intro and discussion : Numerical ecology validates a biogeographical distribution and gender-based effect on mucosa-associated bacteria along the human colon
-
-
-discussion of similarity results- may combine with previous paragraph here, prior studies, again underscore extreme variability of humans 
-
-Discussion of RF models, how they compare to FIT, Joe's check joes paper, how well does model do in L vs R for FIT?
-when we look at models for CRC, cant predict R vs L, so create models
-
-discuss host response papers? what does that mean. 
+Random Forest models have been used by our group and others to increase the detection sensitivity of CRC tumors. Indeed, our group found that a classification model that used microbiome data in combination with Fecal Immunohistochemical Test (FIT) results could correctly identify both carcinoma and adenoma lesions from communities of stool at exit (Baxter et al 2016) and it performed much better than FIT alone. 
+- Could try to predict L vs R tumors from exit stool? long term. maybe. probably not. value of getting data about exit stool comparisons. real issue is diagnosing right though. 
+- note that we have FIT for all of these people but they're all below limit of detection (except for 2). when we look at models for CRC, cant predict R vs L, so create models for healthy
 
 Discussion of differentially abundant OTUs, how they fit the ecological regions of the gut (schematic?)
 some of the very high OTUs BLAST to stool residents, like that one bacteriodes (OTU20) - not necessarily anything interesting there. 
@@ -109,7 +105,7 @@ what is rate of colonization with these bugs in healthy in literature?
 This answer told us that there are specific differences of bacteria in each side and that we can use this information to form hypotheses about how specific microbial/ecological variations from the host can affect oncogenesis. It tells us too that sample collection methods are important, and what we have found in unprepped bowels do/do not match published findings. 
 
 -what's next?  But really to understand what's going on in the various regions of the gut we need more information than just 16S 
-
+discuss host response papers? what does that mean. link bugs to host response on left and right? future directions or intro 
 
 ### Acknowledgments 
 

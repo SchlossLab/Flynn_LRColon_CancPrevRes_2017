@@ -25,7 +25,7 @@ ggplot(only_fuso, aes(x=location, y=total_fuso)) + geom_point() +geom_jitter()
 
 ggplot(only_fuso, aes(x=location, y=Otu00179)) +geom_point() + geom_jitter()
 
-ggplot(only_subsampled_fuso, aes(x=location, y=Otu00179)) +geom_point() + geom_jitter()
+ggplot(only_subsampled_fuso, aes(x=location, y=Otu00179)) +geom_point() + geom_jitter() +theme_bw()
 
 
 #ok probably now should get seq and blast each otu to figure out which is nucleatum 

@@ -83,21 +83,27 @@ Here we identified bacterial taxa that are specific to the lumen and mucosa of t
 
 We identified a range of Simpson diversity values between patients and between each anatomical site. As this measurement takes both number of species and abundance of species into account, it seems that there is a varied level of each component along the human colon. There was no clear pattern of diversity when comparing patients- some patients had a higher level of diversity in the proximal than the distal, some patients had the opposite. An early study of microbial diversity and membership of three human subjects found a varied level of diversity in each subject, but that subjects were overall more similar to themselves than to each other (Eckberg 2005). We next used the thetaYC dissimilarity metric to compare the communities present at each anatomical location to each other. We found that while there was a wide range of similarity of each site within a person, the study participants were ultimately more similar to themselves than all of the other participants. This finding is consistent with numerous studies examining the biogeography of the colon in healthy humans (Eckberg 2005, Aguierre de Carcer, 2015). 
 
-To get around the noisiness created by a diverse set of samples, we employed machine learning algorithms to identify microbes specific to each side. 
+To get around the noisiness created by a diverse set of samples, we employed machine learning algorithms to identify microbes specific to each side. For each comparison we identified top X OTUs that were strongly predictive of one site or another. Generally, OTUs identified in each location were consistent with known physiological gradients along the gut axis (cite nature review). For instance, the right mucosa harbored mucosa-associated facultative anaerobes such as _Actinomyces_ and _Enterobacteraceae_ and the aerobic _Psuedomonas_ consistent with the highest oxygen regions of the colon (cite). The left mucosa was far more likely to host strictly anaerobic species such as _Porphyromonas_, _Anaerococcus_, _Finegoldia_ and _Peptoniphilus_. The model was less effective at classifying the right and left lumenal contents, probably because the samples are arguably composed of the same material. 
 
-Random Forest models have been used by our group and others to increase the detection sensitivity of CRC tumors. Indeed, our group found that a classification model that used microbiome data in combination with Fecal Immunohistochemical Test (FIT) results could correctly identify both carcinoma and adenoma lesions from communities of stool at exit (Baxter et al 2016) and it performed much better than FIT alone. 
-- Could try to predict L vs R tumors from exit stool? long term. maybe. probably not. value of getting data about exit stool comparisons. real issue is diagnosing right though. 
-- note that we have FIT for all of these people but they're all below limit of detection (except for 2). when we look at models for CRC, cant predict R vs L, so create models for healthy
-
-Discussion of differentially abundant OTUs, how they fit the ecological regions of the gut (schematic?)
+other factors besides oxygen? pH? 
+offer another model/schematic?
 some of the very high OTUs BLAST to stool residents, like that one bacteriodes (OTU20) - not necessarily anything interesting there. 
-
-Put this stuff into context with Sears PNAS paper on sidedness 
 
 We detected _F. nucleatum_ and _P. asacharolytica_ in 7 and 5 of our patients, respectively. These bacteria have been shown to be predictive of colorectal cancer in humans (cite Niel) and have oncogenic properties in cell culture and in mice (cite). Interestingly, while _F. nucleatum_ was found on both sides of the colon, _P. asacharolytica_ was only detected in the left mucosa. Not much is known about the distribution of _P. asacharolytica_ but given its documented anaerobic characteristics, it might not be surprising that it resides in the less-oygen-rich left bowel (cite something). In studies examining bacteria on colorectal cancer tumors, _F. nucleatum_ is more commonly detected on right-sided tumors, and distribution of _F. nucleatum_ decreases along the colon to rectum (cite Mima 2016). Of the (8) (40%) individuals positive for _F. nucleatum_ in this study, the bacteria was spread across the right mucosa, left lumen and left mucosa. That said, in a previous study of 1,102 colorectal cancer cases, only 138 (11%) of them contained detectable _F. nucleatum_ at all (Mima 2016). In a separate study of patients with inflammatory bowel disease (IBD), 50% of 22 IBD patients and 17.6% of 34 people without disease contained _F. nucleatum_ in mucosal biopsies (Strauss 2011). These studies have the added caveat of being sampled from prepared or cleaned colons. Thus, the presence of _F. nucleatum_ in a healthy individual is not necessarily linked to the development of future colorectal cancers. Because of the spatial distribution of the _F. nucleatum_ in our sample set, we cannot develop a model for the role of _F. nucleatum_ in the healthy colon. Indeed, rather than the _F. nucleatum_ initiating tumorigenesis, these bacteria may instead arrive "late" to the tumor microenvironment and feed on tumors that have alread begun to develop (Flynn 2016). 
 
-what is rate of colonization with these bugs in healthy in literature?
+what is rate of colonization with these bugs in healthy in literature? how did these bugs factor into our model? 
 
+
+Put this stuff into context with Sears PNAS paper on sidedness 
+
+
+
+how does bowel prep fit into all of this
+
+Random Forest models have been used by our group and others to increase the detection sensitivity of CRC tumors. Indeed, our group found that a classification model that used microbiome data in combination with Fecal Immunohistochemical Test (FIT) results could correctly identify both carcinoma and adenoma lesions from communities of stool at exit (Baxter et al 2016) and it performed much better than FIT alone. 
+- Could try to predict L vs R tumors from exit stool? long term. maybe. probably not. value of getting data about exit stool comparisons. real issue is diagnosing right though. 
+- note that we have FIT for all of these people but they're all below limit of detection (except for 2). when we look at models for CRC, cant predict R vs L, so create models for healthy. can also cite niels stuff showing that FIT is representative of stool community. could it also be representative of left? 
+- LINK TO EXIT STOOL COMPARISONS.
 
 
 

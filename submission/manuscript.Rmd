@@ -92,10 +92,11 @@ offer another model/schematic? what does this tell us about the broader field? d
 By revealing specific differences in microbial populations at each location in the gut via sampling an unprepared bowel, we can begin to form hypothesies about how specific host-microbe interactions can affect oncogenesis of proximal and distal CRC tumors. To this point, 16S community profiling studies do not provide enough information to probe these questions. Our sample set of matched proximal, distal, lumenal and mucosal samples from colons that have not undergone bowel preparation presents a unique opportunity to explore further questions about the microbiome along the gut axis. Specifically, examining metagenomic, metabolomic and host interactions at each site will be useful in further characterizing the host-microbe interactions in the development of proximal and distal colorectal cancer. 
 
 ### Acknowledgments 
+We thank all the individuals who volunteered for the study. This work was supported by the Rose and Lawrence C. Page Foundation (DKT). We would also like to thank Brian Kleiner, Chelsea Crofoot, and Kirk Herman for their roles in study coordination, subject recruitment, sample collection and sample processing.
 
 ### Methods
 #### Human subjects
-The procedures in this study and consent were approved by the Institutional Review Board at the University of Michigan Health System with protocol number XXXX. Subjects were recruited using the online recruitment platform and were pre-screened prior to enrollment in the study. Exclusion criteria included: use of asprin or NSAIDs within 7 days, use of antibiotics within 3 months, current use of anticoagulants, known allergies to Fentanyl or Benadryl, prior history of colon disease, diabetes, abdominal surgery, respiratory, liver, kidney or brain impairments, undergoing current chemotherapy or radiation treatment and subjects that were pregnant or trying to conceive. 20 subjects that met the criteria were selected and provided signed informed consent prior to the procedure. (Table of participant characteristics? gender, race split?)
+The procedures in this study and consent were approved by the Institutional Review Board at the University of Michigan Health System with protocol number XXXX. Subjects were recruited using the online recruitment platform and were pre-screened prior to enrollment in the study. Exclusion criteria included: use of asprin or NSAIDs within 7 days, use of antibiotics within 3 months, current use of anticoagulants, known allergies to Fentanyl or Benadryl, prior history of colon disease, diabetes, abdominal surgery, respiratory, liver, kidney or brain impairments, undergoing current chemotherapy or radiation treatment and subjects that were pregnant or trying to conceive. 20 subjects that met the criteria were selected and provided signed informed consent prior to the procedure. There were 13 female and 7 male subjects ranging in age from 25 to 64. 
 
 #### Sample collection
 At a baseline visit, subjects were consented and given a home collection stool kit (Source of kit supplies). At least one week prior to the scheduled colonoscopy, subjects were to collect whole stool at home and two swabs of a Fecal Immunohistochemical Test cartridge (Polymedco Inc.) and ship the samples to the University. Notably, subjects did not undergo any bowel preparation method prior to sampling. On procedure day, subjects reported to the Michigan Clinical Research Unit at the University of Michigan Health System. Patients were consciously sedated using Fentanyl, Versed and/or Benadryl as appropriate. A flexible sigmoidoscope was first inserted about 25cm into the colon and endoscopy brush used to collect lumenal/stool contents. Two lumenal samples were collected and the contents immediately deposited into RNAlater (source) and flash-frozen in liquid nitrogen. The brushes were withdrawn and biopsy forceps were used to collect mucosal biopsies on sections of the colon that were pink and free of stool matter. Three (double check this) mucosal biopsies were collected and flash-frozen in RNAlater. These samples comprised the distal or left colon samples. The sigmoidoscope was then withdrawn and a pediatric colonoscope was inserted to reach the ascending colon. Samples were then collected as in the distal colon and the colonoscope withdrawn. All samples were stored at -80 C until study completion.
@@ -108,20 +109,30 @@ Diversity analysis was performed using the Simpson diversity calculator and thet
 #### Statistical analysis
 Differences in community membership at the phyla level were tested using the analysis of molecular variance (AMOVA) metric in mothur. Differences in thetaYC distances by location were tested using the Wilcoxon rank-sum test adjusted for multiple comparisons using the Benjamini-Hochberg procedure. 
 
-### Figure Legends
+### Figure legends
 
 ####Figure 1
-Sampling strategy. A flexible sigmoidoscope was used to sample the distal colonic luminal contents and mucosa. The scope was inserted ~ 25cm into the patient and endoscopy brushes were used to sample the luminal contents (green star). A separate set of biopsy forceps was used to sample the distal mucosa (blue star). The sigmoidoscope was removed. A pediatric colonoscope was inserted and used to access the proximal colon. Biopsies were taken of the proximal luminal contents and mucosa as described. One week prior to the procedure stool was collected at home and sent into the laboratory. 
+Sampling strategy. A flexible sigmoidoscope was used to sample the distal colonic luminal contents and mucosa. The scope was inserted ~ 25cm into the subject and endoscopy brushes were used to sample the luminal contents (green star). A separate set of biopsy forceps was used to sample the distal mucosa (blue star). The sigmoidoscope was removed. A pediatric colonoscope was inserted and used to access the proximal colon. Biopsies were taken of the proximal luminal contents and mucosa as described. One week prior to the procedure stool was collected at home and sent into the laboratory. Representative images from one individual are shown.  
 
-Figure 2
+####Figure 2
+Microbial membership and diversity of the proximal and distal human colon. A) Relative abundance of the top five bacterial phyla in each sampling site. Each box represents the median and confidence intervals. B) Simpson diversity of the microbial communities at each location. The lines represent the median values. 
 
-Figure 3
+####Figure 3
+Similarity of microbial community structure between sites of the gut. ThetaYC distances are shown for interpersonal similarities between two sites – each point represents one individual. In (A), comparisons of the right and left mucosal and lumen are shown. In (B), comparisons of each site to the exit stool are shown. 
 
-Figure 4
+####Figure 4
+Random Forest classifies the mucosa and lumen of each side of the colon. A) Receiver Operator Characteristic curves are shown for the 10-fold cross validation of the Random Forest model classifying lumen and mucosal samples for the left and right sides of the colon. (B) Top five OTUs that are most important for the classification model for the left mucosa and lumen (B) and the right mucosa and lumen (C). 
 
-Figure 5 
+####Figure 5 
+Random Forest classifies the left and right sides of the colon. A) Receiver Operator Characteristic curves are shown for the 10-fold cross validation of the Random Forest model classifying left lumen versus right lumen (orange) and left mucosa vs right mucosa (green). (B) Top five OTUs that are most important for the classification model for the left and right mucosa (B) and the left and right lumen (C).
 
+####Figure 6
+Location and abundance of cancer-associated OTUs. Relative abundance was calculated and plotted by sample site for each OTU of interest: (A) _Fusobacterium nucleatum_ (B) _Porphyromonas asacharolytica_ and (C) _Parvimonas micra_. 
 
+###Supplemental material
+
+####Supplemental Figure 1
+Random Forest classifier comparing samples to exit stool. ROC curves for the RF model classifying exit stool versus the right or left lumen, pooled mucosa or pooled lumen are shown. 
 
 ### References 
 

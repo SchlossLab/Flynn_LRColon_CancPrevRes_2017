@@ -20,13 +20,9 @@ tax_file <- read.table(file='data/mothur/kws_final.an.cons.taxonomy', sep = '\t'
 
 shared_meta <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
 
-#make OTU abundance file
-#remove numOTUs column 
 #Create df with relative abundances
-
 test <- subset(shared_file, select = -c(numOtus, label))
-rel_abund <- 100*test/unique(apply(test, 1, sum)) #unique is bad
-
+rel_abund <- 100*test/unique(apply(test, 1, sum)) 
 
 #Create vector of OTUs with median abundances >1%
 OTUs_1 <- apply(rel_abund, 2, max) > 1
@@ -34,17 +30,15 @@ OTU_list <- colnames(rel_abund)[OTUs_1]
 
 #get df of just top OTUs
 rel_abund_top <- rel_abund[, OTUs_1]
-
 rel_meta <- merge(meta_file, rel_abund_top, by.x='group', by.y="row.names")
 
 source('code/Sum_OTU_by_Tax.R')
 source('code/sum_shared.R')
 
-#this code makes the df for family level RA sorted by % abundance thanks to nick 
+#this code makes the df for family level RA sorted by % abundance 
 #add column of sites to rel_abund_top
 locat <- meta_file$location
 rel_abund_top <- cbind(site = locat, rel_abund_top)
-
 
 #this is what i want! 
 rel_fam <- sum_OTU_by_tax_level(2, rel_abund_top, tax_file)
@@ -82,8 +76,6 @@ rownames(fam_loc) <- fam_loc$Group.1
 fam_loc <- fam_loc[,-1]
 fam_abund <- 100*fam_loc/4231
 
-#need to sort fam_abund by 
-
 #do this to remove 0s
 
 fam_abund <- fam_abund[,colSums(fam_abund^2) !=0]
@@ -98,19 +90,20 @@ phyla_upper <- phyla_upper[, c("Group.1","Firmicutes","Bacteroidetes","Proteobac
 phyla_lower <- phyla_lower[, c("Group.1","Firmicutes","Bacteroidetes","Proteobacteria","Verrucomicrobia","Actinobacteria","Fusobacteria")]
 
 #get rel abundance - subsampled to 4231- define as variable (or calculate )
+subsampled_to <- 4231
 rownames(phyla_loc) <- phyla_loc$Group.1
 phyla_loc <- phyla_loc[,-1]
-phyla_abund <- 100*phyla_loc/4231
+phyla_abund <- 100*phyla_loc/subsampled_to
 
 rownames(phyla_lower) <- phyla_lower$Group.1
 phyla_lower <- phyla_lower[,-1]
-phyla_lower <- 100*phyla_lower/4231
+phyla_lower <- 100*phyla_lower/subsampled_to
 
 rownames(phyla_upper) <- phyla_upper$Group.1
 phyla_upper <- phyla_upper[,-1]
-phyla_upper <- 100*phyla_upper/4231
+phyla_upper <- 100*phyla_upper/subsampled_to
 
-RA <- function(x) 100*x/4231
+RA <- function(x) 100*x/subsampled_to
 
 phyla_RA <- data.frame(phyla_test[1], apply(phyla_test[2:ncol(phyla_test)],2, RA))
 phylaRAnames <- colnames(phyla_RA[,1:7])
@@ -156,7 +149,7 @@ decrease_sort <- function(x){
 fam_ordered <- t(apply(fam_abund2, 1, FUN = function(x) decrease_sort(x)))
 
 #a ridiculously long way to get the top ten families and select them. 
-#like a really ridiculously long way to go about that
+#like a really ridiculously long way to go about that - come on kaitlin
 
 LB_fam <- subset(fam_abund2, rownames(fam_abund2) == 'LB')
 rownames(LB_fam) <- LB_fam$group

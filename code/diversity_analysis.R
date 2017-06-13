@@ -9,7 +9,7 @@ simps <- read.table(file='data/mothur/kws_final.an.groups.summary', header = T)
 #fullshan <- merge(shannon, metadata)
 shared_file <- read.table(file='data/mothur/kws_final.an.shared', sep = '\t', header=T, row.names=2)
 
-#load niel's script for properly , reading in thetayc distances
+#load niel's script for properly reading in thetayc distances
 source(file = 'code/read.dist.R')
 #tyc <-read.dist(file='kws.an.thetayc.0.03.lt.dist', input = "lt", make.square=F, diag=NA)
 
@@ -266,8 +266,6 @@ axis(1, at=1:5, labels=c("left biopsy", " ", "right biopsy", " ", "spon. stool")
 #somewhere simpmeta gets defined and idk where
 simpmeta <- merge(meta_file, simps)
 
-install.packages("wesanderson")
-library("wesanderson")
 simpmeta$location <- factor(simpmeta$location, c("LB","RB", "LS", "RS", "SS"))
 ggplot(simpmeta, aes(x=location, y=invsimpson, group =1)) +geom_point() +geom_jitter(width=0.2) +
   theme_bw() + ylab("Inverse Simpson Diversity") +

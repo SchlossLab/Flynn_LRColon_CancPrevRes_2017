@@ -37,7 +37,7 @@ phyla_RAmelt <- melt(phyla_RA[, phylaRAnames], id.vars=1)
 
 #for boxplot version
 positions <- c("RB", "RS", "LB", "LS", "SS")
-ggplot(phyla_RAmelt, aes(x=location, y=value)) + geom_boxplot(aes(color=variable)) + 
+phy_plot <- ggplot(phyla_RAmelt, aes(x=location, y=value)) + geom_boxplot(aes(color=variable)) + 
   scale_color_discrete(guide=FALSE)+
   geom_boxplot(aes(fill=variable), outlier.shape=21, outlier.size=2.5) + theme_bw() + 
   theme(axis.text = element_text(size= 16), axis.title= element_text(size=18), legend.text=element_text(size=14), legend.title=element_text(size=16)) +
@@ -54,13 +54,23 @@ simps <- read.table(file='data/mothur/kws_final.an.groups.summary', header = T)
 simpmeta <- merge(meta_file, simps)
 
 simpmeta$location <- factor(simpmeta$location, c("LB","RB", "LS", "RS", "SS"))
-ggplot(simpmeta, aes(x=location, y=invsimpson, group =1)) +geom_point() +geom_jitter(width=0.2) +
-  theme_bw() + ylab("Inverse Simpson Diversity") +
-  scale_x_discrete(labels=c("L Mucosa", "R Mucosa", "L Lumen", "R Lumen", "Stool")) +
-  theme(legend.position='none', axis.title.x=element_blank()) +
-  stat_summary(aes(x=location, y=invsimpson), data = simpmeta, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4) +
-  theme(axis.text = element_text(size= 16), axis.title= element_text(size=18))
-
-
+positions <- c("RB", "RS", "LB", "LS", "SS")
+simp_plot <- ggplot(simpmeta, aes(x=location, y=invsimpson, group =1)) +geom_point() +geom_jitter(width=0.2) +theme_bw() + ylab("Inverse Simpson Diversity") +
+  scale_x_discrete(limits = positions, breaks=positions, 
+                   labels=c("R Mucosa", "R Lumen", "L Mucosa", "L Lumen", "Stool")) +
+  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 16), axis.title= element_text(size=18)) +
+  stat_summary(aes(x=location, y=invsimpson), data = simpmeta, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 
 #export as PDF
+
+plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_2.pdf'
+pdf(file=plot_file, width=12, height=7)
+layout(matrix(c(1,
+                2), 
+              nrow=2, byrow = TRUE))
+
+phy_plot
+
+simp_plot 
+
+dev.off()

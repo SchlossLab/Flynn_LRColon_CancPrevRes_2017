@@ -35,7 +35,10 @@ $\dagger$ Corresponding author: pschloss@umich.edu
 
 \newpage
 \linenumbers
+
+
 ```{r dependencies}
+#setwd('~/Documents/Flynn_LRColon_XXXX_2017')
 pack_used <- c('randomForest','ggplot2', 'pROC', 'knitr','dplyr','AUCRF', 'tidyr', 'caret', 'RColorBrewer', 'reshape2', 'wesanderson')
 for (dep in pack_used){
   if (dep %in% installed.packages()[,"Package"] == FALSE){
@@ -47,26 +50,29 @@ for (dep in pack_used){
 ```
 
 ```{r datasets}
-meta <- 'data/raw/kws_metadata.tsv'
-shared <- 'data/mothur/kws_final.an.shared'
-tax <- 'data/mothur/kws_final.an.cons.taxonomy'
-subsample <- 'data/mothur/kws_final.an.0.03.subsample.shared'
+#setwd("~/Users/kaitlinflynn/Documents/Flynn_LRColon_XXXX_2017")
+meta <- '../data/raw/kws_metadata.tsv'
+shared <- '../data/mothur/kws_final.an.shared'
+tax <- '../data/mothur/kws_final.an.cons.taxonomy'
+subsample <- '../data/mothur/kws_final.an.0.03.subsample.shared'
 
-meta_file <- read.table(file='data/raw/kws_metadata.tsv', header = T)
-shared_file <- read.table(file='data/mothur/kws_final.an.shared', sep = '\t', header=T, row.names=2)
-tax_file <- read.table(file='data/mothur/kws_final.an.cons.taxonomy', sep = '\t', header=T, row.names=1)
+meta_file <- read.table(file='../data/raw/kws_metadata.tsv', header = T)
+shared_file <- read.table(file='../data/mothur/kws_final.an.shared', sep = '\t', header=T, row.names=2)
+tax_file <- read.table(file='../data/mothur/kws_final.an.cons.taxonomy', sep = '\t', header=T, row.names=1)
 shared_meta <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
 
-simps <- read.table(file='data/mothur/kws_final.an.groups.summary', header = T)
-metasimp <- merge(metadata, simps)
+simps <- read.table(file='../data/mothur/kws_final.an.groups.summary', header = T)
+simpmeta <- merge(meta_file, simps)
+
+tyc <- read.table("../data/mothur/kws_final.an.summary", sep = '\t', header = T, row.names=NULL)
 
 
 
 ```
 
 ```{r otu_barplot}
-source('code/Sum_OTU_by_Tax.R')
-source('code/sum_shared.R')
+source('../code/Sum_OTU_by_Tax.R')
+source('../code/sum_shared.R')
 
 #use this code to assign phyla to each OTU in the shared file 
 shared_phyla <- get_tax_level_shared(subsample, tax, 2)
@@ -83,11 +89,7 @@ phyla_RAmelt <- melt(phyla_RA[, phylaRAnames], id.vars=1)
 
 ```
 
-```{r simpson}
 
-
-
-```
 
 
 ### Abstract

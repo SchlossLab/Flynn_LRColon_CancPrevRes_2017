@@ -175,10 +175,170 @@ for (i in 1:nrow(alltyc)){
   else alltyc$same_pt[i] <- 0
 }
 
-alltyc[10] <- as.factor(alltyc[10])
-
 inter_medians <- aggregate(thetayc ~ same_pt, alltyc, median)
 ```
+
+```{r randomforest}
+#create dataframe with relative abundances
+rel_abund <- 100*shared_file/unique(apply(shared_file, 1, sum))
+
+#Create vector of OTUs with median abundances >1%
+OTUs_1 <- apply(rel_abund, 2, max) > 1
+OTU_list <- colnames(rel_abund)[OTUs_1]
+#get df of just top OTUs
+rel_abund_top <- rel_abund[, OTUs_1]
+rel_meta <- merge(meta_file, rel_abund_top, by.x='group', by.y="row.names")
+
+seed <- 1
+n_trees <- 2001
+
+source('../code/random_functions.R')
+
+#####RandomForest###########################################################################################
+#build randomForest model for each location comparison using randomize_loc function 
+rf_left <- randomize_loc(rel_meta, "LB", "LS") #OOB 10.26%
+rf_right <- randomize_loc(rel_meta, "RB", "RS") #OOB 53%
+rf_bowel <- randomize_loc(rel_meta, "LB", "RB") #OOB 25.64%
+rf_lumen <- randomize_loc(rel_meta, "LS", "RS") #OOB 69.23%
+
+#and for each site
+rf_all <- randomize_site(rel_meta, "mucosa", "stool")
+
+
+#####AUCRF#####################################################################################
+
+# create RF model with AUCRF outputs top OTUs
+aucrf_data_left_bs <- auc_loc(rel_meta, "LB", "LS")
+aucrf_data_LRbowel <- auc_loc(rel_meta, "LB", "RB")
+aucrf_data_right_bs <- auc_loc(rel_meta, "RB", "RS")
+aucrf_data_LRlumen <- auc_loc(rel_meta, "LS", "RS")
+aucrf_data_allum <- auc_site(rel_meta, "mucosa", "stool")
+
+########Cross-Validation#################################################################
+#10 fold cross validation for all lumen vs mucosa 
+iters <- 100
+cv10f_aucs <- c()
+cv10f_all_resp <- c()
+cv10f_all_pred <- c()
+for(j in 1:iters){
+  set.seed(j)
+  sampling <- sample(1:nrow(aucrf_data_allum),nrow(aucrf_data_allum),replace=F)
+  cv10f_probs <- rep(NA,78)
+  for(i in seq(1,77,7)){
+    train <- aucrf_data_allum[sampling[-(i:(i+6))],]
+    test <- aucrf_data_allum[sampling[i:(i+6)],]
+    set.seed(seed)
+    temp_model <- AUCRF(site~., data=train, pdel=0.99, ntree=500)
+    cv10f_probs[sampling[i:(i+6)]] <- predict(temp_model$RFopt, test, type='prob')[,2]
+  }
+  cv10f_roc <- roc(aucrf_data_allum$site~cv10f_probs)
+  cv10f_all_pred <- c(cv10f_all_pred, cv10f_probs)
+  cv10f_all_resp <- c(cv10f_all_resp, aucrf_data_allum$site)
+  cv10f_aucs[j] <- cv10f_roc$auc #stores aucs for all iterations, can use to calc IQR
+}
+cv10f_roc <- roc(cv10f_all_resp~cv10f_all_pred)
+
+#10fold CV for L lumen vs L mucosa
+iters <- 100
+cv10f_aucs <- c()
+cv10f_all_resp_left_bs <- c()
+cv10f_all_pred_left_bs <- c()
+for(j in 1:iters){
+  set.seed(j)
+  sampling <- sample(1:nrow(aucrf_data_left_bs),nrow(aucrf_data_left_bs),replace=F)
+  cv10f_probs <- rep(NA,39)
+  for(i in seq(1,36,4)){
+    train_left_bs <- aucrf_data_left_bs[sampling[-(i:(i+3))],]
+    test_left_bs <- aucrf_data_left_bs[sampling[i:(i+3)],]
+    set.seed(seed)
+    temp_model_left_bs <- AUCRF(location~., data=train_left_bs, pdel=0.99, ntree=500)
+    cv10f_probs[sampling[i:(i+3)]] <- predict(temp_model_left_bs$RFopt, test_left_bs, type='prob')[,2]
+  }
+  cv10f_roc_left_bs <- roc(aucrf_data_left_bs$location~cv10f_probs)
+  cv10f_all_pred_left_bs <- c(cv10f_all_pred_left_bs, cv10f_probs)
+  cv10f_all_resp_left_bs <- c(cv10f_all_resp_left_bs, aucrf_data_left_bs$location)
+  cv10f_aucs[j] <- cv10f_roc_left_bs$auc #stores aucs for all iterations, can use to calc IQR
+}
+cv10f_roc_left_bs <- roc(cv10f_all_resp_left_bs~cv10f_all_pred_left_bs)
+
+#10fold CV for R lumen vs R mucosa
+iters <- 100
+cv10f_aucs <- c()
+cv10f_all_resp_right_bs <- c()
+cv10f_all_pred_right_bs <- c()
+for(j in 1:iters){
+  set.seed(j)
+  sampling <- sample(1:nrow(aucrf_data_right_bs),nrow(aucrf_data_right_bs),replace=F)
+  cv10f_probs <- rep(NA,39)
+  for(i in seq(1,36,4)){
+    train_right_bs <- aucrf_data_right_bs[sampling[-(i:(i+3))],]
+    test_right_bs <- aucrf_data_right_bs[sampling[i:(i+3)],]
+    set.seed(seed)
+    temp_model_right_bs <- AUCRF(location~., data=train_right_bs, pdel=0.99, ntree=500)
+    cv10f_probs[sampling[i:(i+3)]] <- predict(temp_model_right_bs$RFopt, test_right_bs, type='prob')[,2]
+  }
+  cv10f_roc_right_bs <- roc(aucrf_data_right_bs$location~cv10f_probs)
+  cv10f_all_pred_right_bs <- c(cv10f_all_pred_right_bs, cv10f_probs)
+  cv10f_all_resp_right_bs <- c(cv10f_all_resp_right_bs, aucrf_data_right_bs$location)
+  cv10f_aucs[j] <- cv10f_roc_right_bs$auc #stores aucs for all iterations, can use to calc IQR
+}
+cv10f_roc_right_bs <- roc(cv10f_all_resp_right_bs~cv10f_all_pred_right_bs)
+
+#10 fold cross validation for L vs R mucosa
+
+iters <- 100
+cv10f_aucs_muc <- c()
+cv10f_all_resp_muc <- c()
+cv10f_all_pred_muc <- c()
+for(j in 1:iters){
+  set.seed(j)
+  sampling_muc <- sample(1:nrow(aucrf_data_LRbowel),nrow(aucrf_data_LRbowel),replace=F)
+  cv10f_probs_muc <- rep(NA,39)
+  for(i in seq(1,36,4)){
+    train_muc <- aucrf_data_LRbowel[sampling_muc[-(i:(i+3))],]
+    test_muc <- aucrf_data_LRbowel[sampling_muc[i:(i+3)],]
+    set.seed(seed)
+    temp_model_muc <- AUCRF(location~., data=train_muc, pdel=0.99, ntree=500)
+    cv10f_probs_muc[sampling_muc[i:(i+3)]] <- predict(temp_model_muc$RFopt, test_muc, type='prob')[,2]
+  }
+  cv10f_roc_muc <- roc(aucrf_data_LRbowel$location~cv10f_probs_muc)
+  cv10f_all_pred_muc <- c(cv10f_all_pred_muc, cv10f_probs_muc)
+  cv10f_all_resp_muc <- c(cv10f_all_resp_muc, aucrf_data_LRbowel$location)
+  cv10f_aucs_muc[j] <- cv10f_roc_muc$auc #stores aucs for all iterations, can use to calc IQR
+}
+cv10f_roc_muc <- roc(cv10f_all_resp_muc~cv10f_all_pred_muc)
+
+
+#10 fold cross validation for L vs R lumen
+iters <- 100
+cv10f_aucs_lum <- c()
+cv10f_all_resp_lum <- c()
+cv10f_all_pred_lum <- c()
+for(j in 1:iters){
+  set.seed(j)
+  sampling_lum <- sample(1:nrow(aucrf_data_LRlumen),nrow(aucrf_data_LRlumen),replace=F)
+  cv10f_probs_lum <- rep(NA,39)
+  for(i in seq(1,36,4)){
+    train_lum <- aucrf_data_LRlumen[sampling_lum[-(i:(i+3))],]
+    test_lum <- aucrf_data_LRlumen[sampling_lum[i:(i+3)],]
+    set.seed(seed)
+    temp_model_lum <- AUCRF(location~., data=train_lum, pdel=0.99, ntree=500)
+    cv10f_probs_lum[sampling_lum[i:(i+3)]] <- predict(temp_model_lum$RFopt, test_lum, type='prob')[,2]
+  }
+  cv10f_roc_lum <- roc(aucrf_data_LRlumen$location~cv10f_probs_lum)
+  cv10f_all_pred_lum <- c(cv10f_all_pred_lum, cv10f_probs_lum)
+  cv10f_all_resp_lum <- c(cv10f_all_resp_lum, aucrf_data_LRlumen$location)
+  cv10f_aucs_lum[j] <- cv10f_roc_lum$auc #stores aucs for all iterations, can use to calc IQR
+}
+cv10f_roc_lum <- roc(cv10f_all_resp_lum~cv10f_all_pred_lum)
+
+```
+
+```{r important_otus}
+
+
+```
+
 
 ### Abstract
 

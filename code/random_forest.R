@@ -60,7 +60,7 @@ aucrf_data_LRlumen <- auc_loc(rel_meta, "LS", "RS")
 aucrf_data_allum <- auc_site(rel_meta, "mucosa", "stool")
 
 #need to fix specific function for these to output just the rf object 
-rf_exitlum_aucrf <- auc_site(rel_meta, "stool", "exit") # not working 
+#rf_exitlum_aucrf <- auc_site(rel_meta, "stool", "exit") # not working 
 rf_exitLlum_aucrf <- auc_loc(rel_meta, "LB", "SS")
 rf_exitRlum_aucrf <- auc_loc(rel_meta, "RB", "SS")
 

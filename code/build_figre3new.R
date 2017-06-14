@@ -35,19 +35,18 @@ exittyc <- subset(tyc, samp2 == 'SS')
 
 #plots
 tycpositions <- c("RB_RS", "LS_RS", "LB_RB", "LB_LS")
-ggplot(lvsr, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) +theme_bw() + 
+lvr_plot <- ggplot(lvsr, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) +theme_bw() + 
   theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=16)) + 
   scale_x_discrete(limits = tycpositions, breaks = tycpositions,
                    labels=c("R Mucosa vs R Lumen", "L Lumen vs R Lumen", "L Mucosa vs R Mucosa", "L Mucosa vs L Lumen")) +
   ylab("ThetaYC distance") 
 
 exitpositions <- c("RB_SS", "RS_SS", "LB_SS", "LS_SS")
-ggplot(exittyc, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) +theme_bw() +
+exit_plot <- ggplot(exittyc, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) +theme_bw() +
   theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=16)) +
   scale_x_discrete(limits=exitpositions, breaks=exitpositions,
                    labels=c("R Mucosa vs Stool", "R Lumen vs Stool", "L Mucosa vs Stool", "L Lumen vs Stool")) +
-  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")+ 
-  stat_summary(aes(x=match, y=thetayc), data = exittyc, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
+  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")
 
 #trying to get adonis to work for comparisons 
 
@@ -130,13 +129,7 @@ for (i in 1:nrow(alltyc)){
 
 alltyc[10] <- as.factor(alltyc[10])
 
-ggplot(alltyc, aes(x=as.factor(same_pt), y=thetayc)) + geom_jitter(width=0.15, shape=21, size=3, fill='grey', col='black') + theme_bw()+
-  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=16)) +
-  scale_x_discrete(labels=c("interpersonal", "intrapersonal")) +
-  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")+ 
-  stat_summary(aes(x=as.factor(same_pt), y=thetayc), data = alltyc, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.3, col = "black")
-
-ggplot(alltyc, aes(x=as.factor(same_pt), y=thetayc)) + geom_boxplot(width=0.5) + theme_bw()+
+inter_plot <- ggplot(alltyc, aes(x=as.factor(same_pt), y=thetayc)) + geom_boxplot(width=0.5) + theme_bw()+
   theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=16)) +
   scale_x_discrete(labels=c("interpersonal", "intrapersonal")) +
   theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")
@@ -145,6 +138,20 @@ inter_medians <- aggregate(thetayc ~ same_pt, alltyc, median)
   
 wilcox.test(thetayc ~ same_pt, data = alltyc)
 
+# build and export figure 
+#export as PDF
 
+plot_file <- '~/Documents/Schloss_Lab/Flynn_LRColon_XXXX_2017/submission/figure_3.pdf'
+pdf(file=plot_file, width=12, height=11)
+layout(matrix(c(1,
+                2,
+                3), 
+              nrow=3, byrow = TRUE))
 
+lvr_plot
 
+exit_plot
+
+inter_plot
+
+dev.off()

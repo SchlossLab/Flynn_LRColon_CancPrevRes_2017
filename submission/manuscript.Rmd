@@ -38,7 +38,6 @@ $\dagger$ Corresponding author: pschloss@umich.edu
 
 
 ```{r dependencies}
-#setwd('~/Documents/Flynn_LRColon_XXXX_2017')
 pack_used <- c('randomForest','ggplot2', 'pROC', 'knitr','dplyr','AUCRF', 'tidyr', 'caret', 'RColorBrewer', 'reshape2', 'wesanderson')
 for (dep in pack_used){
   if (dep %in% installed.packages()[,"Package"] == FALSE){
@@ -50,7 +49,6 @@ for (dep in pack_used){
 ```
 
 ```{r datasets}
-#setwd("~/Users/kaitlinflynn/Documents/Flynn_LRColon_XXXX_2017")
 meta <- '../data/raw/kws_metadata.tsv'
 shared <- '../data/mothur/kws_final.an.shared'
 tax <- '../data/mothur/kws_final.an.cons.taxonomy'
@@ -65,7 +63,6 @@ simps <- read.table(file='../data/mothur/kws_final.an.groups.summary', header = 
 simpmeta <- merge(meta_file, simps)
 
 tyc <- read.table("../data/mothur/kws_final.an.summary", sep = '\t', header = T, row.names=NULL)
-
 
 
 ```
@@ -89,8 +86,99 @@ phyla_RAmelt <- melt(phyla_RA[, phylaRAnames], id.vars=1)
 
 ```
 
+```{r thetayc}
+tyc <- read.table("../data/mothur/kws_final.an.summary", sep = '\t', header = T, row.names=NULL)
 
+#separate column values for comparisons
+tyc <- separate(tyc, label, into= c('pt1', 'samp1'), sep="-", remove=F)
+tyc <- separate(tyc, comparison, into= c('pt2', 'samp2'), sep="-", remove=F)
+tyc <- subset(tyc, select = -c(row.names, X))
 
+tyc <- subset(tyc, pt1==pt2)
+tyc <- unite_(tyc, "match", from=c('samp1', 'samp2'), sep="_", remove = F)
+
+stooltyc <- subset(tyc, match=='LB_RB' | match== 'LS_RS')
+leftandrighttyc <- subset(tyc, match=='LB_LS' | match== 'RB_RS')
+lvsr <- rbind(stooltyc, leftandrighttyc)
+
+exittyc <- subset(tyc, samp2 == 'SS')
+
+pvalues <- c()
+
+Atyc <- subset(tyc, match=='RB_RS' | match=='LS_RS')
+pvalues <- c(pvalues, wilcox.test(thetayc~match, data=Atyc, paired=T)$p.value)
+
+btyc <- subset(tyc, match=='RB_RS'| match=='LB_RB')
+btyc <- btyc[-25,]
+pvalues <- c(pvalues, wilcox.test(thetayc~match, data=btyc, paired=T)$p.value)
+
+ctyc <- subset(tyc, match=='RB_RS'| match=='LB_LS')
+ctyc <- ctyc[-25,]
+pvalues <- c(pvalues, wilcox.test(thetayc~match, data=ctyc, paired=T)$p.value)
+
+dtyc <- subset(tyc, match == 'LS_RS' | match == 'LB_RB')
+dtyc <- dtyc[-25,]
+pvalues <- c(pvalues, wilcox.test(thetayc~match, data=dtyc, paired=T)$p.value)
+
+etyc <- subset(tyc, match == 'LS_RS' | match == 'LB_LS')
+etyc <- etyc[-25,]
+pvalues <- c(pvalues, wilcox.test(thetayc~match, data=etyc, paired=T)$p.value)
+
+ftyc <- subset(tyc, match == 'LB_RB' | match == 'LB_LS')
+pvalues <- c(pvalues, wilcox.test(thetayc~match, data=ftyc, paired=T)$p.value)
+
+pvalues <- p.adjust(pvalues, method = "BH")
+
+# now for exit comparisons
+
+stoolpvalues <- c()
+
+htyc <- subset(tyc, match=='RB_SS' | match=='RS_SS')
+htyc <- htyc[-25,]
+stoolpvalues <- c(stoolpvalues, wilcox.test(thetayc~match, data=htyc, paired=T)$p.value)
+
+ityc <- subset(tyc, match=='RB_SS' | match=='LB_SS')
+stoolpvalues <- c(stoolpvalues, wilcox.test(thetayc~match, data=ityc, paired=T)$p.value)
+
+jtyc <- subset(tyc, match=='RB_SS' | match=='LS_SS')
+stoolpvalues <- c(stoolpvalues, wilcox.test(thetayc~match, data=jtyc, paired=T)$p.value)
+
+ktyc <- subset(tyc, match=='RS_SS' | match=='LB_SS')
+ktyc <- ktyc[-25,]
+stoolpvalues <- c(stoolpvalues, wilcox.test(thetayc~match, data=ktyc, paired=T)$p.value)
+
+ltyc <- subset(tyc, match=='RS_SS' | match=='LS_SS')
+ltyc <- ltyc[-25,]
+stoolpvalues <- c(stoolpvalues, wilcox.test(thetayc~match, data=ltyc, paired=T)$p.value)
+
+mtyc <- subset(tyc, match=='LB_SS' | match=='LS_SS')
+stoolpvalues <- c(stoolpvalues, wilcox.test(thetayc~match, data=mtyc, paired=T)$p.value)
+
+stoolpvalues <- p.adjust(stoolpvalues, method = "BH")
+
+alltyc <- read.table("../data/process/allshared.summary", sep = '\t', header = T, row.names=NULL)
+alltyc <- separate(alltyc, label, into= c('pt1', 'samp1'), sep="-", remove=F)
+alltyc <- separate(alltyc, comparison, into= c('pt2', 'samp2'), sep="-", remove=F)
+alltyc <- alltyc[-1]
+alltyc <- alltyc[-7]
+
+#ultimately want a plot of all points where pt1 == pt2 in one bar and all of the others in another column 
+#unite and make column of 0/1 for matches? then can plot 1 and 0s 
+#should i separate out lumen and mucosa ? sure or no not for now
+
+alltyc["same_pt"] <- NA
+
+for (i in 1:nrow(alltyc)){
+  if (alltyc$pt1[i] == alltyc$pt2[i]){
+    alltyc$same_pt[i] <- 1
+  }
+  else alltyc$same_pt[i] <- 0
+}
+
+alltyc[10] <- as.factor(alltyc[10])
+
+inter_medians <- aggregate(thetayc ~ same_pt, alltyc, median)
+```
 
 ### Abstract
 

@@ -27,60 +27,27 @@ tyc <- subset(tyc, select = -c(row.names, X))
 tyc <- subset(tyc, pt1==pt2)
 tyc <- unite_(tyc, "match", from=c('samp1', 'samp2'), sep="_", remove = F)
 
-#now plot- this is a plot of thetayc distances in all pairings for all patients 
-ggplot(tyc, aes(x=match, y=thetayc)) + geom_point(aes(col=match)) +facet_wrap(~pt1) +theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ggplot(tyc, aes(x=match, y=thetayc)) + geom_boxplot() +theme_bw()
-
-lefttyc <- subset(tyc, samp1== 'LB' | samp1== 'LS')
-lefttyc <- subset(lefttyc, samp2== 'LB' | samp2== 'LS' | samp2=='SS')
-
-righttyc <- subset(tyc, samp1=='RB' | samp1 == 'RS')
-righttyc <- subset(righttyc, samp2=='RB' | samp2 == 'RS' | samp2 == 'SS')
-
-mucosatyc <- subset(tyc, samp1=='RB' | samp1 == 'LB')
-mucosatyc <- subset(mucosatyc, samp2=='RB' | samp2 == 'LB')
-
 stooltyc <- subset(tyc, match=='LB_RB' | match== 'LS_RS')
-
-exittyc <- subset(tyc, samp2 == 'SS')
-exitLtyc <- subset(exittyc, samp1 == 'LS' | samp1 == 'LB')
-exitRtyc <- subset(exittyc, samp1 == 'LS' | samp1 == 'RS')
-
-
 leftandrighttyc <- subset(tyc, match=='LB_LS' | match== 'RB_RS')
-
 lvsr <- rbind(stooltyc, leftandrighttyc)
 
-ggplot(lefttyc, aes(x=match, y=thetayc)) + geom_boxplot() +theme_bw() +ggtitle("Left")
+exittyc <- subset(tyc, samp2 == 'SS')
 
-ggplot(righttyc, aes(x=match, y=thetayc)) + geom_boxplot() +theme_bw() +ggtitle("Right")
+#plots
+tycpositions <- c("RB_RS", "LS_RS", "LB_RB", "LB_LS")
+ggplot(lvsr, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) +theme_bw() + 
+  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=16)) + 
+  scale_x_discrete(limits = tycpositions, breaks = tycpositions,
+                   labels=c("R Mucosa vs R Lumen", "L Lumen vs R Lumen", "L Mucosa vs R Mucosa", "L Mucosa vs L Lumen")) +
+  ylab("ThetaYC distance") 
 
-ggplot(mucosatyc, aes(x=match, y=thetayc)) + geom_boxplot() +theme_bw()
-
-ggplot(exittyc, aes(x=match, y=thetayc, fill = match)) +geom_boxplot() +theme_bw()+ scale_fill_manual(values=wes_palette("Darjeeling2")) +theme(legend.position="none")
-exittyc$match <- as.factor(exittyc$match)
-kruskal.test(thetayc ~ match, data = exittyc)
-
-ggplot(stooltyc, aes(x=match, y=thetayc, fill = match)) + geom_boxplot() +theme_bw() + scale_fill_manual(values=c("blue3", "goldenrod1")) +theme(legend.position="none")
-stooltyc <- stooltyc[-25,]
-wilcox.test(thetayc ~ match, data=stooltyc, paired=T)
-
-ggplot(leftandrighttyc, aes(x=match, y=thetayc, fill=match)) + geom_boxplot() +theme_bw() +scale_fill_manual(values=c("blue3", "goldenrod1")) +theme(legend.position="none")
-leftandrighttyc <- leftandrighttyc[-25,]
-wilcox.test(thetayc ~ match, data=leftandrighttyc, paired = T)
-
-#thetayc plot for figure 3
-#lvsr$match <- factor(lvsr$match, levels=lvsr$match[order(lvsr$samp1)])
-ggplot(lvsr, aes(x=match, y=thetayc)) + geom_point() + geom_jitter(width= 0.2) +theme_bw() +
-  scale_x_discrete(labels=c("L Mucosa vs L Lumen", "L Mucosa vs R Lumen", "L Lumen vs R Lumen", "R Mucosa vs R Lumen")) +
-  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 16), axis.title= element_text(size=18)) +
-  ylab("ThetaYC distance") + stat_summary(aes(x=match, y=thetayc), data = lvsr, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
-
-
-ggplot(exittyc, aes(x=match, y=thetayc, color=match)) + geom_point() + geom_jitter(width= 0.5) +theme_bw() +scale_color_brewer(palette="Set1") +
-  theme(legend.position="none") +scale_x_discrete(labels=c("L Mucosa vs Stool", "L Lumen vs Stool", "R Mucosa vs Stool", "R Lumen vs Stool")) +
-  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")
+exitpositions <- c("RB_SS", "RS_SS", "LB_SS", "LS_SS")
+ggplot(exittyc, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) +theme_bw() +
+  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=16)) +
+  scale_x_discrete(limits=exitpositions, breaks=exitpositions,
+                   labels=c("R Mucosa vs Stool", "R Lumen vs Stool", "L Mucosa vs Stool", "L Lumen vs Stool")) +
+  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")+ 
+  stat_summary(aes(x=match, y=thetayc), data = exittyc, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 
 #trying to get adonis to work for comparisons 
 
@@ -138,3 +105,46 @@ mtyc <- subset(tyc, match=='LB_SS' | match=='LS_SS')
 stoolpvalues <- c(stoolpvalues, wilcox.test(thetayc~match, data=mtyc, paired=T)$p.value)
 
 stoolpvalues <- p.adjust(stoolpvalues, method = "BH")
+
+#####################################################################
+# Intra / interpersonal comparison
+
+alltyc <- read.table("data/process/allshared.summary", sep = '\t', header = T, row.names=NULL)
+alltyc <- separate(alltyc, label, into= c('pt1', 'samp1'), sep="-", remove=F)
+alltyc <- separate(alltyc, comparison, into= c('pt2', 'samp2'), sep="-", remove=F)
+alltyc <- alltyc[-1]
+alltyc <- alltyc[-7]
+
+#ultimately want a plot of all points where pt1 == pt2 in one bar and all of the others in another column 
+#unite and make column of 0/1 for matches? then can plot 1 and 0s 
+#should i separate out lumen and mucosa ? sure or no not for now
+
+alltyc["same_pt"] <- NA
+
+for (i in 1:nrow(alltyc)){
+  if (alltyc$pt1[i] == alltyc$pt2[i]){
+    alltyc$same_pt[i] <- 1
+  }
+  else alltyc$same_pt[i] <- 0
+}
+
+alltyc[10] <- as.factor(alltyc[10])
+
+ggplot(alltyc, aes(x=as.factor(same_pt), y=thetayc)) + geom_jitter(width=0.15, shape=21, size=3, fill='grey', col='black') + theme_bw()+
+  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=16)) +
+  scale_x_discrete(labels=c("interpersonal", "intrapersonal")) +
+  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")+ 
+  stat_summary(aes(x=as.factor(same_pt), y=thetayc), data = alltyc, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.3, col = "black")
+
+ggplot(alltyc, aes(x=as.factor(same_pt), y=thetayc)) + geom_boxplot(width=0.5) + theme_bw()+
+  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=16)) +
+  scale_x_discrete(labels=c("interpersonal", "intrapersonal")) +
+  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")
+
+inter_medians <- aggregate(thetayc ~ same_pt, alltyc, median)
+  
+wilcox.test(thetayc ~ same_pt, data = alltyc)
+
+
+
+

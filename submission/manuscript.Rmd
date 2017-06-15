@@ -36,6 +36,17 @@ $\dagger$ Corresponding author: pschloss@umich.edu
 \newpage
 \linenumbers
 
+```{r knitr_settings, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+
+opts_chunk$set("tidy" = TRUE)
+opts_chunk$set("echo" = FALSE)
+opts_chunk$set("eval" = TRUE)
+opts_chunk$set("warning" = FALSE)
+opts_chunk$set("cache" = FALSE)
+opts_chunk$set("message" = FALSE)
+
+```
+
 
 ```{r dependencies}
 pack_used <- c('randomForest','ggplot2', 'pROC', 'knitr','dplyr','AUCRF', 'tidyr', 'caret', 'RColorBrewer', 'reshape2', 'wesanderson')
@@ -52,7 +63,7 @@ for (dep in pack_used){
 meta <- '../data/raw/kws_metadata.tsv'
 shared <- '../data/mothur/kws_final.an.shared'
 tax <- '../data/mothur/kws_final.an.cons.taxonomy'
-subsample <- '../data/mothur/kws_final.an.0.03.subsample.shared'
+subsample <- read.table(file='../data/mothur/kws_final.an.0.03.subsample.shared', header=T)
 
 meta_file <- read.table(file='../data/raw/kws_metadata.tsv', header = T)
 shared_file <- read.table(file='../data/mothur/kws_final.an.shared', sep = '\t', header=T, row.names=2)
@@ -62,8 +73,7 @@ shared_meta <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
 simps <- read.table(file='../data/mothur/kws_final.an.groups.summary', header = T)
 simpmeta <- merge(meta_file, simps)
 
-tyc <- read.table("../data/mothur/kws_final.an.summary", sep = '\t', header = T, row.names=NULL)
-
+tyc <- read.table(file ="../data/mothur/kws_final.an.summary", sep = '\t', header = T, row.names=NULL)
 
 ```
 
@@ -72,7 +82,8 @@ source('../code/Sum_OTU_by_Tax.R')
 source('../code/sum_shared.R')
 
 #use this code to assign phyla to each OTU in the shared file 
-shared_phyla <- get_tax_level_shared(subsample, tax, 2)
+sub <- '../data/mothur/kws_final.an.0.03.subsample.shared'
+shared_phyla <- get_tax_level_shared(sub, tax, 2)
 phyla_met <- merge(meta_file, shared_phyla, by.x='group', by.y='row.names')
 
 #try to get the df organized to work as a boxplot - no median calculation 
@@ -331,12 +342,49 @@ for(j in 1:iters){
   cv10f_aucs_lum[j] <- cv10f_roc_lum$auc #stores aucs for all iterations, can use to calc IQR
 }
 cv10f_roc_lum <- roc(cv10f_all_resp_lum~cv10f_all_pred_lum)
+```
+```{r important_otus}
+#just LB vs LS 
+left_otu_feat <- colnames(aucrf_data_left_bs[2:6])
+otu_taxa_left <- get_tax(1, left_otu_feat, tax_file)
+#Abundance stripchart or most predictive otus
+ls_abunds <- shared_meta[shared_meta$location=='LS', left_otu_feat]/10000 + 1e-4
+lb_abunds <- shared_meta[shared_meta$location=='LB', left_otu_feat]/10000 + 1e-4
+
+right_otu_feat <- colnames(aucrf_data_right_bs[2:6])
+otu_taxa_right <- get_tax(1, right_otu_feat, tax_file)
+#Abundance stripchart or most predictive otus
+rs_abunds <- shared_meta[shared_meta$location=='RS', right_otu_feat]/10000 + 1e-4
+rb_abunds <- shared_meta[shared_meta$location=='RB', right_otu_feat]/10000 + 1e-4
+
+#Lb vs Rb
+LRbowel_otu_feat <- colnames(aucrf_data_LRbowel[2:6])
+otu_taxa_LRbowel <- get_tax(1, LRbowel_otu_feat, tax_file)
+#Abundance stripchart or most predictive otus 
+lb_abunds <- shared_meta[shared_meta$location=='LB', LRbowel_otu_feat]/10000 + 1e-4
+rblb_abunds <- shared_meta[shared_meta$location=='RB', LRbowel_otu_feat]/10000 + 1e-4
+
+#LS vs RS
+LRlumen_otu_feat <- colnames(aucrf_data_LRlumen[2:6])
+otu_taxa_LRlumen <- get_tax(1, LRlumen_otu_feat, tax_file)
+#Abundance stripchart or most predictive otus 
+lsrs_abunds <- shared_meta[shared_meta$location=='LS', LRlumen_otu_feat]/10000 + 1e-4
+rsls_abunds <- shared_meta[shared_meta$location=='RS', LRlumen_otu_feat]/10000 + 1e-4
 
 ```
 
-```{r important_otus}
 
+```{r oncogenic_otus}
+subsampled_meta <- merge(meta_file, subsample, by.x='group', by.y='row.names')
+fuso179 <- subsampled_meta[, colnames(subsampled_meta) %in% c("group", "patient", "location", "Otu00179")]
 
+fuso179[,5] <- (fuso179[,4]/subsampled_to)*100
+names(fuso179)[5] <- "Otu00179_relAbund"
+
+p_152 <-subsampled_meta[, colnames(shared_meta) %in% c("Group", "patient", "location", "Otu00152")]
+
+p_152[,4] <- (p_152[,3]/subsampled_to) *100
+names(p_152)[4] <- "Otu152_abund"
 ```
 
 

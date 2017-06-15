@@ -33,7 +33,7 @@ fuso179 <- subsampled_meta[, colnames(subsampled_meta) %in% c("group", "patient"
 fuso179[,5] <- (fuso179[,4]/4321)*100
 names(fuso179)[5] <- "Otu00179_relAbund"
 
-ggplot(fuso179, aes(x=location, y=Otu00179_relAbund)) +geom_jitter() +theme_bw()
+ggplot(fuso179, aes(x=location, y=Otu00179_relAbund)) +geom_jitter(width=0.3) +theme_bw()
 
 #other oncogenic otus - Otu00152 is P. asaccharolytica. Otu00248 is p micra
 
@@ -41,6 +41,13 @@ p_asach <- shared_meta[, colnames(shared_meta) %in% c("Group", "patient", "locat
 
 p_asach[,4] <- (p_asach[,3]/4321) *100
 names(p_asach)[4] <- "Otu00152_abund"
+
+p_152 <-subsampled_meta[, colnames(shared_meta) %in% c("Group", "patient", "location", "Otu00152")]
+
+p_152[,4] <- (p_152[,3]/4321) *100
+names(p_152)[4] <- "Otu152_abund"
+
+ggplot(p_152, aes(x=location, y=Otu152_abund)) +geom_jitter() +theme_bw()
 
 ggplot(p_asach, aes(x=location, y=Otu00152_abund)) +geom_jitter() +theme_bw()
 

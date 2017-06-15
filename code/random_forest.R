@@ -419,3 +419,33 @@ axis(2, at=seq(1,index-2,2), labels=otu_taxa_LRlumen$tax_label, las=1, line=-0.5
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"), cex.axis=1.2)
 legend('topright', legend=c("Left lumen", "Right lumen"), pch=c(21, 21), pt.bg=c("brown","magenta"), cex=1.2)
 
+
+
+# build and export figure 
+#export as PDF
+
+plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_4.pdf'
+pdf(file=plot_file, width=12, height=11)
+layout(matrix(c(1,
+                2,
+                3), 
+              nrow=3, byrow = TRUE))
+
+#Lumen vs mucosa plot 
+par(mar=c(4,4,1,1))
+plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
+plot(cv10f_roc_right_bs, col='blue', lwd=3, add=T, lty=1)
+plot(cv10f_roc_left_bs, col = 'red', lwd=3, add=T, lty=1)
+mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.5)
+mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.5)
+legend('bottom', legend=c(
+  sprintf('L Lumen vs L Mucosa, 10-fold CV, AUC =0.980'),
+  sprintf('R Lumen vs R Mucosa, 10-fold CV, AUC = 0.797')
+),lty=c(1, 1, 1), lwd=3, col=c('red', 'blue'), bty='n', cex=1.2)
+
+
+
+
+inter_plot
+
+dev.off()

@@ -5,7 +5,7 @@
 ####
 
 sum_OTU_by_tax_level <- function(TAX_LEVEL, OTU_DF, tax_df){
-     source('code/tax_level.R')
+     source('../code/tax_level.R')
      TAX_DF <-get_tax(TAX_LEVEL,names(OTU_DF), tax_df)
      tax_levels <- as.character(unique(TAX_DF$tax))
      OUTPUT_DF <- data.frame(rep(0,length(rownames(OTU_DF))), row.names=rownames(OTU_DF))

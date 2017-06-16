@@ -34,6 +34,7 @@ seed <- 1
 n_trees <- 2001
 
 source('code/random_functions.R')
+source('code/tax_level.R')
 
 #####RandomForest###########################################################################################
 #build randomForest model for each location comparison using randomize_loc function 

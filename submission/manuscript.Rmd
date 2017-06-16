@@ -4,11 +4,11 @@ title: '**Machine learning identifies unique taxa differentiating proximal and d
 csl: mbio.csl
 fontsize: 11pt
 output:
-  word_document: default
+  html_document: default
   pdf_document:
     includes: null
     keep_tex: yes
-  html_document: default
+  word_document: default
 geometry: margin=1.0in
 bibliography: references.bib
 ---
@@ -36,19 +36,34 @@ $\dagger$ Corresponding author: pschloss@umich.edu
 \newpage
 \linenumbers
 
-```{r knitr_settings, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+```{r knitr_settings, eval=TRUE, echo=FALSE, cache=FALSE}
+knitr::opts_chunk$set("tidy" = TRUE)
+knitr::opts_chunk$set("echo" = FALSE)
+knitr::opts_chunk$set("eval" = TRUE)
+knitr::opts_chunk$set("warning" = FALSE)
+knitr::opts_chunk$set("cache" = FALSE)
 
-opts_chunk$set("tidy" = TRUE)
-opts_chunk$set("echo" = FALSE)
-opts_chunk$set("eval" = TRUE)
-opts_chunk$set("warning" = FALSE)
-opts_chunk$set("cache" = FALSE)
-opts_chunk$set("message" = FALSE)
+inline_hook <- function(x){
+	print(x)
 
+	if(is.list(x)){
+		x <- unlist(x)
+	}
+
+	if(is.numeric(x)){
+		if(abs(x - round(x)) < .Machine$double.eps^0.5){
+			paste(format(x,big.mark=',', digits=0, scientific=FALSE))
+		} else {
+			paste(format(x,big.mark=',', digits=1, nsmall=1, scientific=FALSE))
+		}
+	} else {
+    	paste(x)      
+	}
+}
+knitr::knit_hooks$set(inline=inline_hook)
 ```
 
-
-```{r dependencies}
+```{r dependencies, echo=FALSE, warning = FALSE}
 pack_used <- c('randomForest','ggplot2', 'pROC', 'knitr','dplyr','AUCRF', 'tidyr', 'caret', 'RColorBrewer', 'reshape2', 'wesanderson')
 for (dep in pack_used){
   if (dep %in% installed.packages()[,"Package"] == FALSE){
@@ -59,7 +74,7 @@ for (dep in pack_used){
 }
 ```
 
-```{r datasets}
+```{r datasets, echo=FALSE}
 meta <- '../data/raw/kws_metadata.tsv'
 shared <- '../data/mothur/kws_final.an.shared'
 tax <- '../data/mothur/kws_final.an.cons.taxonomy'
@@ -77,7 +92,7 @@ tyc <- read.table(file ="../data/mothur/kws_final.an.summary", sep = '\t', heade
 
 ```
 
-```{r otu_barplot}
+```{r otu_barplot, echo=FALSE}
 source('../code/Sum_OTU_by_Tax.R')
 source('../code/sum_shared.R')
 
@@ -97,7 +112,7 @@ phyla_RAmelt <- melt(phyla_RA[, phylaRAnames], id.vars=1)
 
 ```
 
-```{r thetayc}
+```{r thetayc, echo=FALSE}
 tyc <- read.table("../data/mothur/kws_final.an.summary", sep = '\t', header = T, row.names=NULL)
 
 #separate column values for comparisons
@@ -189,9 +204,15 @@ for (i in 1:nrow(alltyc)){
 inter_medians <- aggregate(thetayc ~ same_pt, alltyc, median)
 ```
 
-```{r randomforest}
+```{r randomforest, echo=FALSE}
+
+#make OTU abundance file
+#Create df with relative abundances
+shared_file_rf <- subset(shared_file, select = -c(numOtus, label))
+shared_meta_rf <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
+
 #create dataframe with relative abundances
-rel_abund <- 100*shared_file/unique(apply(shared_file, 1, sum))
+rel_abund <- 100*shared_file_rf/unique(apply(shared_file_rf, 1, sum))
 
 #Create vector of OTUs with median abundances >1%
 OTUs_1 <- apply(rel_abund, 2, max) > 1
@@ -204,6 +225,7 @@ seed <- 1
 n_trees <- 2001
 
 source('../code/random_functions.R')
+source('../code/tax_level.R')
 
 #####RandomForest###########################################################################################
 #build randomForest model for each location comparison using randomize_loc function 
@@ -343,7 +365,7 @@ for(j in 1:iters){
 }
 cv10f_roc_lum <- roc(cv10f_all_resp_lum~cv10f_all_pred_lum)
 ```
-```{r important_otus}
+```{r important_otus, echo=FALSE}
 #just LB vs LS 
 left_otu_feat <- colnames(aucrf_data_left_bs[2:6])
 otu_taxa_left <- get_tax(1, left_otu_feat, tax_file)
@@ -374,7 +396,7 @@ rsls_abunds <- shared_meta[shared_meta$location=='RS', LRlumen_otu_feat]/10000 +
 ```
 
 
-```{r oncogenic_otus}
+```{r oncogenic_otus, echo=FALSE}
 subsampled_meta <- merge(meta_file, subsample, by.x='group', by.y='row.names')
 fuso179 <- subsampled_meta[, colnames(subsampled_meta) %in% c("group", "patient", "location", "Otu00179")]
 

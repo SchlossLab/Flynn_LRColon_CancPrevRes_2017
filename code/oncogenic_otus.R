@@ -58,3 +58,21 @@ names(p_micra)[4] <- "Otu00248_abund"
 
 ggplot(p_micra, aes(x=location, y=Otu00248_abund)) +geom_jitter() +theme_bw()
 
+########################################Build figure 6 
+#export as PDF
+
+plot_file <- '~/Documents/Schloss_Lab/Flynn_LRColon_XXXX_2017/submission/figure_3.pdf'
+pdf(file=plot_file, width=12, height=11)
+layout(matrix(c(1,
+                2,
+                3), 
+              nrow=3, byrow = TRUE))
+
+lvr_plot
+
+exit_plot
+
+inter_plot
+
+dev.off()
+

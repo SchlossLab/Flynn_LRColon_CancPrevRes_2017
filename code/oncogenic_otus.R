@@ -33,7 +33,13 @@ fuso179 <- subsampled_meta[, colnames(subsampled_meta) %in% c("group", "patient"
 fuso179[,5] <- (fuso179[,4]/4321)*100
 names(fuso179)[5] <- "Otu00179_relAbund"
 
-ggplot(fuso179, aes(x=location, y=Otu00179_relAbund)) +geom_jitter(width=0.3) +theme_bw()
+positions <- c("RB", "RS", "LB", "LS", "SS")
+fuso_plot <- ggplot(fuso179, aes(x=location, y=Otu00179_relAbund)) +geom_jitter(width=0.3) +theme_bw() +
+  ylab("F. nucleatum Relative Abundance") +
+  scale_x_discrete(limits = positions, breaks=positions, 
+                   labels=c("R Mucosa", "R Lumen", "L Mucosa", "L Lumen", "Stool")) +
+  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=14))
+
 
 #other oncogenic otus - Otu00152 is P. asaccharolytica. Otu00248 is p micra
 
@@ -51,6 +57,15 @@ ggplot(p_152, aes(x=location, y=Otu152_abund)) +geom_jitter() +theme_bw()
 
 ggplot(p_asach, aes(x=location, y=Otu00152_abund)) +geom_jitter() +theme_bw()
 
+positions <- c("RB", "RS", "LB", "LS", "SS")
+porphy_plot <- ggplot(p_152, aes(x=location, y=Otu152_abund)) +geom_jitter(width=0.3) +theme_bw() +
+  ylab("P. asacharolytica Relative Abundance") +
+  scale_x_discrete(limits = positions, breaks=positions, 
+                   labels=c("R Mucosa", "R Lumen", "L Mucosa", "L Lumen", "Stool")) +
+  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=14))
+
+
+
 p_micra <- shared_meta[, colnames(shared_meta) %in% c("Group", "patient", "location", "Otu00248")]
 
 p_micra[,4] <- (p_micra[,3]/4321) *100
@@ -61,18 +76,15 @@ ggplot(p_micra, aes(x=location, y=Otu00248_abund)) +geom_jitter() +theme_bw()
 ########################################Build figure 6 
 #export as PDF
 
-plot_file <- '~/Documents/Schloss_Lab/Flynn_LRColon_XXXX_2017/submission/figure_3.pdf'
-pdf(file=plot_file, width=12, height=11)
+plot_file <- '~/Documents/Schloss_Lab/KWS_Project/Flynn_LRColon_XXXX_2017/submission/figure_6.pdf'
+pdf(file=plot_file, width=9, height=6)
 layout(matrix(c(1,
-                2,
-                3), 
-              nrow=3, byrow = TRUE))
+                2), 
+              nrow=2, byrow = TRUE))
 
-lvr_plot
+fuso_plot
 
-exit_plot
-
-inter_plot
+porphy_plot
 
 dev.off()
 

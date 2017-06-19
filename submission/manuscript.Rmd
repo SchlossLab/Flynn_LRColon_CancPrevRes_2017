@@ -475,22 +475,42 @@ Diversity analysis was performed using the Simpson diversity calculator and thet
 #### Statistical analysis
 Differences in community membership at the phyla level were tested using the analysis of molecular variance (AMOVA) metric in mothur. Differences in thetaYC distances by location were tested using the Wilcoxon rank-sum test adjusted for multiple comparisons using the Benjamini-Hochberg procedure. 
 
-### Figure legends
+
+\newpage
+
+### Figures
+
+\includegraphics{submission/figure_1.pdf}
 
 ####Figure 1
 Sampling strategy. A flexible sigmoidoscope was used to sample the distal colonic luminal contents and mucosa. The scope was inserted ~ 25cm into the subject and endoscopy brushes were used to sample the luminal contents (green star). A separate set of biopsy forceps was used to sample the distal mucosa (blue star). The sigmoidoscope was removed. A pediatric colonoscope was inserted and used to access the proximal colon. Biopsies were taken of the proximal luminal contents and mucosa as described. One week prior to the procedure stool was collected at home and sent into the laboratory. Representative images from one individual are shown.  
 
+\newpage
+\includegraphics{submission/figure_2.pdf}
+
 ####Figure 2
 Microbial membership and diversity of the proximal and distal human colon. A) Relative abundance of the top five bacterial phyla in each sampling site. Each box represents the median and confidence intervals. B) Simpson diversity of the microbial communities at each location. The lines represent the median values. 
+
+\newpage
+\includegraphics{submission/figure_3.pdf}
 
 ####Figure 3
 Similarity of microbial community structure between sites of the gut. ThetaYC distances are shown for interpersonal similarities between two sites – each point represents one individual. In (A), comparisons of the right and left mucosal and lumen are shown. In (B), comparisons of each site to the exit stool are shown. 
 
+\newpage
+\includegraphics{submission/figure_4.pdf}
+
 ####Figure 4
 Random Forest classifies the mucosa and lumen of each side of the colon. A) Receiver Operator Characteristic curves are shown for the 10-fold cross validation of the Random Forest model classifying lumen and mucosal samples for the left and right sides of the colon. (B) Top five OTUs that are most important for the classification model for the left mucosa and lumen (B) and the right mucosa and lumen (C). 
 
+\newpage
+\includegraphics{submission/figure_5.pdf}
+
 ####Figure 5 
 Random Forest classifies the left and right sides of the colon. A) Receiver Operator Characteristic curves are shown for the 10-fold cross validation of the Random Forest model classifying left lumen versus right lumen (orange) and left mucosa vs right mucosa (green). (B) Top five OTUs that are most important for the classification model for the left and right mucosa (B) and the left and right lumen (C).
+
+\newpage
+\includegraphics{submission/figure_6.pdf}
 
 ####Figure 6
 Location and abundance of cancer-associated OTUs. Relative abundance was calculated and plotted by sample site for each OTU of interest: (A) _Fusobacterium nucleatum_ and (B) _Porphyromonas asacharolytica_ 

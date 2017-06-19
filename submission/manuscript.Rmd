@@ -1,6 +1,6 @@
 ---
-title: '*Specific taxa differentiate proximal and distal
-  microbiota in the unprepped human colon*'
+title: 'Specific taxa differentiate proximal and distal microbiota in the unprepped
+  human colon'
 csl: mbio.csl
 fontsize: 11pt
 output:
@@ -435,7 +435,7 @@ To compare similarity between sides (left or right) or sites (lumen or mucosa), 
 Next, we calculated thetaYC distances to examine how each sample compared to the home-collected exit stool. Amidst variability between patients, we did identify significantly smaller thetaYc distance between the left lumenal sample and the exit stool (Figure 3B, P < 0.05, Wilcoxon, BH adjustment). Furthermore, there was an even larger difference in the comparisons of the left mucosa to the exit stool, indicating that the mucosa is different from the stool as compared to lumen (P < 0.0005, Wilcoxon, BH adjustment). To determine what factors may be driving the differences seen among the samples, we compared thetaYC distances between samples from all subjects (interpersonal) versus samples from within one subject (intrapersonal). We found that samples from one individual were overall much more similar to each other than to other study subjects (Figure 3C), consistent with previous human microbiome studies that have sampled multiple sites of the human colon (@Eckberg2005, @deCarcer2010, @Zhang2013). Thus interpersonal variation between subjects drives the differences between samples more than sample site or location. Overall, the results of the similarity analysis suggest that the contents of the left lumen are most representative of stool at exit, and the microbes remaining on the mucosa are much different. 
 
 #### Random Forest classification models identify important OTUs on each side
-To identify OTUs that were distinct at each biogeographical site, we constructed several Random Forest models built on OTU abundances. We built the first model to classify the lumen versus mucosal samples for the right and left sides, independently (Figure 4A). The constructed model used ((Xopt)) features for the right and ((Xopt)) for the left. The models performed well when classifying these samples (AUC = 0.797 and AUC = 0.980, respectively). The OTUs that were most predictive of each site are identified by their greatest mean decrease in accuracy when removed from the model. For distinguishing the right lumen and mucosa, OTUs from the _Bacteriodes_, _Actinomyces_, _Psuedomonas_ and two OTUs from the _Enterobacteraceae_ genera were differentially abundant (Figure 4B). The model classifying the left lumen and mucosa identified OTUs from _Turicibacter_, _Finegoldia_, _Peptoniphilus_ and two OTUs from the _Anaerococcus_ genera that could distinguish lumen from mucosal samples (Figure 4C). These results indicate that there are fine differences between the different sites of the colon, and that these can be traced down to specific OTUs on each side. 
+To identify OTUs that were distinct at each biogeographical site, we constructed several Random Forest models built on OTU abundances. We built the first model to classify the lumen versus mucosal samples for the right and left sides, independently (Figure 4A). The constructed model used ((Xopt)) features for the right and ((Xopt)) for the left. The models performed well when classifying these samples (`r cv10f_roc_right_bs$auc` and `r cv10f_roc_left_bs$auc`, respectively). The OTUs that were most predictive of each site are identified by their greatest mean decrease in accuracy when removed from the model. For distinguishing the right lumen and mucosa, OTUs from the _Bacteriodes_, _Actinomyces_, _Psuedomonas_ and two OTUs from the _Enterobacteraceae_ genera were differentially abundant (Figure 4B). The model classifying the left lumen and mucosa identified OTUs from _Turicibacter_, _Finegoldia_, _Peptoniphilus_ and two OTUs from the _Anaerococcus_ genera that could distinguish lumen from mucosal samples (Figure 4C). These results indicate that there are fine differences between the different sites of the colon, and that these can be traced down to specific OTUs on each side. 
 
 Next, we built a model to differentiate the left and right microbiome. The model performed best when distinguishing the right versus left mucosa (Figure 5A, AUC = 0.912) compared to the right versus left lumen (AUC = 0.755). The model was able to explain ((X%)) of the variance. OTUs that were differentially abundant between the left and right mucosa included members of the _Porphyromonas_, _Murdochiella_, _Finegoldia_, _Anaerococcus_ and _Peptoniphilus_ genera (Figure 5B). The model was less-effective at classifying the right and left lumen (AUC = 0.755). However it did identify differentially abundant OTUs such as three members of the _Bacteroides_ genus, a _Clostridium IV_ OTU and an _Oscillibacter_ OTU (Figure 5C). This analysis found that some of the same OTUs that are distinct between the mucosa and lumen also drive sidedness- such as _Anaerococcus_ and _Finegoldia_. 
 
@@ -480,37 +480,30 @@ Differences in community membership at the phyla level were tested using the ana
 
 ### Figures
 
-\includegraphics{submission/figure_1.pdf}
-
 ####Figure 1
 Sampling strategy. A flexible sigmoidoscope was used to sample the distal colonic luminal contents and mucosa. The scope was inserted ~ 25cm into the subject and endoscopy brushes were used to sample the luminal contents (green star). A separate set of biopsy forceps was used to sample the distal mucosa (blue star). The sigmoidoscope was removed. A pediatric colonoscope was inserted and used to access the proximal colon. Biopsies were taken of the proximal luminal contents and mucosa as described. One week prior to the procedure stool was collected at home and sent into the laboratory. Representative images from one individual are shown.  
 
 \newpage
-\includegraphics{submission/figure_2.pdf}
 
 ####Figure 2
 Microbial membership and diversity of the proximal and distal human colon. A) Relative abundance of the top five bacterial phyla in each sampling site. Each box represents the median and confidence intervals. B) Simpson diversity of the microbial communities at each location. The lines represent the median values. 
 
 \newpage
-\includegraphics{submission/figure_3.pdf}
 
 ####Figure 3
 Similarity of microbial community structure between sites of the gut. ThetaYC distances are shown for interpersonal similarities between two sites – each point represents one individual. In (A), comparisons of the right and left mucosal and lumen are shown. In (B), comparisons of each site to the exit stool are shown. 
 
 \newpage
-\includegraphics{submission/figure_4.pdf}
 
 ####Figure 4
 Random Forest classifies the mucosa and lumen of each side of the colon. A) Receiver Operator Characteristic curves are shown for the 10-fold cross validation of the Random Forest model classifying lumen and mucosal samples for the left and right sides of the colon. (B) Top five OTUs that are most important for the classification model for the left mucosa and lumen (B) and the right mucosa and lumen (C). 
 
 \newpage
-\includegraphics{submission/figure_5.pdf}
 
 ####Figure 5 
 Random Forest classifies the left and right sides of the colon. A) Receiver Operator Characteristic curves are shown for the 10-fold cross validation of the Random Forest model classifying left lumen versus right lumen (orange) and left mucosa vs right mucosa (green). (B) Top five OTUs that are most important for the classification model for the left and right mucosa (B) and the left and right lumen (C).
 
 \newpage
-\includegraphics{submission/figure_6.pdf}
 
 ####Figure 6
 Location and abundance of cancer-associated OTUs. Relative abundance was calculated and plotted by sample site for each OTU of interest: (A) _Fusobacterium nucleatum_ and (B) _Porphyromonas asacharolytica_ 

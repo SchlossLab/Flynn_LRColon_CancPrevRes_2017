@@ -1,16 +1,22 @@
 ---
-title: 'Specific taxa differentiate proximal and distal microbiota in the unprepped
-  human colon'
+title: Specific taxa differentiate proximal and distal microbiota in the unprepped
+  human colon
 csl: mbio.csl
 fontsize: 11pt
 output:
-  html_document: default
   pdf_document:
     includes: null
     keep_tex: yes
+    latex_engine: xelatex
+  html_document: default
   word_document: default
 geometry: margin=1.0in
 bibliography: references.bib
+header-includes:
+- \usepackage{setspace}
+- \doublespacing
+- \usepackage{lineno}
+- \linenumbers
 ---
 \vspace{35mm}
 
@@ -34,7 +40,6 @@ $\dagger$ Corresponding author: pschloss@umich.edu
 
 
 \newpage
-\linenumbers
 
 ```{r knitr_settings, eval=TRUE, echo=FALSE, cache=FALSE}
 knitr::opts_chunk$set("tidy" = TRUE)
@@ -63,7 +68,7 @@ inline_hook <- function(x){
 knitr::knit_hooks$set(inline=inline_hook)
 ```
 
-```{r dependencies, echo=FALSE, warning = FALSE}
+```{r dependencies, echo=FALSE, warning = FALSE, message=FALSE}
 pack_used <- c('randomForest','ggplot2', 'pROC', 'knitr','dplyr','AUCRF', 'tidyr', 'caret', 'RColorBrewer', 'reshape2', 'wesanderson')
 for (dep in pack_used){
   if (dep %in% installed.packages()[,"Package"] == FALSE){

@@ -72,8 +72,8 @@
 }
 
 \setlength{\droptitle}{-2em}
-  \title{\emph{Specific taxa differentiate proximal and distal microbiota in the
-unprepped human colon}}
+  \title{Specific taxa differentiate proximal and distal microbiota in the
+unprepped human colon}
   \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
   \author{}
@@ -81,6 +81,10 @@ unprepped human colon}}
   \date{}
   \predate{}\postdate{}
 
+\usepackage{setspace}
+\doublespacing
+\usepackage{lineno}
+\linenumbers
 
 \begin{document}
 \maketitle
@@ -111,84 +115,6 @@ Medical School, Ann Arbor, Michigan 48109
 University of Michigan Medical School, Ann Arbor, Michigan
 
 \newpage
-
-\linenumbers
-
-\begin{verbatim}
-## randomForest 4.6-12
-\end{verbatim}
-
-\begin{verbatim}
-## Type rfNews() to see new features/changes/bug fixes.
-\end{verbatim}
-
-\begin{verbatim}
-## 
-## Attaching package: 'ggplot2'
-\end{verbatim}
-
-\begin{verbatim}
-## The following object is masked from 'package:randomForest':
-## 
-##     margin
-\end{verbatim}
-
-\begin{verbatim}
-## Type 'citation("pROC")' for a citation.
-\end{verbatim}
-
-\begin{verbatim}
-## 
-## Attaching package: 'pROC'
-\end{verbatim}
-
-\begin{verbatim}
-## The following objects are masked from 'package:stats':
-## 
-##     cov, smooth, var
-\end{verbatim}
-
-\begin{verbatim}
-## 
-## Attaching package: 'dplyr'
-\end{verbatim}
-
-\begin{verbatim}
-## The following object is masked from 'package:randomForest':
-## 
-##     combine
-\end{verbatim}
-
-\begin{verbatim}
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-\end{verbatim}
-
-\begin{verbatim}
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-\end{verbatim}
-
-\begin{verbatim}
-## AUCRF 1.1
-\end{verbatim}
-
-\begin{verbatim}
-## Loading required package: lattice
-\end{verbatim}
-
-\begin{verbatim}
-## 
-## Attaching package: 'reshape2'
-\end{verbatim}
-
-\begin{verbatim}
-## The following object is masked from 'package:tidyr':
-## 
-##     smiths
-\end{verbatim}
 
 \subsubsection{Abstract}\label{abstract}
 
@@ -372,19 +298,18 @@ constructed several Random Forest models built on OTU abundances. We
 built the first model to classify the lumen versus mucosal samples for
 the right and left sides, independently (Figure 4A). The constructed
 model used ((Xopt)) features for the right and ((Xopt)) for the left.
-The models performed well when classifying these samples (AUC = 0.797
-and AUC = 0.980, respectively). The OTUs that were most predictive of
-each site are identified by their greatest mean decrease in accuracy
-when removed from the model. For distinguishing the right lumen and
-mucosa, OTUs from the \emph{Bacteriodes}, \emph{Actinomyces},
-\emph{Psuedomonas} and two OTUs from the \emph{Enterobacteraceae} genera
-were differentially abundant (Figure 4B). The model classifying the left
-lumen and mucosa identified OTUs from \emph{Turicibacter},
-\emph{Finegoldia}, \emph{Peptoniphilus} and two OTUs from the
-\emph{Anaerococcus} genera that could distinguish lumen from mucosal
-samples (Figure 4C). These results indicate that there are fine
-differences between the different sites of the colon, and that these can
-be traced down to specific OTUs on each side.
+The models performed well when classifying these samples (0.8 and 1.0,
+respectively). The OTUs that were most predictive of each site are
+identified by their greatest mean decrease in accuracy when removed from
+the model. For distinguishing the right lumen and mucosa, OTUs from the
+\emph{Bacteriodes}, \emph{Actinomyces}, \emph{Psuedomonas} and two OTUs
+from the \emph{Enterobacteraceae} genera were differentially abundant
+(Figure 4B). The model classifying the left lumen and mucosa identified
+OTUs from \emph{Turicibacter}, \emph{Finegoldia}, \emph{Peptoniphilus}
+and two OTUs from the \emph{Anaerococcus} genera that could distinguish
+lumen from mucosal samples (Figure 4C). These results indicate that
+there are fine differences between the different sites of the colon, and
+that these can be traced down to specific OTUs on each side.
 
 Next, we built a model to differentiate the left and right microbiome.
 The model performed best when distinguishing the right versus left
@@ -639,8 +564,6 @@ procedure.
 
 \subsubsection{Figures}\label{figures}
 
-\includegraphics{submission/figure_1.pdf}
-
 \paragraph{Figure 1}\label{figure-1}
 
 Sampling strategy. A flexible sigmoidoscope was used to sample the
@@ -656,8 +579,6 @@ Representative images from one individual are shown.
 
 \newpage
 
-\includegraphics{submission/figure_2.pdf}
-
 \paragraph{Figure 2}\label{figure-2}
 
 Microbial membership and diversity of the proximal and distal human
@@ -668,8 +589,6 @@ lines represent the median values.
 
 \newpage
 
-\includegraphics{submission/figure_3.pdf}
-
 \paragraph{Figure 3}\label{figure-3}
 
 Similarity of microbial community structure between sites of the gut.
@@ -679,8 +598,6 @@ the right and left mucosal and lumen are shown. In (B), comparisons of
 each site to the exit stool are shown.
 
 \newpage
-
-\includegraphics{submission/figure_4.pdf}
 
 \paragraph{Figure 4}\label{figure-4}
 
@@ -693,8 +610,6 @@ mucosa and lumen (B) and the right mucosa and lumen (C).
 
 \newpage
 
-\includegraphics{submission/figure_5.pdf}
-
 \paragraph{Figure 5}\label{figure-5}
 
 Random Forest classifies the left and right sides of the colon. A)
@@ -705,8 +620,6 @@ five OTUs that are most important for the classification model for the
 left and right mucosa (B) and the left and right lumen (C).
 
 \newpage
-
-\includegraphics{submission/figure_6.pdf}
 
 \paragraph{Figure 6}\label{figure-6}
 

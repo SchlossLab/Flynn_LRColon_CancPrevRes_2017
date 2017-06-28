@@ -120,7 +120,7 @@ University of Michigan Medical School, Ann Arbor, Michigan
 
 Colorectal cancer (CRC) remains a leading cause of death worldwide
 despite improved preventative and therapeutic measures. Tumors of the
-proximal (right) and distal (left) colon are morphologically and
+proximal (proximal) and distal (distal) colon are morphologically and
 genetically distinct. Previous work from our group found that microbial
 dysbiosis is associated with the development of CRC tumors in studies of
 both mice and humans. Analysis of the fecal microbiota from healthy and
@@ -146,18 +146,18 @@ were most likely to be found in mucosal samples versus luminal samples
 (AUC = 0.925). The classification model performed well (AUC = 0.912)
 when classifying mucosal samples into proximal or distal sides, but
 separating luminal samples from each side proved more challenging (AUC =
-0.755). The left mucosa was found to have high populations of
+0.755). The distal mucosa was found to have high populations of
 \emph{Finegoldia, Murdochiella} and \emph{Porphyromonas}. Proximal and
 distal luminal samples were comprised of many of the same taxa, likely
 reflecting the fact that stool moves along the colon from the proximal
 to distal end. Finally, comparison of all samples to fecal samples taken
 at exit uncovered that the feces were most similar to samples taken from
-the left lumen, again reflecting the anatomical structure of the colon.
-By sampling the unprepped human colon, our results have identified
-distinct bacterial populations native to the proximal and distal sides.
-Further investigation of these bacteria may elucidate if and how these
-groups contribute to differential oncogenesis processes on the
-respective sides of the colon.
+the distal lumen, again reflecting the anatomical structure of the
+colon. By sampling the unprepped human colon, our results have
+identified distinct bacterial populations native to the proximal and
+distal sides. Further investigation of these bacteria may elucidate if
+and how these groups contribute to differential oncogenesis processes on
+the respective sides of the colon.
 
 \subsubsection{Introduction}\label{introduction}
 
@@ -165,21 +165,21 @@ Colorectal cancer (CRC) is the second-leading cause of cancer-related
 deaths in the United States. CRC tumors vary in structure, size,
 morbidity and symptomology depending upon their geographical location in
 the colon. CRC has recently been described to fall into four molecular
-subtypes ((1)). Of these subtypes, tumors that arise on the left side of
-the colon are infiltrating lesions that present with painful symptoms.
-In contrast, 47\% of CRCs are caused by right-sided colon tumors that
-are bulky and project into the lumen, often remaining asymptomatic until
-advanced carcinogenesis ((2)). Due to the absence of symptoms,
-right-sided tumors have a significantly higher mortality rate ((2)). The
-left and right sides of the colon differ in the amount of inflammation
-present and the genomic instability of precancerous cells, respectively,
-as well as oxygen, pH and the presence of antimicrobial peptides ((3),
-(4), (5)). Microenvironments differ not only longitutinally along the
-colon, but latitudinally from the epithelium to mucosa to intestinal
-lumen, offering several sites for different microbial communities to
-flourish. Given this varied physiology of the proximal-distal axis of
-the colon, symbiotic microbes and their metabolites likely vary between
-sites.
+subtypes ((1)). Of these subtypes, tumors that arise on the distal side
+of the colon are infiltrating lesions that present with painful
+symptoms. In contrast, 47\% of CRCs are caused by proximal-sided colon
+tumors that are bulky and project into the lumen, often remaining
+asymptomatic until advanced carcinogenesis ((2)). Due to the absence of
+symptoms, proximal-sided tumors have a significantly higher mortality
+rate ((2)). The distal and proximal sides of the colon differ in the
+amount of inflammation present and the genomic instability of
+precancerous cells, respectively, as well as oxygen, pH and the presence
+of antimicrobial peptides ((3), (4), (5)). Microenvironments differ not
+only longitutinally along the colon, but latitudinally from the
+epithelium to mucosa to intestinal lumen, offering several sites for
+different microbial communities to flourish. Given this varied
+physiology of the proximal-distal axis of the colon, symbiotic microbes
+and their metabolites likely vary between sites.
 
 Several recent findings have shown that development and progression of
 CRC can be attributed to specific molecular events as a result of
@@ -205,7 +205,7 @@ limitations, the contribution of the gut microbiota to these subtypes is
 largely undefined. Characterizing these communities could provide needed
 insight into CRC etiology, including how the disruption of the healthy
 community could promote the initiation or proliferation of the distinct
-left and right CRC tumors.
+distal and proximal CRC tumors.
 
 Further, the few existing profiles of the microbial biogeography of the
 gut have been limited by sample collection methods. The majority of
@@ -221,12 +221,12 @@ layer ((10), (11)). As such, what little information we do have about
 the biogeographical distribution of the microbes in the proximal and
 distal colon is confounded by the bowel preparation procedure.
 
-We combined these approaches to address the limitations of previous
-studies and effectively characterize the microbiome in the lumen and
-mucosa of the proximal and distal healthy human colon. Our design used
-unprepared colonoscopy techniques to sample each location of the gut
-without prior disruption of the native bacteria in 20 healthy
-volunteers. To address noise created by a diverse set of human
+Here we aimed to address the limitations of previous studies and
+effectively characterize the microbiome in the lumen and mucosa of the
+proximal and distal healthy human colon. Our design used unprepared
+colonoscopy techniques to sample the natural community of each location
+of the gut without prior disruption of the native bacteria in 20 healthy
+volunteers. To address the inherent inter-individual variation in human
 microbiomes, we used a machine-learning classification algorithm trained
 on curated 16S rRNA sequencing reads to identify microbes specific to
 each location. We found that our classification models were able to
@@ -242,128 +242,134 @@ distal human colon.
 \paragraph{Microbial membership and diversity of the proximal and distal
 colon}\label{microbial-membership-and-diversity-of-the-proximal-and-distal-colon}
 
-Proximal and distal lumenal and mucosal samples were collected from 20
-healthy humans that had not undergone bowel preparation(Figure 1).
-Participants also collected stool at home one week prior to the
-procedure. To characterize the bacterial communities present at these
-sites, 16S rRNA gene sequencing was performed on extracted DNA from each
-sample. The relative abundance of each phyla for each site is shown in
-Figure 2A. This data combines the samples from all participants in the
-study. Each site is primarily dominated by \emph{Firmicutes} and
-\emph{Bacteriodetes}, consistent with known variability in human
-microbiome research (cite). Likewise, samples had varying levels of
-diversity at each site, irrespective of the individual (Figure 2B). That
-is, while some individuals had a more diverse right mucosa, some had a
-more diverse left mucosa. Therefore we could not identify a clear
-pattern of changes in microbial diversity along the gut axis.
+Lumenal and mucosal samples were collected from the proximal and distal
+colon of 20 healthy humans that had not undergone bowel preparation
+(Figure 1). Participants also collected stool at home one week prior to
+the procedure. To characterize the bacterial communities present at
+these sites, 16S rRNA gene sequencing was performed on extracted DNA
+from each sample. Each site was primarily dominated by \emph{Firmicutes}
+and \emph{Bacteriodetes} (Figure 2A), consistent with known variability
+in human microbiome research (cite). Likewise, samples had varying
+levels of diversity at each site, irrespective of the individual (Figure
+2B). For example, the proximal mucosa was more diverse than the distal
+for some individuals while the opposite was true for others. Therefore
+we could not identify a clear pattern of changes in microbial diversity
+along the gut axis.
 
-To compare similarity between sides (left or right) or sites (lumen or
-mucosa), we calculated theta YC distances from OTU abundances and
-compared distances for all individuals. Again, across all patient
-samples we observed a range of theta YC distances when comparing sample
-locations (Figure 3A) and again those ranges did not follow a clear
-pattern on an individual basis. However, when comparing median distances
-between the right lumen and mucosa, the left versus right lumen, the
-left versus right mucosa and the left lumen and mucosa, we found that
-the right lumen and mucosa were most similar to each other than the
-other samples (P \textless{} 0.005, Wilcoxon, BH adjustment).
+To compare similarity between sides (proximal or distal) or sites (lumen
+or mucosa), we calculated \({\theta}\)YC distances from OTU abundances
+and compared these distances for all individuals. Again, across all
+patient samples we observed a range of \({\theta}\)YC distances when
+comparing sample locations (Figure 3A) and again those ranges did not
+follow a clear pattern on an individual basis. However, when comparing
+median distances between the proximal lumen and mucosa, the proximal
+versus distal lumen, the proximal versus distal mucosa, and the distal
+lumen and mucosa, we found that the proximal lumen and mucosa were most
+similar to each other than the other samples (P \textless{} 0.005,
+Wilcoxon, BH adjustment).
 
-Next, we calculated thetaYC distances to examine how each sample
+\paragraph{Stool at exit most resembles lumenal samples from the distal
+colon}\label{stool-at-exit-most-resembles-lumenal-samples-from-the-distal-colon}
+
+Next, we calculated \({\theta}\)YC distances to examine how each sample
 compared to the home-collected exit stool. Amidst variability between
-patients, we did identify significantly smaller thetaYc distance between
-the left lumenal sample and the exit stool (Figure 3B, P \textless{}
-0.05, Wilcoxon, BH adjustment). Furthermore, there was an even larger
-difference in the comparisons of the left mucosa to the exit stool,
-indicating that the mucosa is different from the stool as compared to
-lumen (P \textless{} 0.0005, Wilcoxon, BH adjustment). To determine what
-factors may be driving the differences seen among the samples, we
-compared thetaYC distances between samples from all subjects
+patients, we did identify significantly smaller \({\theta}\)YC distance
+between the distal lumenal sample and the exit stool (Figure 3B, P
+\textless{} 0.05, Wilcoxon, BH adjustment). Furthermore, there was an
+even larger difference in the comparisons of the distal mucosa to the
+exit stool, indicating that the mucosa is different from the stool as
+compared to lumen (P \textless{} 0.0005, Wilcoxon, BH adjustment). To
+determine what factors may be driving the differences seen among the
+samples, we compared thetaYC distances between samples from all subjects
 (interpersonal) versus samples from within one subject (intrapersonal).
-We found that samples from one individual were overall much more similar
-to each other than to other study subjects (Figure 3C), consistent with
-previous human microbiome studies that have sampled multiple sites of
-the human colon (\textbf{???}, (12), (13)). Thus interpersonal variation
-between subjects drives the differences between samples more than sample
-site or location. Overall, the results of the similarity analysis
-suggest that the contents of the left lumen are most representative of
-stool at exit, and the microbes remaining on the mucosa are much
-different.
+We found that samples from one individual were far more similar to each
+other than to other study subjects (Figure 3C), consistent with previous
+human microbiome studies that have sampled multiple sites of the human
+colon (\textbf{???}, (12), (13)). Thus interpersonal variation between
+subjects drives the differences between samples more than sample site or
+location. Overall, the results comparing the structure of the
+communities suggest that the contents of the distal lumen are most
+representative of stool at exit, and the microbes remaining on the
+mucosa are much different.
 
 \paragraph{Random Forest classification models identify important OTUs
 on each
 side}\label{random-forest-classification-models-identify-important-otus-on-each-side}
 
 To identify OTUs that were distinct at each biogeographical site, we
-constructed several Random Forest models built on OTU abundances. We
-built the first model to classify the lumen versus mucosal samples for
-the right and left sides, independently (Figure 4A). The constructed
-model used ((Xopt)) features for the right and ((Xopt)) for the left.
-The models performed well when classifying these samples (0.8 and 1.0,
-respectively). The OTUs that were most predictive of each site are
-identified by their greatest mean decrease in accuracy when removed from
-the model. For distinguishing the right lumen and mucosa, OTUs from the
-\emph{Bacteriodes}, \emph{Actinomyces}, \emph{Psuedomonas} and two OTUs
-from the \emph{Enterobacteraceae} genera were differentially abundant
-(Figure 4B). The model classifying the left lumen and mucosa identified
-OTUs from \emph{Turicibacter}, \emph{Finegoldia}, \emph{Peptoniphilus}
-and two OTUs from the \emph{Anaerococcus} genera that could distinguish
-lumen from mucosal samples (Figure 4C). These results indicate that
-there are fine differences between the different sites of the colon, and
-that these can be traced down to specific OTUs on each side.
+constructed several Random Forest models trained using OTU abundances.
+We built the first model to classify the lumen versus mucosal samples
+for the proximal and distal sides, independently (Figure 4A). The
+constructed model used ((Xopt)) features for the proximal and ((Xopt))
+for the distal. The models performed well when classifying these samples
+(0.8 and 1.0, respectively). The OTUs that were most predictive of each
+site are identified by their greatest mean decrease in accuracy when
+removed from the model. For distinguishing the proximal lumen and
+mucosa, OTUs from the \emph{Bacteriodes}, \emph{Actinomyces},
+\emph{Psuedomonas} and two OTUs from the \emph{Enterobacteraceae} genera
+were differentially abundant (Figure 4B). The model classifying the
+distal lumen and mucosa identified OTUs from \emph{Turicibacter},
+\emph{Finegoldia}, \emph{Peptoniphilus} and two OTUs from the
+\emph{Anaerococcus} genera that could distinguish lumen from mucosal
+samples (Figure 4C). These results indicate that there are fine
+differences between the different sites of the colon, and that these can
+be traced down to specific OTUs on each side.
 
-Next, we built a model to differentiate the left and right microbiome.
-The model performed best when distinguishing the right versus left
-mucosa (Figure 5A, AUC = 0.912) compared to the right versus left lumen
-(AUC = 0.755). The model was able to explain ((X\%)) of the variance.
-OTUs that were differentially abundant between the left and right mucosa
-included members of the \emph{Porphyromonas}, \emph{Murdochiella},
-\emph{Finegoldia}, \emph{Anaerococcus} and \emph{Peptoniphilus} genera
-(Figure 5B). The model was less-effective at classifying the right and
-left lumen (AUC = 0.755). However it did identify differentially
-abundant OTUs such as three members of the \emph{Bacteroides} genus, a
-\emph{Clostridium IV} OTU and an \emph{Oscillibacter} OTU (Figure 5C).
-This analysis found that some of the same OTUs that are distinct between
-the mucosa and lumen also drive sidedness- such as \emph{Anaerococcus}
-and \emph{Finegoldia}.
+Next, we built a model to differentiate the proximal and distal lumenal
+samples. The model performed best when distinguishing the proximal
+versus distal mucosa (Figure 5A, AUC = 0.912) compared to the proximal
+versus distal lumen (AUC = 0.755). These models were able to explain
+((X\%)) of the variance, respectively. OTUs that were differentially
+abundant between the distal and proximal mucosa included members of the
+\emph{Porphyromonas}, \emph{Murdochiella}, \emph{Finegoldia},
+\emph{Anaerococcus} and \emph{Peptoniphilus} genera (Figure 5B).
+Differentially abundant OTUs of the proximal and distal lumen included
+three OTUs of the \emph{Bacteroides} genus, a \emph{Clostridium IV} OTU
+and an \emph{Oscillibacter} OTU (Figure 5C). This analysis found that
+some of the same OTUs that are distinct between the mucosa and lumen
+also helped to differentiate between the two sides- such as
+\emph{Anaerococcus} and \emph{Finegoldia}.
 
 \paragraph{Bacterial OTUs associated with cancer are found in healthy
 individuals}\label{bacterial-otus-associated-with-cancer-are-found-in-healthy-individuals}
 
 Given that specific bacterial species have been associated with
-colorectal cancer, we probed our sample set for these OTUs. Among our
-100 samples, the most frequent sequence associated wtih the
+colorectal cancer and IBD, we probed our sample set for these OTUs.
+Among our 100 samples, the most frequent sequence associated with the
 \emph{Fusobacterium} genus was OTU179, which aligns via BLASTn to
-\emph{Fusobacterium nucleatum subsp animalis}. It was the only sequence
-to align with a \emph{F. nucleatum} strain- the only species of
-\emph{Fusobacterium} known to have oncogenic properties and be found on
-the surfaces of colorectal cancer tumors. ((14)). The
-\emph{Fusobacterium} positive samples were located on the right and left
-mucosa and ranged up to 1\% of the sample (Figure 6A). OTU00152 is
-\emph{Porphyromonas} and the most frequent sequence in that OTU aligns
-to \emph{Porphyromonas asacharolytica}, another bacterium commonly
-detected and isolated from colorectal tumors. OTU152 was only detected
-on the left mucosa, and in fact was one of the OTUs the classification
-model identified as separating left and right sides (Figure 6B). Samples
-that were positive for \emph{P. asacharolytica} ranged in abundances
-from 0.01\% - 16\%. Thus, cancer-associated OTUs could be found in our
+\emph{Fusobacterium nucleatum subsp animalis} (XX\% over full length).
+This is the only species of \emph{Fusobacterium} known to have oncogenic
+properties and be found on the surfaces of colorectal cancer tumors.
+((14)). The \emph{Fusobacterium} positive samples were located in x\% of
+the the proximal and X\% of the distal mucosa and represented as much as
+1\% of any sample (Figure 6A). OTU152 was similar to the members of the
+\emph{Porphyromonas} genus and the most frequent sequence in that OTU
+aligned to \emph{Porphyromonas asacharolytica} (X\% over full length),
+another bacterium commonly detected and isolated from colorectal tumors.
+OTU152 was only detected on the distal mucosa, and in fact was one of
+the OTUs the classification model identified as separating distal and
+proximal sides (Figure 6B). Among the samples that were positive for
+\emph{P. asacharolytica}, the relative abundances for this OTU ranged
+from 0.01\% - 16\%. Thus, disease-associated OTUs could be found in our
 sample set of 20 healthy individuals.
 
 \subsubsection{Discussion}\label{discussion}
 
 Here we identified bacterial taxa that are specific to the lumen and
-mucosa of the right and left human colon from samples collected during
-unprepared colonoscopy. We found that all locations contained a range of
-phyla and a range of diversity, but that there was a wide variability
-between subjects. Pairwise comparisons of each of the sites revealed
-that the right mucosa and lumen were most similar to each other.
-Further, comparison of colonoscopy-collected samples with samples
-collected from stool at home showed that the left lumen is most similar
-to stool at exit. Random Forest algorithms built on OTU abundances from
-each sample identified microbes that are particular to each location of
-the colon. Finally, we were able to detect some bacterial OTUs
-associated with colorectal cancer in our healthy patient cohort. Using
-unprepped colonoscopy and machine learning, we have identified bacterial
-phyla specific to the healthy proximal and distal human colon.
+mucosa of the proximal and distal human colon from samples collected
+during unprepared colonoscopy. We found that all locations contained a
+range of phyla and a range of diversity, but that there was a wide
+variability between subjects. Pairwise comparisons of each of the sites
+revealed that the proximal mucosa and lumen were most similar to each
+other. Further, comparison of colonoscopy-collected samples with samples
+collected from stool at home showed that the distal lumen is most
+similar to stool at exit. Random Forest algorithms built on OTU
+abundances from each sample identified microbes that are particular to
+each location of the colon. Finally, we were able to detect some
+bacterial OTUs associated with colorectal cancer in our healthy patient
+cohort. Using unprepped colonoscopy and machine learning, we have
+identified bacterial phyla specific to the healthy proximal and distal
+human colon.
 
 When examining the relative abundance of the different phyla at each
 site, there was a wide amount of variation for each phyla with
@@ -387,14 +393,14 @@ built a Random Forest model to identify microbes specific to each side.
 For each comparison we identified top X OTUs that were strongly
 predictive of one site or another. Generally, OTUs identified in each
 location were consistent with known physiological gradients along the
-gut axis ((5)). For instance, the right mucosa harbored
+gut axis ((5)). For instance, the proximal mucosa harbored
 mucosa-associated facultative anaerobes such as \emph{Actinomyces} and
 \emph{Enterobacteraceae} and the aerobic \emph{Psuedomonas} consistent
-with the highest oxygen regions of the colon. The left mucosa was far
+with the highest oxygen regions of the colon. The distal mucosa was far
 more likely to host strictly anaerobic species such as
 \emph{Porphyromonas}, \emph{Anaerococcus}, \emph{Finegoldia} and
 \emph{Peptoniphilus}. The model was less effective at classifying the
-right and left lumenal contents, probably because the samples are
+proximal and distal lumenal contents, probably because the samples are
 arguably composed of the same material.
 
 We detected \emph{F. nucleatum} and \emph{P. asacharolytica} in 8 and 5
@@ -402,31 +408,31 @@ of our subjects, respectively. These bacteria have been shown to be
 predictive of colorectal cancer in humans ((9)) and have oncogenic
 properties in cell culture and in mice ((17)). Interestingly, while
 \emph{F. nucleatum} was found on both sides of the colon, \emph{P.
-asacharolytica} was only detected in the left mucosa. Not much is known
-about the distribution of \emph{P. asacharolytica} but given its
+asacharolytica} was only detected in the distal mucosa. Not much is
+known about the distribution of \emph{P. asacharolytica} but given its
 documented anaerobic characteristics and asacharolytic metabolism, it
 might not be surprising that it resides in the less-oygen-rich and
-proteinaceous left mucosa ((4)). In studies examining bacteria on
+proteinaceous distal mucosa ((4)). In studies examining bacteria on
 colorectal cancer tumors, \emph{F. nucleatum} is more commonly detected
-on right-sided tumors, and distribution of \emph{F. nucleatum} decreases
-along the colon to rectum ((18)). Of the (8) (40\%) individuals positive
-for \emph{F. nucleatum} in this study, the bacteria was spread across
-the right mucosa, left lumen and left mucosa. The presence of \emph{F.
-nucleatum} in a healthy individual is not necessarily linked to the
-development of future colorectal cancers. Because of the spatial
-distribution of the \emph{F. nucleatum} in our sample set, we cannot
-develop a model for the role of \emph{F. nucleatum} in the healthy
-colon. Data examining bacterial biofilms on CRC tumors suggests that
-\emph{Fusobacteria} species are more commonly found both on proximal
-tumors and in biofilms, indicating that it is not only the presence of
-the bacteria but the organization of the tumor community that
-contributes to \emph{Fusobacterium's} role in tumorigenesis ((8)).
-Finally, \emph{Fusobacteria} and \emph{Porphyromonas} species have been
-known to not only co-occur on CRC tumors but also to synergistically
-promote tumorigenesis in an oral cancer model ((19), (20)). Thus,
-further analysis of the distribution and activities of these pathogens
-may elucidate a mechanism for development of CRC tumors in the proximal
-or distal colon.
+on proximal-sided tumors, and distribution of \emph{F. nucleatum}
+decreases along the colon to rectum ((18)). Of the (8) (40\%)
+individuals positive for \emph{F. nucleatum} in this study, the bacteria
+was spread across the proximal mucosa, distal lumen and distal mucosa.
+The presence of \emph{F. nucleatum} in a healthy individual is not
+necessarily linked to the development of future colorectal cancers.
+Because of the spatial distribution of the \emph{F. nucleatum} in our
+sample set, we cannot develop a model for the role of \emph{F.
+nucleatum} in the healthy colon. Data examining bacterial biofilms on
+CRC tumors suggests that \emph{Fusobacteria} species are more commonly
+found both on proximal tumors and in biofilms, indicating that it is not
+only the presence of the bacteria but the organization of the tumor
+community that contributes to \emph{Fusobacterium's} role in
+tumorigenesis ((8)). Finally, \emph{Fusobacteria} and
+\emph{Porphyromonas} species have been known to not only co-occur on CRC
+tumors but also to synergistically promote tumorigenesis in an oral
+cancer model ((19), (20)). Thus, further analysis of the distribution
+and activities of these pathogens may elucidate a mechanism for
+development of CRC tumors in the proximal or distal colon.
 
 Specific comparisons of our findings to previously published gut
 biogeography studies are additionally confounded by the use of bowel
@@ -458,7 +464,7 @@ FIT study was that there was not sufficient information to test if a
 classification model could differentiate between proximal and distal CRC
 tumors based on exit stool sample alone, but we would hypothesize that
 would not be effective. Given that our results showed that the stool
-most accurately reflects the community of the left lumen, we likely
+most accurately reflects the community of the distal lumen, we likely
 cannot use Random Forest of stool samples to diagnose any changes in the
 proximal or mucosal communities.
 
@@ -519,9 +525,9 @@ and flash-frozen in liquid nitrogen. The brushes were withdrawn and
 biopsy forceps were used to collect mucosal biopsies on sections of the
 colon that were pink and free of stool matter. Three mucosal biopsies
 were collected and flash-frozen in RNAlater. These samples comprised the
-distal or left colon samples. The sigmoidoscope was then withdrawn and a
-pediatric colonoscope was inserted to reach the ascending colon. Samples
-were then collected as in the distal colon and the colonoscope
+distal or distal colon samples. The sigmoidoscope was then withdrawn and
+a pediatric colonoscope was inserted to reach the ascending colon.
+Samples were then collected as in the distal colon and the colonoscope
 withdrawn. All samples were stored at -80 C until study completion.
 
 \paragraph{Sample processing, sequencing and
@@ -594,8 +600,8 @@ lines represent the median values.
 Similarity of microbial community structure between sites of the gut.
 ThetaYC distances are shown for interpersonal similarities between two
 sites -- each point represents one individual. In (A), comparisons of
-the right and left mucosal and lumen are shown. In (B), comparisons of
-each site to the exit stool are shown.
+the proximal and distal mucosal and lumen are shown. In (B), comparisons
+of each site to the exit stool are shown.
 
 \newpage
 
@@ -604,20 +610,21 @@ each site to the exit stool are shown.
 Random Forest classifies the mucosa and lumen of each side of the colon.
 A) Receiver Operator Characteristic curves are shown for the 10-fold
 cross validation of the Random Forest model classifying lumen and
-mucosal samples for the left and right sides of the colon. (B) Top five
-OTUs that are most important for the classification model for the left
-mucosa and lumen (B) and the right mucosa and lumen (C).
+mucosal samples for the distal and proximal sides of the colon. (B) Top
+five OTUs that are most important for the classification model for the
+distal mucosa and lumen (B) and the proximal mucosa and lumen (C).
 
 \newpage
 
 \paragraph{Figure 5}\label{figure-5}
 
-Random Forest classifies the left and right sides of the colon. A)
+Random Forest classifies the distal and proximal sides of the colon. A)
 Receiver Operator Characteristic curves are shown for the 10-fold cross
-validation of the Random Forest model classifying left lumen versus
-right lumen (orange) and left mucosa vs right mucosa (green). (B) Top
-five OTUs that are most important for the classification model for the
-left and right mucosa (B) and the left and right lumen (C).
+validation of the Random Forest model classifying distal lumen versus
+proximal lumen (orange) and distal mucosa vs proximal mucosa (green).
+(B) Top five OTUs that are most important for the classification model
+for the distal and proximal mucosa (B) and the distal and proximal lumen
+(C).
 
 \newpage
 

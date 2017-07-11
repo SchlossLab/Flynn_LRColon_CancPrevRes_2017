@@ -40,6 +40,20 @@ fuso_plot <- ggplot(fuso179, aes(x=location, y=Otu00179_relAbund)) +geom_jitter(
                    labels=c("R Mucosa", "R Lumen", "L Mucosa", "L Lumen", "Stool")) +
   theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=14))
 
+#IBD fuso OTU - F. varium 
+
+fusoviv <- subsampled_meta[, colnames(subsampled_meta) %in% c("group", "patient", "location", "Otu00472")]
+fusoviv[,5] <- (fusoviv[,4]/4321)*100
+names(fusoviv)[5] <- "Otu00472_relAbund"
+
+positions <- c("RB", "RS", "LB", "LS", "SS")
+fusoviv_plot <- ggplot(fusoviv, aes(x=location, y=Otu00472_relAbund)) +geom_jitter(width=0.3) +theme_bw() +
+  ylab("F. varium Relative Abundance") +
+  scale_x_discrete(limits = positions, breaks=positions, 
+                   labels=c("R Mucosa", "R Lumen", "L Mucosa", "L Lumen", "Stool")) +
+  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=14))
+
+
 
 #other oncogenic otus - Otu00152 is P. asaccharolytica. Otu00248 is p micra
 

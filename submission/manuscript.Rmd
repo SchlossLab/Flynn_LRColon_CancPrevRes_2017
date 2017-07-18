@@ -1,5 +1,6 @@
 ---
-title: Unprepared colonoscopy identifies microbiota specific to the proximal and distal human colon
+title: Unprepared colonoscopy identifies microbiota specific to the proximal and distal
+  human colon
 csl: mbio.csl
 fontsize: 11pt
 output:
@@ -8,13 +9,13 @@ output:
     keep_tex: yes
   html_document: default
   word_document: default
-geometry: margin=1.0in
-bibliography: references.bib
 header-includes:
 - \usepackage{setspace}
 - \doublespacing
 - \usepackage{lineno}
 - \linenumbers
+geometry: margin=1.0in
+bibliography: references.bib
 ---
 \vspace{35mm}
 

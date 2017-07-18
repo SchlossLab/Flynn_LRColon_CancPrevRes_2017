@@ -24,7 +24,7 @@
 \usepackage[margin=1.0in]{geometry}
 \usepackage{hyperref}
 \hypersetup{unicode=true,
-            pdftitle={Specific taxa differentiate proximal and distal microbiota in the unprepped human colon},
+            pdftitle={Unprepared colonoscopy identifies microbiota specific to the proximal and distal human colon},
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
@@ -72,8 +72,8 @@
 }
 
 \setlength{\droptitle}{-2em}
-  \title{Specific taxa differentiate proximal and distal microbiota in the
-unprepped human colon}
+  \title{Unprepared colonoscopy identifies microbiota specific to the proximal
+and distal human colon}
   \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
   \author{}
@@ -91,8 +91,8 @@ unprepped human colon}
 
 \vspace{35mm}
 
-Running title: Specific taxa differentiate proximal and distal human
-colon microbiota
+Running title: Unprepared colonoscopy identifies proximal and distal
+human colonic microbiota
 
 \vspace{35mm}
 
@@ -118,124 +118,149 @@ University of Michigan Medical School, Ann Arbor, Michigan
 
 \subsubsection{Abstract}\label{abstract}
 
-Colorectal cancer (CRC) remains a leading cause of death worldwide
-despite improved preventative and therapeutic measures. Tumors of the
-proximal (proximal) and distal (distal) colon are morphologically and
-genetically distinct. Previous work from our group found that microbial
-dysbiosis is associated with the development of CRC tumors in studies of
-both mice and humans. Analysis of the fecal microbiota from healthy and
-CRC patients further revealed different microbial signatures associated
-with disease. We extended our observations of the fecal microbiome to
-include analysis of the proximal and distal human colon. We used a
-two-colonoscope approach on subjects that had not undergone standard
-bowel preparation procedure. This technique allowed us to characterize
-the native proximal and distal luminal and mucosal microbiome without
-prior chemical disruption. 16S rRNA gene sequencing was performed on
-proximal and distal mucosal and luminal biopsies and home-collected
-stool for 20 healthy individuals. Diversity analysis revealed that each
-site contained a diverse community, and that a patient's samples were
-more similar to each other than to that of other individuals. Since we
-could not differentiate sites along the colon based on community
-structure or community membership alone, we employed the Random Forest
-machine-learning algorithm to identify key species that distinguish
-biogeographical sites. Random Forest classification models were built
-using taxa abundance and sample location and revealed distinct
-populations that were found in each location. \emph{Peptoniphilus,
-Anaerococcus, Enterobacteraceae, Pseudomonas} and \emph{Actinomyces}
-were most likely to be found in mucosal samples versus luminal samples
-(AUC = 0.925). The classification model performed well (AUC = 0.912)
-when classifying mucosal samples into proximal or distal sides, but
-separating luminal samples from each side proved more challenging (AUC =
-0.755). The distal mucosa was found to have high populations of
-\emph{Finegoldia, Murdochiella} and \emph{Porphyromonas}. Proximal and
-distal luminal samples were comprised of many of the same taxa, likely
-reflecting the fact that stool moves along the colon from the proximal
-to distal end. Finally, comparison of all samples to fecal samples taken
-at exit uncovered that the feces were most similar to samples taken from
-the distal lumen, again reflecting the anatomical structure of the
-colon. By sampling the unprepped human colon, our results have
-identified distinct bacterial populations native to the proximal and
-distal sides. Further investigation of these bacteria may elucidate if
-and how these groups contribute to differential oncogenesis processes on
-the respective sides of the colon.
+The human colon contains chemicals and nutrients that change along the
+proximal to distal gut axis. These gradients create microenvironments
+that affect the distrubution and composition of the gut microbiota. The
+microbiome has been implicated in the colonic diseases colorectal cancer
+(CRC) and inflammatory bowel disease (IBD). Further, these diseases
+exhibit different symptoms depending on the location of the colon they
+are found in. CRC tumors of the proximal and distal colon are
+morphologically and genetically distinct. Similarly, bowel diseases such
+as Crohn's are typically exacerbated in the proximal instestine while
+ulcerative colitis patients often experience symptoms in the distal
+colon. Previous analysis of the fecal microbiota from healthy and CRC or
+IBD patients has revealed different microbial signatures associated with
+these diseases. We extended these observations of the fecal microbiome
+to include analysis of the proximal and distal healthy human colon. We
+used a two-colonoscope approach on subjects that had not undergone
+standard bowel preparation procedure. This technique allowed us to
+characterize the native proximal and distal luminal and mucosal
+microbiome without prior chemical disruption. 16S rRNA gene sequencing
+was performed on proximal and distal mucosal and luminal biopsies and
+home-collected stool for 20 healthy individuals. Diversity analysis
+revealed that each site contained a diverse community, and that a
+patient's samples were more similar to each other than to that of other
+individuals. Comparison of all samples to fecal samples taken at exit
+uncovered that the feces were most similar to samples taken from the
+distal lumen, likely reflecting the anatomical structure of the colon.
+Since we could not differentiate sites along the colon based on
+community structure or community membership alone, we employed the
+Random Forest machine-learning algorithm to identify key species that
+distinguish biogeographical sites. Random Forest classification models
+were built using taxa abundance and sample location and revealed
+distinct populations that were found in each location.
+\emph{Peptoniphilus, Anaerococcus, Enterobacteraceae, Pseudomonas} and
+\emph{Actinomyces} were most likely to be found in mucosal samples
+versus luminal samples (AUC = 0.925). The classification model performed
+well (AUC = 0.912) when classifying mucosal samples into proximal or
+distal sides, but separating luminal samples from each side proved more
+challenging (AUC = 0.755). The distal mucosa was found to have high
+populations of \emph{Finegoldia, Murdochiella} and \emph{Porphyromonas}.
+Proximal and distal luminal samples were comprised of many of the same
+taxa, likely reflecting the fact that stool moves along the colon from
+the proximal to distal end. By sampling the unprepped human colon, our
+results have identified distinct bacterial populations native to the
+proximal and distal sides. Further investigation of these bacteria may
+elucidate if and how these groups contribute to different pathogenesis
+processes on the respective sides of the colon.
 
 \subsubsection{Introduction}\label{introduction}
 
-Colorectal cancer (CRC) is the second-leading cause of cancer-related
-deaths in the United States. CRC tumors vary in structure, size,
-morbidity and symptomology depending upon their geographical location in
-the colon. CRC has recently been described to fall into four molecular
-subtypes ((1)). Of these subtypes, tumors that arise on the distal side
-of the colon are infiltrating lesions that present with painful
-symptoms. In contrast, 47\% of CRCs are caused by proximal-sided colon
-tumors that are bulky and project into the lumen, often remaining
-asymptomatic until advanced carcinogenesis ((2)). Due to the absence of
-symptoms, proximal-sided tumors have a significantly higher mortality
-rate ((2)). The distal and proximal sides of the colon differ in the
-amount of inflammation present and the genomic instability of
-precancerous cells, respectively, as well as oxygen, pH and the presence
-of antimicrobial peptides ((3), (4), (5)). Microenvironments differ not
-only longitutinally along the colon, but latitudinally from the
-epithelium to mucosa to intestinal lumen, offering several sites for
-different microbial communities to flourish. Given this varied
-physiology of the proximal-distal axis of the colon, symbiotic microbes
-and their metabolites likely vary between sites.
+The human colon is an ecosystem comprised of several different
+microenvironments inhabited by resident bacterial members of the
+microbiome. Concentrations of oxygen, water and anti-microbial peptides
+change along the gut axis and influence what populations of microbes
+reside in each location. Microenvironments differ not only
+longitutinally along the colon, but latitudinally from the epithelium to
+mucosa to intestinal lumen, offering several sites for different
+microbial communities to flourish. The identity of these specific
+microbes and communities are important for understanding the etiology of
+complex colon diseases such as Inflammatory Bowel Disease (IBD) and
+Colorectal Cancer (CRC). IBD and CRC are known to be preceded or
+accelerated by perturbations in gut microbes ((1), (2), (3)). The
+severity, symptoms, morbidity and mortality of these diseases is known
+to vary based upon the biogeographical location in which they occur. For
+instance, CRC tumors that arise on the distal side of the colon are
+infiltrating lesions that present with painful symptoms ((4)). In
+contrast, 47\% of CRCs are caused by proximal-sided colon tumors that
+are sessile and form along the wall of the colon, often remaining
+asymptomatic until advanced carcinogenesis ((4)). The distal and
+proximal sides of the colon differ in the amount of inflammation present
+and the genomic instability of precancerous cells, respectively, in
+addition to variation in the previously mentioned chemical gradients
+((1), (5), (6)). In IBD patients, disease flares in the distal colon are
+usually indicative of ulcerative colitis (UC), whereas Crohn's disease
+(CD) patients typically experience disease in the small intestine, ileum
+and proximal colon ((2)). UC presents as large and highly inflammed
+mucosal ulcers, where as CD lesions are often smaller and have areas of
+normal tissue distributed amongst the flare ((2)). Thus, given the
+varied physiology of the proximal-distal axis of the colon and known
+differences in disease patterns at these sites, symbiotic microbes and
+their metabolites likely vary as well, and may influence the
+heterogenous disease prognoses of IBD and CRC. Because CRC is a
+long-term complication of IBD, the distribution of microbes is important
+to understanding the pathophysiology of both diseases.
 
 Several recent findings have shown that development and progression of
-CRC can be attributed to specific molecular events as a result of
-interactions between the gut microbiota and human host ((3)). Our group
-and others have found that the stool microbiome of patients with CRC is
-distinct from that of healthy people ((6)). Further studies manipulating
-the gut microbiome using antibiotics or other chemoagents in mice has
-shown that dysbiosis preceded and accelerated the development of CRC
-tumors ((7)). Comparison of the specific bacteria present on CRC tumors
-with those found on nearby healthy tissue has also identified specific
-bacterial species that are tumor-associated ((8)). These species include
-the oral pathogens \emph{Fusobacterium nucleatum} and
-\emph{Porphyromonas asacharolytica}. Interestingly, these periodontal
-pathogens have been highly predictive of whether a patient had CRC
-tumors or not in our classification studies ((9)). Because these studies
-were performed in mice or examined only shed human stool, they were
-unable to analyze paried samples from the proximal and distal sides of
-the colon. Similarly, comparisons of on- or off-tumor bacteria rarely
-have matched tissue from the other side of the colon from the same
-patient, limiting what conclusions can be drawn about the colonic
-microbiome overall, let alone at that specific site. Due to these
-limitations, the contribution of the gut microbiota to these subtypes is
-largely undefined. Characterizing these communities could provide needed
-insight into CRC etiology, including how the disruption of the healthy
-community could promote the initiation or proliferation of the distinct
-distal and proximal CRC tumors.
+IBD or CRC can be attributed to specific molecular events as a result of
+interactions between the gut microbiota and human host ((1), (3)). For
+instance, comparison of the bacteria present on CRC tumors with those
+found on nearby healthy tissue has identified specific species that are
+tumor-associated ((7)). These species include the oral pathogens
+\emph{Fusobacterium nucleatum} and \emph{Porphyromonas asacharolytica}.
+Interestingly, these periodontal pathogens have been highly predictive
+of whether a patient had CRC tumors or not in our human stool
+classification studies ((8)). \emph{F. nucleatum} has also been found to
+be elevated in the stool and biopsies of patients with IBD as compared
+to healthy controls (Strauss2011). Furthermore, studies of \emph{F.
+nucleatum} isolated from mucosal biopsies showed that more invasive
+\emph{F. nucleatum} positively correlates with IBD disease level
+(Strauss2011). Like many intestinal pathogens, the bacteria appear to
+have a high-impact despite being lowly-abundant in the community ((2)).
+The molecular capabilities of these rare taxa may contribute to the
+colonic disease state. These studies often examined only shed human
+stool or the small intestine, preventing fine-resolution analysis of
+paired samples from the proximal and distal sides of the colon.
+Similarly, comparisons of on- or off-tumor/lesion bacteria rarely have
+matched tissue from the other side of the colon from the same patient,
+limiting what conclusions can be drawn about the colonic microbiome
+overall, let alone at that specific site. Due to these limitations, the
+contribution of the gut microbiota to IBD and CRC disease location in
+the colon is largely undefined. Characterizing these communities could
+provide needed insight into disease etiology, including how the
+disruption of the healthy community could promote the initiation or
+proliferation of the distinct proximal and distal CRC tumors or IBD
+flares.
 
-Further, the few existing profiles of the microbial biogeography of the
-gut have been limited by sample collection methods. The majority of
-human gut microbiome studies have been performed on whole shed stool or
-on samples collected during colonoscopy procedures. While the latter
-method allows investigators to acquire samples from inside the human
-colon, typically this procedure is preceded by the use of bowel
-preparation methods such as the consumption of laxatives to cleanse the
-bowel. Bowel preparation is essential for detecting cancerous or
-precancerous lesions in the colon, but complicates microbiome profiling
-as the chemicals strip the bowel of contents and disrupt the mucosal
-layer ((10), (11)). As such, what little information we do have about
-the biogeographical distribution of the microbes in the proximal and
-distal colon is confounded by the bowel preparation procedure.
+The few existing profiles of the microbial biogeography of the gut have
+been limited by sample collection methods. The majority of human gut
+microbiome studies have been performed on whole shed stool or on samples
+collected during colonoscopy procedures. While the latter method allows
+investigators to acquire samples from inside the human colon, typically
+this procedure is preceded by the use of bowel preparation methods such
+as the consumption of laxatives to cleanse the bowel. Bowel preparation
+is essential for detecting cancerous or precancerous lesions in the
+colon, but complicates microbiome profiling as the chemicals strip the
+bowel of contents and disrupt the mucosal layer ((9), (10)). As such,
+what little information we do have about the biogeographical
+distribution of the microbes in the proximal and distal colon is
+confounded by the bowel preparation procedure.
 
 Here we aimed to address the limitations of previous studies and
-effectively characterize the microbiome in the lumen and mucosa of the
-proximal and distal healthy human colon. Our design used unprepared
-colonoscopy techniques to sample the natural community of each location
-of the gut without prior disruption of the native bacteria in 20 healthy
-volunteers. To address the inherent inter-individual variation in human
-microbiomes, we used a machine-learning classification algorithm trained
-on curated 16S rRNA sequencing reads to identify microbes specific to
-each location. We found that our classification models were able to
-separate mucosal and lumenal samples as well as differentiate between
-sides of the colon based on populations of specific microbes. By
-identifying the specific microbes we are poised to ask if and how the
-presence or disruption of the microbes at each site contribute to the
-development of the specific tumor subtypes of CRC in the proximal and
-distal human colon.
+effectively identify the microbes specific to the lumen and mucosa of
+the proximal and distal healthy human colon. Our design used an
+unprepared colonoscopy technique to sample the natural community of each
+location of the gut without prior disruption of the native bacteria in
+20 healthy volunteers. To address the inherent inter-individual
+variation in human microbiomes, we used a machine-learning
+classification algorithm trained on curated 16S rRNA sequencing reads to
+identify microbes specific to each location. We found that our
+classification models were able to separate mucosal and lumenal samples
+as well as differentiate between sides of the colon based on populations
+of specific microbes. By identifying the specific microbes we are poised
+to ask if and how the presence or disruption of the microbes at each
+site contribute to the development of the specific tumor subtypes of CRC
+in the proximal and distal human colon.
 
 \subsubsection{Results}\label{results}
 
@@ -249,7 +274,7 @@ the procedure. To characterize the bacterial communities present at
 these sites, 16S rRNA gene sequencing was performed on extracted DNA
 from each sample. Each site was primarily dominated by \emph{Firmicutes}
 and \emph{Bacteriodetes} (Figure 2A), consistent with known variability
-in human microbiome research (cite). Likewise, samples had varying
+in human microbiome research ((11)). Likewise, samples had varying
 levels of diversity at each site, irrespective of the individual (Figure
 2B). For example, the proximal mucosa was more diverse than the distal
 for some individuals while the opposite was true for others. Therefore
@@ -355,131 +380,126 @@ sample set of 20 healthy individuals.
 
 \subsubsection{Discussion}\label{discussion}
 
-Here we identified bacterial taxa that are specific to the lumen and
-mucosa of the proximal and distal human colon from samples collected
-during unprepared colonoscopy. We found that all locations contained a
-range of phyla and a range of diversity, but that there was a wide
-variability between subjects. Pairwise comparisons of each of the sites
-revealed that the proximal mucosa and lumen were most similar to each
-other. Further, comparison of colonoscopy-collected samples with samples
-collected from stool at home showed that the distal lumen is most
-similar to stool at exit. Random Forest algorithms built on OTU
-abundances from each sample identified microbes that are particular to
-each location of the colon. Finally, we were able to detect some
-bacterial OTUs associated with colorectal cancer in our healthy patient
-cohort. Using unprepped colonoscopy and machine learning, we have
-identified bacterial phyla specific to the healthy proximal and distal
-human colon.
+Here we identified bacterial taxa that were specific to the lumen and
+mucosa of the proximal and distal sides of the human colon from samples
+collected during unprepared colonoscopy. We found that all locations
+contained a range of phyla and a range of diversity, but that there was
+a wide variability between subjects. Pairwise comparisons of each of the
+sites revealed that the proximal mucosa and lumen were most similar to
+each other. Further, comparison of colonoscopy-collected samples with
+samples collected from stool at home showed that the distal lumen is
+most similar to stool at exit. Random Forest models built on OTU
+relative abundances from each sample identified microbes that are
+particular to each location of the colon. Finally, we were able to
+detect some bacterial OTUs associated with colonic disease in our
+healthy patient cohort. Using unprepped colonoscopy and machine
+learning, we have identified bacterial phyla specific to the healthy
+proximal and distal human colon.
 
 When examining the relative abundance of the different phyla at each
 site, there was a wide amount of variation for each phyla with
-communities primarily dominated by the Bacteriodes and Firmicutes. This
-likely reflects not only the variability between human subjects, casued
-by differences in age, gender, diet, but also reports of microbial
-``patchiness'' in the gut microbiome. Several previous studies have
-noted that the bacteria recoverable from the same mucosal sample
-location can be vastly different when the samples are taken just 1 cm
-away from each other ((15)). Similar patchiness is also observed in
+communities primarily dominated by the \emph{Bacteriodes} and
+\emph{Firmicutes}. This likely reflects not only the variability between
+human subjects, casued by differences in age, gender, diet, but also
+reports of biogeogrphical ``patchiness'' in the gut microbiome. Several
+studies have noted that the bacteria recoverable from the same mucosal
+sample location can be vastly different when the samples are taken just
+1 cm away from each other (15). Similar patchiness is also observed in
 lumenal contents and fecal samples themselves; there is observed
 separation of different interacting microbes along the length of a stool
-sample, for instance ((16)). That said, across our samples the mucosal
-samples harbor more Proteobacteria, consistent with previous studies
-comparing mucosal swabs to lumenal content in humans ((4)). Hence, the
-conclusions we can draw from phyla analysis are likely confounded by
-differences in sampling and patchiness between subjects.
+sample, for instance (16). That said, across our samples the mucosal
+samples harbor more \emph{Proteobacteria}, consistent with previous
+studies comparing mucosal swabs to lumenal content in humans (5). Hence,
+the conclusions we can draw from phyla analysis are likely impacted by
+patchiness between subjects.
 
-To get around the noisiness created by a diverse set of samples, we
-built a Random Forest model to identify microbes specific to each side.
-For each comparison we identified top X OTUs that were strongly
-predictive of one site or another. Generally, OTUs identified in each
-location were consistent with known physiological gradients along the
-gut axis ((5)). For instance, the proximal mucosa harbored
-mucosa-associated facultative anaerobes such as \emph{Actinomyces} and
-\emph{Enterobacteraceae} and the aerobic \emph{Psuedomonas} consistent
-with the highest oxygen regions of the colon. The distal mucosa was far
-more likely to host strictly anaerobic species such as
-\emph{Porphyromonas}, \emph{Anaerococcus}, \emph{Finegoldia} and
-\emph{Peptoniphilus}. The model was less effective at classifying the
-proximal and distal lumenal contents, probably because the samples are
-arguably composed of the same material.
+To get around the noisiness from a diverse set of samples, we built a
+Random Forest model to identify microbes specific to each side. For each
+comparison we identified top X OTUs that were strongly predictive of one
+site or another. Generally, OTUs identified in each location were
+consistent with known physiological gradients along the gut axis (6).
+For instance, the proximal mucosa contains the highest oxygen
+concentratons of the colon and harbored mucosa-associated facultative
+anaerobes such as \emph{Actinomyces} and \emph{Enterobacteraceae} and
+aerobic \emph{Psuedomonas}. The distal mucosa was far more likely to
+host strictly anaerobic species such as \emph{Porphyromonas},
+\emph{Anaerococcus}, \emph{Finegoldia} and \emph{Peptoniphilus}. The
+model was less effective at classifying the proximal and distal lumenal
+contents, probably because the samples are arguably composed of the same
+bacteria but differ in water content.
 
 We detected \emph{F. nucleatum} and \emph{P. asacharolytica} in 8 and 5
 of our subjects, respectively. These bacteria have been shown to be
-predictive of colorectal cancer in humans ((9)) and have oncogenic
-properties in cell culture and in mice ((17)). Interestingly, while
+predictive of colorectal cancer in humans (8) and have oncogenic
+properties in cell culture and in mice (17). Interestingly, while
 \emph{F. nucleatum} was found on both sides of the colon, \emph{P.
 asacharolytica} was only detected in the distal mucosa. Not much is
 known about the distribution of \emph{P. asacharolytica} but given its
 documented anaerobic characteristics and asacharolytic metabolism, it
 might not be surprising that it resides in the less-oygen-rich and
-proteinaceous distal mucosa ((4)). In studies examining bacteria on
+proteinaceous distal mucosa ((5)). In studies examining bacteria on
 colorectal cancer tumors, \emph{F. nucleatum} is more commonly detected
 on proximal-sided tumors, and distribution of \emph{F. nucleatum}
-decreases along the colon to rectum ((18)). Of the (8) (40\%)
-individuals positive for \emph{F. nucleatum} in this study, the bacteria
-was spread across the proximal mucosa, distal lumen and distal mucosa.
-The presence of \emph{F. nucleatum} in a healthy individual is not
-necessarily linked to the development of future colorectal cancers.
-Because of the spatial distribution of the \emph{F. nucleatum} in our
-sample set, we cannot develop a model for the role of \emph{F.
-nucleatum} in the healthy colon. Data examining bacterial biofilms on
-CRC tumors suggests that \emph{Fusobacteria} species are more commonly
-found both on proximal tumors and in biofilms, indicating that it is not
-only the presence of the bacteria but the organization of the tumor
-community that contributes to \emph{Fusobacterium's} role in
-tumorigenesis ((8)). Finally, \emph{Fusobacteria} and
-\emph{Porphyromonas} species have been known to not only co-occur on CRC
-tumors but also to synergistically promote tumorigenesis in an oral
-cancer model ((19), (20)). Thus, further analysis of the distribution
-and activities of these pathogens may elucidate a mechanism for
-development of CRC tumors in the proximal or distal colon.
+decreases along the colon to rectum ((18)). Of the 8 (40\%) individuals
+positive for \emph{F. nucleatum} in this study, the bacterium was spread
+across the proximal mucosa, distal lumen and distal mucosa. The presence
+of \emph{F. nucleatum} in a healthy individual is not necessarily linked
+to the development of future colorectal cancers (cite). Data examining
+bacterial biofilms on CRC tumors suggests that \emph{Fusobacteria}
+species are more commonly found on proximal tumors and in biofilms,
+indicating that it is not only the presence of the bacteria but the
+organization of the tumor community that contributes to
+\emph{Fusobacterium's} role in tumorigenesis ((7)). Finally,
+\emph{Fusobacterium} and \emph{Porphyromonas} species have been known to
+not only co-occur on CRC tumors but also to synergistically promote
+tumorigenesis in an oral cancer model ((19), (20)). Thus, further
+analysis of the distribution and activities of these pathogens may
+elucidate a mechanism for development of IBD or CRC subtypes in the
+proximal or distal colon.
+
+The \emph{Fusobacterium} species \emph{nucleatum} and \emph{varium} have
+been commonly isolated from mucosal biopsies of patients with IBD
+(cite). Laboratory experiments with these isolates have shown that
+disease-isolated \emph{F. nucleatum} are more invasive and stimulate
+more TNF-a production than strains from healthy individuals ((21)),
+suggesting the bacteria may increase inflammation in the gut as well
+(cite - Dharmani 2011). \emph{F. varium} isolated from UC patients
+caused colonic ulcers in an experimental mouse model (Ohkusa 2003).
+\emph{F. varium} was only detected in 3 of our study participants and
+two of those samples were isolated form the proximal mucosa (cite
+figure). Although there is low occurrance in our study, \emph{F. varium}
+is most commonly isolated from UC patient biopsies from the ileum or
+cecum (cite), suggesting this species may exhibit preference for the
+different environmental conditions of these gastrointestinal sites.
+Further work will assess how gut environment may select for species
+which then cause localized disease.
 
 Specific comparisons of our findings to previously published gut
 biogeography studies are additionally confounded by the use of bowel
 preparation methods in most other studies. A rare report of a
-matched-colonoscopy study that sampled 18 patient's colonic mucosa and
-lumenal contents prior to and after bowel cleansing ((21)). This group
-found that mucosa and lumenal samples were distinguishable prior to
+matched-colonoscopy study sampled 18 patient's colonic mucosa and
+lumenal contents prior to and after bowel cleansing ((22)). This group
+found that mucosal and lumenal samples were distinguishable prior to
 bowel cleansing, but that bowel preparation resulted in an increase in
-shared OTUs between each site ((21)). Bowel cleansing not only made the
+shared OTUs between each site ((22)). Bowel cleansing not only made the
 samples harder to distinguish, it resulted in decreases in diversity
 across sites. Further, the differences were not great enough to overcome
-interpersonal differences between subjects. So, bowel preparation
-clearly induces bias into the microbes recovered from sampling the lumen
-or mucosa of a prepared bowel. Thus our findings of specific bacteria at
-each site of the colon are strengthened by the lack of bowel
-preparation.
-
-Microbiome-based diagnostics are increasingly being explored as
-non-invasive tools to survey for the development of colon cancer. Random
-Forest models have been used by our group and others to increase the
-detection sensitivity of CRC tumors. Indeed, our group found that a
-classification model that used microbiome data in combination with Fecal
-Immunohistochemical Test (FIT) results could correctly identify both
-carcinoma and adenoma lesions from communities of stool at exit and it
-performed much better than FIT alone. Further work from our lab has
-shown that microbiome profiling of the FIT cartridge contents
-sufficiently represented the stool community ((9)). One caveat of the
-FIT study was that there was not sufficient information to test if a
-classification model could differentiate between proximal and distal CRC
-tumors based on exit stool sample alone, but we would hypothesize that
-would not be effective. Given that our results showed that the stool
-most accurately reflects the community of the distal lumen, we likely
-cannot use Random Forest of stool samples to diagnose any changes in the
-proximal or mucosal communities.
+interpersonal differences between subjects. Bowel preparation clearly
+induces bias into the microbes recovered from sampling the lumen or
+mucosa of a prepared bowel. Thus our findings in this study are
+strengthened by the lack of bowel preparation.
 
 By revealing specific differences in microbial populations at each
 location in the gut via sampling an unprepared bowel, we can begin to
 form hypothesies about how specific host-microbe interactions can affect
-oncogenesis of proximal and distal CRC tumors. To this point, 16S
-community profiling studies do not provide enough information to probe
-these questions. Our sample set of matched proximal, distal, lumenal and
-mucosal samples from colons that have not undergone bowel preparation
-presents a unique opportunity to explore further questions about the
-microbiome along the gut axis. Specifically, examining metagenomic,
-metabolomic and host interactions at each site will be useful in further
-characterizing the host-microbe interactions in the development of
-proximal and distal colorectal cancer.
+disease progression of proximal and distal CRC and IBD subtypes. To this
+point, 16S rRNA gene sequecing community profiling studies do not
+provide enough information to fully probe these questions. In
+particular, 16S sequencing cannot not profile the host characteristics
+at each site. Combining the unprepared colonoscopy approach with
+analysis of multi-omic sequencing data may be useful in further
+characterizing host-microbiome interactions along the gut axis for both
+health and disease.
 
 \subsubsection{Acknowledgments}\label{acknowledgments}
 
@@ -512,9 +532,8 @@ from 25 to 64.
 At a baseline visit, subjects were consented and given a home collection
 stool kit (Source of kit supplies). At least one week prior to the
 scheduled colonoscopy, subjects were to collect whole stool at home and
-two swabs of a Fecal Immunohistochemical Test cartridge (Polymedco Inc.)
-and ship the samples to the University. Notably, subjects did not
-undergo any bowel preparation method prior to sampling. On procedure
+ship the samples to the University on ice. Notably, subjects did not
+undergo any bowel preparation method prior to sampling. On the procedure
 day, subjects reported to the Michigan Clinical Research Unit at the
 University of Michigan Health System. Patients were consciously sedated
 using Fentanyl, Versed and/or Benadryl as appropriate. A flexible
@@ -539,24 +558,25 @@ solution (Fisher) and 2.8mm ceramic beads (MO BIO Laboratories) were
 added to the bead beating step to enhance DNA recovery from mucosal
 samples. The resulting DNA was used as template for amplification of the
 V4 region of the 16S rRNA gene and fragments were sequenced on an
-Illumina MiSeq as previously described ((22)). Sequences were curated
-using the mothur software as described previously ((23)). The sequences
+Illumina MiSeq as previously described ((23)). Sequences were curated
+using the mothur software as described previously ((24)). The sequences
 were assigned taxonomic classification using a naive Bayesian classifier
 trained using a 16S rRNA gene training set from the Ribosomal Database
-Project (RDP) ((24)) and clustered into operational taxonomic units
+Project (RDP) ((25)) and clustered into operational taxonomic units
 (OTUs) based on a 97\% similarity cutoff. Sequencing and analysis of a
 mock community revealed the error rate to be X\%. Samples were rarefied
-to 4231 sequences per sample in order to reduce sampling bias.
+to 4231 sequences per sample in order to reduce uneven sampling bias.
 
 Diversity analysis was performed using the Simpson diversity calculator
-and theta YC calculator metrics in mothur ((23)). ThetaYC distances were
-calculated to determine the dissimilarity between two samples. Random
-Forest classification models were built using the randomForest R package
-and resultant models were used to identify the OTUs that were most
-important for classifying each location ((25)). To get species-level
-information about sequences of interest, sequences were aligned using
-blastn and the species name was only used if the identity score was
-\textgreater{}= 99\%.
+and theta YC calculator metrics in mothur version
+\textless{}3.2?\textgreater{} ((24)). ThetaYC distances were calculated
+to determine the dissimilarity between two samples. Random Forest
+classification models were built using the randomForest R package and
+resultant models were used to identify the OTUs that were most important
+for classifying each location ((26)). To get species-level information
+about sequences of interest, sequences were aligned using blastn and the
+species name was only used if the identity score was \textgreater{}=
+99\%.
 
 \paragraph{Statistical analysis}\label{statistical-analysis}
 
@@ -565,6 +585,10 @@ the analysis of molecular variance (AMOVA) metric in mothur. Differences
 in thetaYC distances by location were tested using the Wilcoxon rank-sum
 test adjusted for multiple comparisons using the Benjamini-Hochberg
 procedure.
+
+\paragraph{Data availability}\label{data-availability}
+
+\paragraph{Github repository}\label{github-repository}
 
 \newpage
 
@@ -597,7 +621,7 @@ lines represent the median values.
 
 \paragraph{Figure 3}\label{figure-3}
 
-Similarity of microbial community structure between sites of the gut.
+Distances of microbial community structure between sites of the gut.
 ThetaYC distances are shown for interpersonal similarities between two
 sites -- each point represents one individual. In (A), comparisons of
 the proximal and distal mucosal and lumen are shown. In (B), comparisons
@@ -639,40 +663,39 @@ asacharolytica}
 \addcontentsline{toc}{subsubsection}{References}
 
 \hypertarget{refs}{}
-\hypertarget{ref-Guinney2015}{}
-1. \textbf{Guinney J}, \textbf{Dienstmann R}, \textbf{Wang X},
-\textbf{Reyniès A de}, \textbf{Schlicker A}, \textbf{Soneson C},
-\textbf{Marisa L}, \textbf{Roepman P}, \textbf{Nyamundanda G},
-\textbf{Angelino P}, \textbf{Bot BM}, \textbf{Morris JS}, \textbf{Simon
-IM}, \textbf{Gerster S}, \textbf{Fessler E}, \textbf{Melo FDSE},
-\textbf{Missiaglia E}, \textbf{Ramay H}, \textbf{Barras D},
-\textbf{Homicsko K}, \textbf{Maru D}, \textbf{Manyam GC}, \textbf{Broom
-B}, \textbf{Boige V}, \textbf{Perez-Villamil B}, \textbf{Laderas T},
-\textbf{Salazar R}, \textbf{Gray JW}, \textbf{Hanahan D},
-\textbf{Tabernero J}, \textbf{Bernards R}, \textbf{Friend SH},
-\textbf{Laurent-Puig P}, \textbf{Medema JP}, \textbf{Sadanandam A},
-\textbf{Wessels L}, \textbf{Delorenzi M}, \textbf{Kopetz S},
-\textbf{Vermeulen L}, \textbf{Tejpar S}. 2015. The consensus molecular
-subtypes of colorectal cancer. Nature Medicine \textbf{21}:1350--1356.
-doi:\href{https://doi.org/10.1038/nm.3967}{10.1038/nm.3967}.
+\hypertarget{ref-Yamauchi2012}{}
+1. \textbf{Yamauchi M}, \textbf{Lochhead P}, \textbf{Morikawa T},
+\textbf{Huttenhower C}, \textbf{Chan AT}, \textbf{Giovannucci E},
+\textbf{Fuchs C}, \textbf{Ogino S}. 2012. Colorectal cancer: A tale of
+two sides or a continuum?: Figure 1. Gut \textbf{61}:794--797.
+doi:\href{https://doi.org/10.1136/gutjnl-2012-302014}{10.1136/gutjnl-2012-302014}.
+
+\hypertarget{ref-Forbes2016}{}
+2. \textbf{Forbes JD}, \textbf{Domselaar GV}, \textbf{Bernstein CN}.
+2016. The gut microbiota in immune-mediated inflammatory diseases.
+Frontiers in Microbiology \textbf{7}.
+doi:\href{https://doi.org/10.3389/fmicb.2016.01081}{10.3389/fmicb.2016.01081}.
+
+\hypertarget{ref-Halfvarson2017}{}
+3. \textbf{Halfvarson J}, \textbf{Brislawn CJ}, \textbf{Lamendella R},
+\textbf{Vázquez-Baeza Y}, \textbf{Walters WA}, \textbf{Bramer LM},
+\textbf{D\textquotesingleAmato M}, \textbf{Bonfiglio F},
+\textbf{McDonald D}, \textbf{Gonzalez A}, \textbf{McClure EE},
+\textbf{Dunklebarger MF}, \textbf{Knight R}, \textbf{Jansson JK}. 2017.
+Dynamics of the human gut microbiome in inflammatory bowel disease.
+Nature Microbiology \textbf{2}:17004.
+doi:\href{https://doi.org/10.1038/nmicrobiol.2017.4}{10.1038/nmicrobiol.2017.4}.
 
 \hypertarget{ref-Benedix2010}{}
-2. \textbf{Benedix F}, \textbf{Kube R}, \textbf{Meyer F},
+4. \textbf{Benedix F}, \textbf{Kube R}, \textbf{Meyer F},
 \textbf{Schmidt U}, \textbf{Gastinger I}, \textbf{Lippert H}. 2010.
 Comparison of 17, 641 patients with right- and left-sided colon cancer:
 Differences in epidemiology, perioperative course, histology, and
 survival. Diseases of the Colon \& Rectum \textbf{53}:57--64.
 doi:\href{https://doi.org/10.1007/dcr.0b013e3181c703a4}{10.1007/dcr.0b013e3181c703a4}.
 
-\hypertarget{ref-Yamauchi2012}{}
-3. \textbf{Yamauchi M}, \textbf{Lochhead P}, \textbf{Morikawa T},
-\textbf{Huttenhower C}, \textbf{Chan AT}, \textbf{Giovannucci E},
-\textbf{Fuchs C}, \textbf{Ogino S}. 2012. Colorectal cancer: A tale of
-two sides or a continuum?: Figure 1. Gut \textbf{61}:794--797.
-doi:\href{https://doi.org/10.1136/gutjnl-2012-302014}{10.1136/gutjnl-2012-302014}.
-
 \hypertarget{ref-Albenberg2014}{}
-4. \textbf{Albenberg L}, \textbf{Esipova TV}, \textbf{Judge CP},
+5. \textbf{Albenberg L}, \textbf{Esipova TV}, \textbf{Judge CP},
 \textbf{Bittinger K}, \textbf{Chen J}, \textbf{Laughlin A},
 \textbf{Grunberg S}, \textbf{Baldassano RN}, \textbf{Lewis JD},
 \textbf{Li H}, \textbf{Thom SR}, \textbf{Bushman FD}, \textbf{Vinogradov
@@ -682,26 +705,13 @@ Gastroenterology \textbf{147}:1055--1063.e8.
 doi:\href{https://doi.org/10.1053/j.gastro.2014.07.020}{10.1053/j.gastro.2014.07.020}.
 
 \hypertarget{ref-Donaldson2015}{}
-5. \textbf{Donaldson GP}, \textbf{Lee SM}, \textbf{Mazmanian SK}. 2015.
+6. \textbf{Donaldson GP}, \textbf{Lee SM}, \textbf{Mazmanian SK}. 2015.
 Gut biogeography of the bacterial microbiota. Nature Reviews
 Microbiology \textbf{14}:20--32.
 doi:\href{https://doi.org/10.1038/nrmicro3552}{10.1038/nrmicro3552}.
 
-\hypertarget{ref-Zackular2014}{}
-6. \textbf{Zackular JP}, \textbf{Rogers MAM}, \textbf{Ruffin MT},
-\textbf{Schloss PD}. 2014. The human gut microbiome as a screening tool
-for colorectal cancer. Cancer Prevention Research \textbf{7}:1112--1121.
-doi:\href{https://doi.org/10.1158/1940-6207.capr-14-0129}{10.1158/1940-6207.capr-14-0129}.
-
-\hypertarget{ref-Zackular2013}{}
-7. \textbf{Zackular JP}, \textbf{Baxter NT}, \textbf{Iverson KD},
-\textbf{Sadler WD}, \textbf{Petrosino JF}, \textbf{Chen GY},
-\textbf{Schloss PD}. 2013. The gut microbiome modulates colon
-tumorigenesis. mBio \textbf{4}:e00692--13--e00692--13.
-doi:\href{https://doi.org/10.1128/mbio.00692-13}{10.1128/mbio.00692-13}.
-
 \hypertarget{ref-Dejea2014}{}
-8. \textbf{Dejea CM}, \textbf{Wick EC}, \textbf{Hechenbleikner EM},
+7. \textbf{Dejea CM}, \textbf{Wick EC}, \textbf{Hechenbleikner EM},
 \textbf{White JR}, \textbf{Welch JLM}, \textbf{Rossetti BJ},
 \textbf{Peterson SN}, \textbf{Snesrud EC}, \textbf{Borisy GG},
 \textbf{Lazarev M}, \textbf{Stein E}, \textbf{Vadivelu J},
@@ -716,14 +726,14 @@ cancers. Proceedings of the National Academy of Sciences
 doi:\href{https://doi.org/10.1073/pnas.1406199111}{10.1073/pnas.1406199111}.
 
 \hypertarget{ref-Baxter2016}{}
-9. \textbf{Baxter NT}, \textbf{Ruffin MT}, \textbf{Rogers MAM},
+8. \textbf{Baxter NT}, \textbf{Ruffin MT}, \textbf{Rogers MAM},
 \textbf{Schloss PD}. 2016. Microbiota-based model improves the
 sensitivity of fecal immunochemical test for detecting colonic lesions.
 Genome Medicine \textbf{8}.
 doi:\href{https://doi.org/10.1186/s13073-016-0290-3}{10.1186/s13073-016-0290-3}.
 
 \hypertarget{ref-Jalanka2014}{}
-10. \textbf{Jalanka J}, \textbf{Salonen A}, \textbf{Salojärvi J},
+9. \textbf{Jalanka J}, \textbf{Salonen A}, \textbf{Salojärvi J},
 \textbf{Ritari J}, \textbf{Immonen O}, \textbf{Marciani L},
 \textbf{Gowland P}, \textbf{Hoad C}, \textbf{Garsed K}, \textbf{Lam C},
 \textbf{Palva A}, \textbf{Spiller RC}, \textbf{Vos WM de}. 2014. Effects
@@ -732,12 +742,17 @@ of bowel cleansing on the intestinal microbiota. Gut
 doi:\href{https://doi.org/10.1136/gutjnl-2014-307240}{10.1136/gutjnl-2014-307240}.
 
 \hypertarget{ref-Harrell2012}{}
-11. \textbf{Harrell L}, \textbf{Wang Y}, \textbf{Antonopoulos D},
+10. \textbf{Harrell L}, \textbf{Wang Y}, \textbf{Antonopoulos D},
 \textbf{Young V}, \textbf{Lichtenstein L}, \textbf{Huang Y},
 \textbf{Hanauer S}, \textbf{Chang E}. 2012. Standard colonic lavage
 alters the natural state of mucosal-associated microbiota in the human
 colon. PLoS ONE \textbf{7}:e32545.
 doi:\href{https://doi.org/10.1371/journal.pone.0032545}{10.1371/journal.pone.0032545}.
+
+\hypertarget{ref-LloydPrice2016}{}
+11. \textbf{Lloyd-Price J}, \textbf{Abu-Ali G}, \textbf{Huttenhower C}.
+2016. The healthy human microbiome. Genome Medicine \textbf{8}.
+doi:\href{https://doi.org/10.1186/s13073-016-0307-y}{10.1186/s13073-016-0307-y}.
 
 \hypertarget{ref-deCarcer2010}{}
 12. \textbf{Cárcer DA de}, \textbf{Cuív PÓ}, \textbf{Wang T},
@@ -811,8 +826,17 @@ Metabolic and community synergy of oral bacteria in colorectal cancer.
 mSphere \textbf{1}:e00102--16.
 doi:\href{https://doi.org/10.1128/msphere.00102-16}{10.1128/msphere.00102-16}.
 
+\hypertarget{ref-Strauss2011}{}
+21. \textbf{Strauss J}, \textbf{Kaplan GG}, \textbf{Beck PL},
+\textbf{Rioux K}, \textbf{Panaccione R}, \textbf{DeVinney R},
+\textbf{Lynch T}, \textbf{Allen-Vercoe E}. 2011. Invasive potential of
+gut mucosa-derived fusobacterium nucleatum positively correlates with
+IBD status of the host. Inflammatory Bowel Diseases
+\textbf{17}:1971--1978.
+doi:\href{https://doi.org/10.1002/ibd.21606}{10.1002/ibd.21606}.
+
 \hypertarget{ref-Shobar2016}{}
-21. \textbf{Shobar RM}, \textbf{Velineni S}, \textbf{Keshavarzian A},
+22. \textbf{Shobar RM}, \textbf{Velineni S}, \textbf{Keshavarzian A},
 \textbf{Swanson G}, \textbf{DeMeo MT}, \textbf{Melson JE},
 \textbf{Losurdo J}, \textbf{Engen PA}, \textbf{Sun Y}, \textbf{Koenig
 L}, \textbf{Mutlu EA}. 2016. The effects of bowel preparation on
@@ -822,7 +846,7 @@ Clinical and Translational Gastroenterology \textbf{7}:e143.
 doi:\href{https://doi.org/10.1038/ctg.2015.54}{10.1038/ctg.2015.54}.
 
 \hypertarget{ref-Kozich2013}{}
-22. \textbf{Kozich JJ}, \textbf{Westcott SL}, \textbf{Baxter NT},
+23. \textbf{Kozich JJ}, \textbf{Westcott SL}, \textbf{Baxter NT},
 \textbf{Highlander SK}, \textbf{Schloss PD}. 2013. Development of a
 dual-index sequencing strategy and curation pipeline for analyzing
 amplicon sequence data on the MiSeq illumina sequencing platform.
@@ -830,7 +854,7 @@ Applied and Environmental Microbiology \textbf{79}:5112--5120.
 doi:\href{https://doi.org/10.1128/aem.01043-13}{10.1128/aem.01043-13}.
 
 \hypertarget{ref-Schloss2009}{}
-23. \textbf{Schloss PD}, \textbf{Westcott SL}, \textbf{Ryabin T},
+24. \textbf{Schloss PD}, \textbf{Westcott SL}, \textbf{Ryabin T},
 \textbf{Hall JR}, \textbf{Hartmann M}, \textbf{Hollister EB},
 \textbf{Lesniewski RA}, \textbf{Oakley BB}, \textbf{Parks DH},
 \textbf{Robinson CJ}, \textbf{Sahl JW}, \textbf{Stres B},
@@ -842,14 +866,14 @@ communities. Applied and Environmental Microbiology
 doi:\href{https://doi.org/10.1128/aem.01541-09}{10.1128/aem.01541-09}.
 
 \hypertarget{ref-Wang2007}{}
-24. \textbf{Wang Q}, \textbf{Garrity GM}, \textbf{Tiedje JM},
+25. \textbf{Wang Q}, \textbf{Garrity GM}, \textbf{Tiedje JM},
 \textbf{Cole JR}. 2007. Naive bayesian classifier for rapid assignment
 of rRNA sequences into the new bacterial taxonomy. Applied and
 Environmental Microbiology \textbf{73}:5261--5267.
 doi:\href{https://doi.org/10.1128/aem.00062-07}{10.1128/aem.00062-07}.
 
 \hypertarget{ref-Liaw2002}{}
-25. \textbf{Liaw A}, \textbf{Wiener M}. 2002. Classification and
+26. \textbf{Liaw A}, \textbf{Wiener M}. 2002. Classification and
 regression by randomForest. R News: The Newsletter of the R Project
 \textbf{2}:18--22.
 

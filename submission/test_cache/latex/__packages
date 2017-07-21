@@ -1,0 +1,13 @@
+base
+randomForest
+ggplot2
+pROC
+knitr
+dplyr
+AUCRF
+tidyr
+lattice
+caret
+RColorBrewer
+reshape2
+wesanderson

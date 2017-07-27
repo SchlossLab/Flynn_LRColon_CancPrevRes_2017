@@ -325,27 +325,26 @@ To identify OTUs that were distinct at each biogeographical site, we
 constructed several Random Forest models trained using OTU abundances.
 We built the first model to classify the lumen versus mucosal samples
 for the proximal and distal sides, independently (Figure 4A). The
-constructed model used ((Xopt)) features for the proximal and ((Xopt))
-for the distal. The models performed well when classifying these samples
-(0.8 and 1.0, respectively). The OTUs that were most predictive of each
-site are identified by their greatest mean decrease in accuracy when
-removed from the model. For distinguishing the proximal lumen and
-mucosa, OTUs from the \emph{Bacteriodes}, \emph{Actinomyces},
-\emph{Psuedomonas} and two OTUs from the \emph{Enterobacteraceae} genera
-were differentially abundant (Figure 4B). The model classifying the
-distal lumen and mucosa identified OTUs from \emph{Turicibacter},
-\emph{Finegoldia}, \emph{Peptoniphilus} and two OTUs from the
-\emph{Anaerococcus} genera that could distinguish lumen from mucosal
-samples (Figure 4C). These results indicate that there are fine
-differences between the different sites of the colon, and that these can
-be traced down to specific OTUs on each side.
+constructed model used 14 features for the proximal and 6 for the
+distal. The models performed well when classifying these samples (0.8
+and 1.0, respectively). The OTUs that were most predictive of each site
+are identified by their greatest mean decrease in accuracy when removed
+from the model. For distinguishing the proximal lumen and mucosa, OTUs
+from the \emph{Bacteriodes}, \emph{Actinomyces}, \emph{Psuedomonas} and
+two OTUs from the \emph{Enterobacteraceae} genera were differentially
+abundant (Figure 4B). The model classifying the distal lumen and mucosa
+identified OTUs from \emph{Turicibacter}, \emph{Finegoldia},
+\emph{Peptoniphilus} and two OTUs from the \emph{Anaerococcus} genera
+that could distinguish lumen from mucosal samples (Figure 4C). These
+results indicate that there are fine differences between the different
+sites of the colon, and that these can be traced down to specific OTUs
+on each side.
 
 Next, we built a model to differentiate the proximal and distal lumenal
 samples. The model performed best when distinguishing the proximal
-versus distal mucosa (Figure 5A, AUC = 0.912) compared to the proximal
-versus distal lumen (AUC = 0.755). These models were able to explain
-((X\%)) of the variance, respectively. OTUs that were differentially
-abundant between the distal and proximal mucosa included members of the
+versus distal mucosa (Figure 5A, AUC = 0.9) compared to the proximal
+versus distal lumen (AUC = 0.8). OTUs that were differentially abundant
+between the distal and proximal mucosa included members of the
 \emph{Porphyromonas}, \emph{Murdochiella}, \emph{Finegoldia},
 \emph{Anaerococcus} and \emph{Peptoniphilus} genera (Figure 5B).
 Differentially abundant OTUs of the proximal and distal lumen included

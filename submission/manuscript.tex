@@ -343,10 +343,12 @@ on each side.
 Next, we built a model to differentiate the proximal and distal lumenal
 samples. The model performed best when distinguishing the proximal
 versus distal mucosa (Figure 5A, AUC = 0.9) compared to the proximal
-versus distal lumen (AUC = 0.8). OTUs that were differentially abundant
-between the distal and proximal mucosa included members of the
+versus distal lumen (AUC = 0.8). The model that separated proximal and
+distal mucosal samples used 6 features. OTUs that were differentially
+abundant between the distal and proximal mucosa included members of the
 \emph{Porphyromonas}, \emph{Murdochiella}, \emph{Finegoldia},
-\emph{Anaerococcus} and \emph{Peptoniphilus} genera (Figure 5B).
+\emph{Anaerococcus} and \emph{Peptoniphilus} genera (Figure 5B). The
+model used 44 features to separate proximal and distal lumenal samples.
 Differentially abundant OTUs of the proximal and distal lumen included
 three OTUs of the \emph{Bacteroides} genus, a \emph{Clostridium IV} OTU
 and an \emph{Oscillibacter} OTU (Figure 5C). This analysis found that
@@ -361,21 +363,27 @@ Given that specific bacterial species have been associated with
 colorectal cancer and IBD, we probed our sample set for these OTUs.
 Among our 100 samples, the most frequent sequence associated with the
 \emph{Fusobacterium} genus was OTU179, which aligns via BLASTn to
-\emph{Fusobacterium nucleatum subsp animalis} (XX\% over full length).
+\emph{Fusobacterium nucleatum subsp animalis} (100\% over full length).
 This is the only species of \emph{Fusobacterium} known to have oncogenic
 properties and be found on the surfaces of colorectal cancer tumors.
-((14)). The \emph{Fusobacterium} positive samples were located in x\% of
-the the proximal and X\% of the distal mucosa and represented as much as
-1\% of any sample (Figure 6A). OTU152 was similar to the members of the
-\emph{Porphyromonas} genus and the most frequent sequence in that OTU
-aligned to \emph{Porphyromonas asacharolytica} (X\% over full length),
-another bacterium commonly detected and isolated from colorectal tumors.
-OTU152 was only detected on the distal mucosa, and in fact was one of
-the OTUs the classification model identified as separating distal and
-proximal sides (Figure 6B). Among the samples that were positive for
-\emph{P. asacharolytica}, the relative abundances for this OTU ranged
-from 0.01\% - 16\%. Thus, disease-associated OTUs could be found in our
-sample set of 20 healthy individuals.
+((14)). There were 14 samples with the \emph{F. nucleatum subsp.
+animalis} sequence. Four sequences were located in the proximal mucosa
+and three in the distal mucosal samples (Figure 6A). The second most
+frequent \emph{Fusobacterium} sequence was OTU472, which aligns with
+99\% identity to \emph{F. varium}. In addition to \emph{F. nucleatum},
+\emph{F. varium} has been associated with IBD ((15)). 4 study
+participants harbored \emph{F. varium} and the samples were split evenly
+between the proximal and distal mucosa (Figure 6B). OTU152 was similar
+to the members of the \emph{Porphyromonas} genus and the most frequent
+sequence in that OTU aligned to \emph{Porphyromonas asacharolytica}
+(99\% over full length), another bacterium commonly detected and
+isolated from colorectal tumors. OTU152 was only detected on the distal
+mucosa, and in fact was one of the OTUs the classification model
+identified as separating distal and proximal sides (Figure 6C). Among
+the samples that were positive for \emph{P. asacharolytica}, the
+relative abundances for this OTU ranged from 0.01\% - 16\%. Thus,
+disease-associated OTUs could be found in our sample set of 20 healthy
+individuals.
 
 \subsubsection{Discussion}\label{discussion}
 
@@ -403,10 +411,10 @@ human subjects, casued by differences in age, gender, diet, but also
 reports of biogeogrphical ``patchiness'' in the gut microbiome. Several
 studies have noted that the bacteria recoverable from the same mucosal
 sample location can be vastly different when the samples are taken just
-1 cm away from each other (15). Similar patchiness is also observed in
+1 cm away from each other (16). Similar patchiness is also observed in
 lumenal contents and fecal samples themselves; there is observed
 separation of different interacting microbes along the length of a stool
-sample, for instance (16). That said, across our samples the mucosal
+sample, for instance (17). That said, across our samples the mucosal
 samples harbor more \emph{Proteobacteria}, consistent with previous
 studies comparing mucosal swabs to lumenal content in humans (5). Hence,
 the conclusions we can draw from phyla analysis are likely impacted by
@@ -414,7 +422,7 @@ patchiness between subjects.
 
 To get around the noisiness from a diverse set of samples, we built a
 Random Forest model to identify microbes specific to each side. For each
-comparison we identified top X OTUs that were strongly predictive of one
+comparison we identified top 5 OTUs that were strongly predictive of one
 site or another. Generally, OTUs identified in each location were
 consistent with known physiological gradients along the gut axis (6).
 For instance, the proximal mucosa contains the highest oxygen
@@ -430,57 +438,54 @@ bacteria but differ in water content.
 We detected \emph{F. nucleatum} and \emph{P. asacharolytica} in 8 and 5
 of our subjects, respectively. These bacteria have been shown to be
 predictive of colorectal cancer in humans (8) and have oncogenic
-properties in cell culture and in mice (17). Interestingly, while
+properties in cell culture and in mice (18). Interestingly, while
 \emph{F. nucleatum} was found on both sides of the colon, \emph{P.
 asacharolytica} was only detected in the distal mucosa. Not much is
 known about the distribution of \emph{P. asacharolytica} but given its
 documented anaerobic characteristics and asacharolytic metabolism, it
 might not be surprising that it resides in the less-oygen-rich and
-proteinaceous distal mucosa ((5)). In studies examining bacteria on
+proteinaceous distal mucosa (5). In studies examining bacteria on
 colorectal cancer tumors, \emph{F. nucleatum} is more commonly detected
 on proximal-sided tumors, and distribution of \emph{F. nucleatum}
-decreases along the colon to rectum ((18)). Of the 8 (40\%) individuals
+decreases along the colon to rectum (19). Of the 8 (40\%) individuals
 positive for \emph{F. nucleatum} in this study, the bacterium was spread
-across the proximal mucosa, distal lumen and distal mucosa. The presence
-of \emph{F. nucleatum} in a healthy individual is not necessarily linked
-to the development of future colorectal cancers (cite). Data examining
-bacterial biofilms on CRC tumors suggests that \emph{Fusobacteria}
-species are more commonly found on proximal tumors and in biofilms,
-indicating that it is not only the presence of the bacteria but the
-organization of the tumor community that contributes to
-\emph{Fusobacterium's} role in tumorigenesis ((7)). Finally,
+across the proximal mucosa, distal lumen and distal mucosa. Data
+examining bacterial biofilms on the mucosa of CRC tumors suggests that
+\emph{Fusobacteria} species are more commonly found on proximal tumors
+and in biofilms, indicating that it is not only the presence of the
+bacteria but the organization of the tumor community that contributes to
+\emph{Fusobacterium's} role in tumorigenesis (7). Finally,
 \emph{Fusobacterium} and \emph{Porphyromonas} species have been known to
 not only co-occur on CRC tumors but also to synergistically promote
-tumorigenesis in an oral cancer model ((19), (20)). Thus, further
-analysis of the distribution and activities of these pathogens may
-elucidate a mechanism for development of IBD or CRC subtypes in the
-proximal or distal colon.
+tumorigenesis in an oral cancer model (20), (21). Thus, further analysis
+of the distribution and activities of these pathogens may elucidate a
+mechanism for development of IBD or CRC subtypes in the proximal or
+distal colon.
 
 The \emph{Fusobacterium} species \emph{nucleatum} and \emph{varium} have
-been commonly isolated from mucosal biopsies of patients with IBD
-(cite). Laboratory experiments with these isolates have shown that
+been commonly isolated from mucosal biopsies of patients with IBD (15).
+Laboratory experiments with these isolates have shown that
 disease-isolated \emph{F. nucleatum} are more invasive and stimulate
-more TNF-a production than strains from healthy individuals ((21)),
+more TNF-a production than strains from healthy individuals (22),
 suggesting the bacteria may increase inflammation in the gut as well
-(cite - Dharmani 2011). \emph{F. varium} isolated from UC patients
-caused colonic ulcers in an experimental mouse model (Ohkusa 2003).
-\emph{F. varium} was only detected in 3 of our study participants and
-two of those samples were isolated form the proximal mucosa (cite
-figure). Although there is low occurrance in our study, \emph{F. varium}
-is most commonly isolated from UC patient biopsies from the ileum or
-cecum (cite), suggesting this species may exhibit preference for the
-different environmental conditions of these gastrointestinal sites.
-Further work will assess how gut environment may select for species
-which then cause localized disease.
+(23). \emph{F. varium} isolated from UC patients caused colonic ulcers
+in an experimental mouse model (24). \emph{F. varium} was only detected
+in 3 of our study participants and two of those samples were isolated
+form the proximal mucosa (Figure 6B). Although there is low occurrance
+in our study, \emph{F. varium} is most commonly isolated from UC patient
+biopsies from the ileum or cecum (25), suggesting this species may
+exhibit preference for the different environmental conditions of these
+gastrointestinal sites. Further work will assess how gut environment may
+select for species which then cause localized disease.
 
 Specific comparisons of our findings to previously published gut
 biogeography studies are additionally confounded by the use of bowel
 preparation methods in most other studies. A rare report of a
 matched-colonoscopy study sampled 18 patient's colonic mucosa and
-lumenal contents prior to and after bowel cleansing ((22)). This group
+lumenal contents prior to and after bowel cleansing (26). This group
 found that mucosal and lumenal samples were distinguishable prior to
 bowel cleansing, but that bowel preparation resulted in an increase in
-shared OTUs between each site ((22)). Bowel cleansing not only made the
+shared OTUs between each site (26). Bowel cleansing not only made the
 samples harder to distinguish, it resulted in decreases in diversity
 across sites. Further, the differences were not great enough to overcome
 interpersonal differences between subjects. Bowel preparation clearly
@@ -529,16 +534,16 @@ from 25 to 64.
 \paragraph{Sample collection}\label{sample-collection}
 
 At a baseline visit, subjects were consented and given a home collection
-stool kit (Source of kit supplies). At least one week prior to the
-scheduled colonoscopy, subjects were to collect whole stool at home and
-ship the samples to the University on ice. Notably, subjects did not
-undergo any bowel preparation method prior to sampling. On the procedure
-day, subjects reported to the Michigan Clinical Research Unit at the
+stool kit (Source of kit?). At least one week prior to the scheduled
+colonoscopy, subjects were to collect whole stool at home and ship the
+samples to the University on ice. Notably, subjects did not undergo any
+bowel preparation method prior to sampling. On the procedure day,
+subjects reported to the Michigan Clinical Research Unit at the
 University of Michigan Health System. Patients were consciously sedated
 using Fentanyl, Versed and/or Benadryl as appropriate. A flexible
 sigmoidoscope was first inserted about 25cm into the colon and endoscopy
 brush used to collect lumenal/stool contents. Two lumenal samples were
-collected and the contents immediately deposited into RNAlater (source)
+collected and the contents immediately deposited into RNAlater (Fischer)
 and flash-frozen in liquid nitrogen. The brushes were withdrawn and
 biopsy forceps were used to collect mucosal biopsies on sections of the
 colon that were pink and free of stool matter. Three mucosal biopsies
@@ -557,25 +562,24 @@ solution (Fisher) and 2.8mm ceramic beads (MO BIO Laboratories) were
 added to the bead beating step to enhance DNA recovery from mucosal
 samples. The resulting DNA was used as template for amplification of the
 V4 region of the 16S rRNA gene and fragments were sequenced on an
-Illumina MiSeq as previously described ((23)). Sequences were curated
-using the mothur software as described previously ((24)). The sequences
+Illumina MiSeq as previously described (27). Sequences were curated
+using the mothur software as described previously (28). The sequences
 were assigned taxonomic classification using a naive Bayesian classifier
 trained using a 16S rRNA gene training set from the Ribosomal Database
-Project (RDP) ((25)) and clustered into operational taxonomic units
-(OTUs) based on a 97\% similarity cutoff. Sequencing and analysis of a
-mock community revealed the error rate to be X\%. Samples were rarefied
-to 4231 sequences per sample in order to reduce uneven sampling bias.
+Project (RDP) (29) and clustered into operational taxonomic units (OTUs)
+based on a 97\% similarity cutoff. Sequencing and analysis of a mock
+community revealed the error rate to be 1.8\%. Samples were rarefied to
+4231 sequences per sample in order to reduce uneven sampling bias.
 
 Diversity analysis was performed using the Simpson diversity calculator
-and theta YC calculator metrics in mothur version
-\textless{}3.2?\textgreater{} ((24)). ThetaYC distances were calculated
-to determine the dissimilarity between two samples. Random Forest
-classification models were built using the randomForest R package and
-resultant models were used to identify the OTUs that were most important
-for classifying each location ((26)). To get species-level information
-about sequences of interest, sequences were aligned using blastn and the
-species name was only used if the identity score was \textgreater{}=
-99\%.
+and theta YC calculator metrics in mothur version 3.2? (28). ThetaYC
+distances were calculated to determine the dissimilarity between two
+samples. Random Forest classification models were built using the
+randomForest R package and resultant models were used to identify the
+OTUs that were most important for classifying each location (30). To get
+species-level information about sequences of interest, sequences were
+aligned using blastn and the species name was only used if the identity
+score was \textgreater{}= 99\%.
 
 \paragraph{Statistical analysis}\label{statistical-analysis}
 
@@ -583,11 +587,11 @@ Differences in community membership at the phyla level were tested using
 the analysis of molecular variance (AMOVA) metric in mothur. Differences
 in thetaYC distances by location were tested using the Wilcoxon rank-sum
 test adjusted for multiple comparisons using the Benjamini-Hochberg
-procedure.
-
-\paragraph{Data availability}\label{data-availability}
-
-\paragraph{Github repository}\label{github-repository}
+procedure. \#\#\#\# Data availability 16S rRNA gene sequence reads and
+experiment metadata are available on the NCBI Sequence Read Archive
+(SRA) with accession number XXXX. A reproducible data analysis pipeline
+can be found at
+\url{https://github.com/SchlossLab/Flynn_LRColon_XXXX_2017}.
 
 \newpage
 
@@ -655,8 +659,8 @@ for the distal and proximal mucosa (B) and the distal and proximal lumen
 
 Location and abundance of cancer-associated OTUs. Relative abundance was
 calculated and plotted by sample site for each OTU of interest: (A)
-\emph{Fusobacterium nucleatum} and (B) \emph{Porphyromonas
-asacharolytica}
+\emph{Fusobacterium nucleatum subsp. animalis} (B) \emph{Fusobacterium
+varium} and (C) \emph{Porphyromonas asacharolytica}
 
 \subsubsection*{References}\label{references}
 \addcontentsline{toc}{subsubsection}{References}
@@ -779,8 +783,15 @@ infection is prevalent in human colorectal carcinoma. Genome Research
 \textbf{22}:299--306.
 doi:\href{https://doi.org/10.1101/gr.126516.111}{10.1101/gr.126516.111}.
 
+\hypertarget{ref-Lee2016}{}
+15. \textbf{Lee Y}, \textbf{Eun CS}, \textbf{Lee AR}, \textbf{Park CH},
+\textbf{Han DS}. 2016. FusobacteriumIsolates recovered from colonic
+biopsies of inflammatory bowel disease patients in korea. Annals of
+Laboratory Medicine \textbf{36}:387.
+doi:\href{https://doi.org/10.3343/alm.2016.36.4.387}{10.3343/alm.2016.36.4.387}.
+
 \hypertarget{ref-Hong2011}{}
-15. \textbf{Hong P-Y}, \textbf{Croix JA}, \textbf{Greenberg E},
+16. \textbf{Hong P-Y}, \textbf{Croix JA}, \textbf{Greenberg E},
 \textbf{Gaskins HR}, \textbf{Mackie RI}. 2011. Pyrosequencing-based
 analysis of the mucosal microbiota in healthy individuals reveals
 ubiquitous bacterial groups and micro-heterogeneity. PLoS ONE
@@ -788,7 +799,7 @@ ubiquitous bacterial groups and micro-heterogeneity. PLoS ONE
 doi:\href{https://doi.org/10.1371/journal.pone.0025042}{10.1371/journal.pone.0025042}.
 
 \hypertarget{ref-Stearns2011}{}
-16. \textbf{Stearns JC}, \textbf{Lynch MDJ}, \textbf{Senadheera DB},
+17. \textbf{Stearns JC}, \textbf{Lynch MDJ}, \textbf{Senadheera DB},
 \textbf{Tenenbaum HC}, \textbf{Goldberg MB}, \textbf{Cvitkovitch DG},
 \textbf{Croitoru K}, \textbf{Moreno-Hagelsieb G}, \textbf{Neufeld JD}.
 2011. Bacterial biogeography of the human digestive tract. Scientific
@@ -796,12 +807,12 @@ Reports \textbf{1}.
 doi:\href{https://doi.org/10.1038/srep00170}{10.1038/srep00170}.
 
 \hypertarget{ref-Sears2014}{}
-17. \textbf{Sears CL}, \textbf{Garrett WS}. 2014. Microbes, microbiota,
+18. \textbf{Sears CL}, \textbf{Garrett WS}. 2014. Microbes, microbiota,
 and colon cancer. Cell Host \& Microbe \textbf{15}:317--328.
 doi:\href{https://doi.org/10.1016/j.chom.2014.02.007}{10.1016/j.chom.2014.02.007}.
 
 \hypertarget{ref-Mima2016}{}
-18. \textbf{Mima K}, \textbf{Cao Y}, \textbf{Chan AT}, \textbf{Qian ZR},
+19. \textbf{Mima K}, \textbf{Cao Y}, \textbf{Chan AT}, \textbf{Qian ZR},
 \textbf{Nowak JA}, \textbf{Masugi Y}, \textbf{Shi Y}, \textbf{Song M},
 \textbf{Silva A da}, \textbf{Gu M}, \textbf{Li W}, \textbf{Hamada T},
 \textbf{Kosumi K}, \textbf{Hanyuda A}, \textbf{Liu L}, \textbf{Kostic
@@ -815,18 +826,18 @@ Translational Gastroenterology \textbf{7}:e200.
 doi:\href{https://doi.org/10.1038/ctg.2016.53}{10.1038/ctg.2016.53}.
 
 \hypertarget{ref-Whitmore2014}{}
-19. \textbf{Whitmore SE}, \textbf{Lamont RJ}. 2014. Oral bacteria and
+20. \textbf{Whitmore SE}, \textbf{Lamont RJ}. 2014. Oral bacteria and
 cancer. PLoS Pathogens \textbf{10}:e1003933.
 doi:\href{https://doi.org/10.1371/journal.ppat.1003933}{10.1371/journal.ppat.1003933}.
 
 \hypertarget{ref-Flynn2016}{}
-20. \textbf{Flynn KJ}, \textbf{Baxter NT}, \textbf{Schloss PD}. 2016.
+21. \textbf{Flynn KJ}, \textbf{Baxter NT}, \textbf{Schloss PD}. 2016.
 Metabolic and community synergy of oral bacteria in colorectal cancer.
 mSphere \textbf{1}:e00102--16.
 doi:\href{https://doi.org/10.1128/msphere.00102-16}{10.1128/msphere.00102-16}.
 
 \hypertarget{ref-Strauss2011}{}
-21. \textbf{Strauss J}, \textbf{Kaplan GG}, \textbf{Beck PL},
+22. \textbf{Strauss J}, \textbf{Kaplan GG}, \textbf{Beck PL},
 \textbf{Rioux K}, \textbf{Panaccione R}, \textbf{DeVinney R},
 \textbf{Lynch T}, \textbf{Allen-Vercoe E}. 2011. Invasive potential of
 gut mucosa-derived fusobacterium nucleatum positively correlates with
@@ -834,8 +845,29 @@ IBD status of the host. Inflammatory Bowel Diseases
 \textbf{17}:1971--1978.
 doi:\href{https://doi.org/10.1002/ibd.21606}{10.1002/ibd.21606}.
 
+\hypertarget{ref-Dharmani2011}{}
+23. \textbf{Dharmani P}, \textbf{Strauss J}, \textbf{Ambrose C},
+\textbf{Allen-Vercoe E}, \textbf{Chadee K}. 2011. Fusobacterium
+nucleatum infection of colonic cells stimulates MUC2 mucin and tumor
+necrosis factor alpha. Infection and Immunity \textbf{79}:2597--2607.
+doi:\href{https://doi.org/10.1128/iai.05118-11}{10.1128/iai.05118-11}.
+
+\hypertarget{ref-Ohkusa2003}{}
+24. \textbf{Ohkusa T}. 2003. Induction of experimental ulcerative
+colitis by fusobacterium varium isolated from colonic mucosa of patients
+with ulcerative colitis. Gut \textbf{52}:79--83.
+doi:\href{https://doi.org/10.1136/gut.52.1.79}{10.1136/gut.52.1.79}.
+
+\hypertarget{ref-Ohkusa2002}{}
+25. \textbf{Ohkusa T}, \textbf{Sato N}, \textbf{Ogihara T},
+\textbf{Morita K}, \textbf{Ogawa M}, \textbf{Okayasu I}. 2002.
+Fusobacterium varium localized in the colonic mucosa of patients with
+ulcerative colitis stimulates species-specific antibody. Journal of
+Gastroenterology and Hepatology \textbf{17}:849--853.
+doi:\href{https://doi.org/10.1046/j.1440-1746.2002.02834.x}{10.1046/j.1440-1746.2002.02834.x}.
+
 \hypertarget{ref-Shobar2016}{}
-22. \textbf{Shobar RM}, \textbf{Velineni S}, \textbf{Keshavarzian A},
+26. \textbf{Shobar RM}, \textbf{Velineni S}, \textbf{Keshavarzian A},
 \textbf{Swanson G}, \textbf{DeMeo MT}, \textbf{Melson JE},
 \textbf{Losurdo J}, \textbf{Engen PA}, \textbf{Sun Y}, \textbf{Koenig
 L}, \textbf{Mutlu EA}. 2016. The effects of bowel preparation on
@@ -845,7 +877,7 @@ Clinical and Translational Gastroenterology \textbf{7}:e143.
 doi:\href{https://doi.org/10.1038/ctg.2015.54}{10.1038/ctg.2015.54}.
 
 \hypertarget{ref-Kozich2013}{}
-23. \textbf{Kozich JJ}, \textbf{Westcott SL}, \textbf{Baxter NT},
+27. \textbf{Kozich JJ}, \textbf{Westcott SL}, \textbf{Baxter NT},
 \textbf{Highlander SK}, \textbf{Schloss PD}. 2013. Development of a
 dual-index sequencing strategy and curation pipeline for analyzing
 amplicon sequence data on the MiSeq illumina sequencing platform.
@@ -853,7 +885,7 @@ Applied and Environmental Microbiology \textbf{79}:5112--5120.
 doi:\href{https://doi.org/10.1128/aem.01043-13}{10.1128/aem.01043-13}.
 
 \hypertarget{ref-Schloss2009}{}
-24. \textbf{Schloss PD}, \textbf{Westcott SL}, \textbf{Ryabin T},
+28. \textbf{Schloss PD}, \textbf{Westcott SL}, \textbf{Ryabin T},
 \textbf{Hall JR}, \textbf{Hartmann M}, \textbf{Hollister EB},
 \textbf{Lesniewski RA}, \textbf{Oakley BB}, \textbf{Parks DH},
 \textbf{Robinson CJ}, \textbf{Sahl JW}, \textbf{Stres B},
@@ -865,14 +897,14 @@ communities. Applied and Environmental Microbiology
 doi:\href{https://doi.org/10.1128/aem.01541-09}{10.1128/aem.01541-09}.
 
 \hypertarget{ref-Wang2007}{}
-25. \textbf{Wang Q}, \textbf{Garrity GM}, \textbf{Tiedje JM},
+29. \textbf{Wang Q}, \textbf{Garrity GM}, \textbf{Tiedje JM},
 \textbf{Cole JR}. 2007. Naive bayesian classifier for rapid assignment
 of rRNA sequences into the new bacterial taxonomy. Applied and
 Environmental Microbiology \textbf{73}:5261--5267.
 doi:\href{https://doi.org/10.1128/aem.00062-07}{10.1128/aem.00062-07}.
 
 \hypertarget{ref-Liaw2002}{}
-26. \textbf{Liaw A}, \textbf{Wiener M}. 2002. Classification and
+30. \textbf{Liaw A}, \textbf{Wiener M}. 2002. Classification and
 regression by randomForest. R News: The Newsletter of the R Project
 \textbf{2}:18--22.
 

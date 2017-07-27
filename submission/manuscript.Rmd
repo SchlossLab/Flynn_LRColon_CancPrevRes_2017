@@ -401,17 +401,17 @@ rsls_abunds <- shared_meta[shared_meta$location=='RS', LRlumen_otu_feat]/10000 +
 
 
 ```{r oncogenic_otus, echo=FALSE}
-subsampled_meta <- merge(meta_file, subsampled_file, by.x='group', by.y='row.names')
+subsampled_meta <- merge(meta_file, subsample, by.x='group', by.y='row.names')
 fuso179 <- subsampled_meta[, colnames(subsampled_meta) %in% c("group", "patient", "location", "Otu00179")]
 subsampled_to = 4231
 
 fuso179[,5] <- (fuso179[,4]/subsampled_to)*100
 names(fuso179)[5] <- "Otu00179_relAbund"
 
-p_152 <-subsampled_meta[, colnames(shared_meta) %in% c("Group", "patient", "location", "Otu00152")]
+p_152 <-subsampled_meta[, colnames(subsampled_meta) %in% c("Group", "patient", "location", "Otu00152")]
 
-p_152[,4] <- (p_152[,3]/subsampled_to) *100
-names(p_152)[4] <- "Otu152_abund"
+p_152[,5] <- (p_152[,4]/subsampled_to) *100
+names(p_152)[5] <- "Otu152_abund"
 
 fusoviv <- subsampled_meta[, colnames(subsampled_meta) %in% c("group", "patient", "location", "Otu00472")]
 fusoviv[,5] <- (fusoviv[,4]/4321)*100

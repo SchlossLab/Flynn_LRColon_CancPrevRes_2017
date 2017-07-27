@@ -42,7 +42,7 @@ phy_plot <- ggplot(phyla_RAmelt, aes(x=location, y=value)) + geom_boxplot(aes(co
   geom_boxplot(aes(fill=variable), outlier.shape=21, outlier.size=2.5) + theme_bw() + 
   theme(axis.text = element_text(size= 16), axis.title= element_text(size=18), legend.text=element_text(size=14), legend.title=element_text(size=16)) +
   scale_x_discrete(limits = positions, breaks=positions, 
-                   labels=c("R Mucosa", "R Lumen", "L Mucosa", "L Lumen", "Stool")) +
+                   labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
   theme(axis.title.x=element_blank(), panel.grid.major.x = element_blank(),panel.grid.minor.x = element_blank()) +
   theme(legend.justification = c(0.999, 0.999), legend.position = c(0.999, 0.999)) + scale_fill_brewer(palette="Dark2", name="Phylum") +
   ylab("% Relative Abundance") 
@@ -57,7 +57,7 @@ simpmeta$location <- factor(simpmeta$location, c("LB","RB", "LS", "RS", "SS"))
 positions <- c("RB", "RS", "LB", "LS", "SS")
 simp_plot <- ggplot(simpmeta, aes(x=location, y=invsimpson, group =1)) +geom_point() +geom_jitter(width=0.2) +theme_bw() + ylab("Inverse Simpson Diversity") +
   scale_x_discrete(limits = positions, breaks=positions, 
-                   labels=c("R Mucosa", "R Lumen", "L Mucosa", "L Lumen", "Stool")) +
+                   labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
   theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 16), axis.title= element_text(size=18)) +
   stat_summary(aes(x=location, y=invsimpson), data = simpmeta, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 

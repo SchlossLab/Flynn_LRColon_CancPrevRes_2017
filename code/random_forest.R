@@ -195,8 +195,8 @@ plot(cv10f_roc_left_bs, col = 'red', lwd=3, add=T, lty=1)
 mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.5)
 mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.5)
 legend('bottom', legend=c(#sprintf('Lumen vs Mucosa, 10-fold CV, AUC = 0.925'),
-                          sprintf('L Lumen vs L Mucosa, 10-fold CV, AUC =0.980'),
-                          sprintf('R Lumen vs R Mucosa, 10-fold CV, AUC = 0.797')
+                          sprintf('D Lumen vs D Mucosa, 10-fold CV, AUC =0.980'),
+                          sprintf('P Lumen vs P Mucosa, 10-fold CV, AUC = 0.797')
                                #sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
                                #sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
 ),lty=c(1, 1, 1), lwd=3, col=c('red', 'blue'), bty='n', cex=1.2)
@@ -209,8 +209,8 @@ plot(cv10f_roc_muc,col = 'green4', lwd=3, add=T, lty=1) #r vs l mucosa cross val
 plot(cv10f_roc_lum, col = 'orange', lwd=3, add=T, lty=1) #r vs l lumen cross validation
 mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.2)
 mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.2)
-legend('bottom', legend=c(sprintf('L mucosa vs R mucosa 10-fold CV, AUC = 0.912'),
-                          sprintf('L lumen vs R lumen 10-fold CV, AUC = 0.7551')
+legend('bottom', legend=c(sprintf('D mucosa vs P mucosa 10-fold CV, AUC = 0.912'),
+                          sprintf('D lumen vs P lumen 10-fold CV, AUC = 0.7551')
                           # sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
                           # sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
 ),lty=c(1, 1), lwd=2, col=c('green4', 'orange'), bty='n', cex=1.2)
@@ -425,7 +425,7 @@ legend('topright', legend=c("Left lumen", "Right lumen"), pch=c(21, 21), pt.bg=c
 ######################################################## build and export figure 
 #export as PDF
 
-plot_file <- '~/Documents/Schloss_Lab/KWS_Project/Flynn_LRColon_XXXX_2017/submission/figure_4.pdf'
+plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_4.pdf'
 pdf(file=plot_file, width=9, height=12)
 layout(matrix(c(1,
                 2,
@@ -440,8 +440,8 @@ plot(cv10f_roc_left_bs, col = 'red', lwd=3, add=T, lty=1)
 mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.2)
 mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.2)
 legend('bottom', legend=c(
-  sprintf('L Lumen vs L Mucosa, 10-fold CV, AUC =0.980'),
-  sprintf('R Lumen vs R Mucosa, 10-fold CV, AUC = 0.797')
+  sprintf('D Lumen vs D Mucosa, 10-fold CV, AUC =0.980'),
+  sprintf('P Lumen vs P Mucosa, 10-fold CV, AUC = 0.797')
 ),lty=c(1, 1, 1), lwd=3, col=c('red', 'blue'), bty='n', cex=1.2)
 
 #RB vs RS
@@ -464,7 +464,7 @@ for(i in right_otu_feat){
 }
 axis(2, at=seq(1,index-2,2), labels=otu_taxa_right$tax_label, las=1, line=-0.5, tick=F, cex.axis=1.2)
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"), cex.axis=1.2)
-legend('topright', legend=c("Right mucosa", "Right lumen"), pch=c(21, 21), pt.bg=c("orange","purple"), cex=1.2)
+legend('topright', legend=c("Proximal mucosa", "Proximal lumen"), pch=c(21, 21), pt.bg=c("orange","purple"), cex=1.2)
 
 
 #just LB vs LS 
@@ -486,7 +486,7 @@ for(i in left_otu_feat){
 }
 axis(2, at=seq(1,index-2,2), labels=otu_taxa_left$tax_label, las=1, line=-0.5, tick=F, cex.axis=1.2)
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"), cex.axis=1.2)
-legend('topright', legend=c("Left mucosa", "Left lumen"), pch=c(21, 21), pt.bg=c("yellow","lightblue"), cex=1.2)
+legend('topright', legend=c("Distal mucosa", "Distal lumen"), pch=c(21, 21), pt.bg=c("yellow","lightblue"), cex=1.2)
 
 
 dev.off()
@@ -494,7 +494,7 @@ dev.off()
 ####################################### Figure 5
 #export as PDF
 
-plot_file <- '~/Documents/Schloss_Lab/KWS_Project/Flynn_LRColon_XXXX_2017/submission/figure_5.pdf'
+plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_5.pdf'
 pdf(file=plot_file, width=9, height=12)
 layout(matrix(c(1,
                 2,
@@ -508,8 +508,8 @@ plot(cv10f_roc_muc,col = 'green4', lwd=3, add=T, lty=1) #r vs l mucosa cross val
 plot(cv10f_roc_lum, col = 'orange', lwd=3, add=T, lty=1) #r vs l lumen cross validation
 mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.2)
 mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.2)
-legend('bottom', legend=c(sprintf('L mucosa vs R mucosa 10-fold CV, AUC = 0.912'),
-                          sprintf('L lumen vs R lumen 10-fold CV, AUC = 0.7551')
+legend('bottom', legend=c(sprintf('D mucosa vs P mucosa 10-fold CV, AUC = 0.912'),
+                          sprintf('D lumen vs P lumen 10-fold CV, AUC = 0.7551')
                           # sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
                           # sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
 ),lty=c(1, 1), lwd=2, col=c('green4', 'orange'), bty='n', cex=1.2)
@@ -533,7 +533,7 @@ for(i in LRbowel_otu_feat){
 }
 axis(2, at=seq(1,index-2,2), labels=otu_taxa_LRbowel$tax_label, las=1, line=-0.5, tick=F, cex.axis=1.2)
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"), cex.axis=1.2)
-legend('topright', legend=c("Left mucosa", "Right mucosa"), pch=c(21, 21), pt.bg=c("darkgreen","pink"), cex=1.2)
+legend('topright', legend=c("Distal mucosa", "Proximal mucosa"), pch=c(21, 21), pt.bg=c("darkgreen","pink"), cex=1.2)
 
 #LS vs RS
 LRlumen_otu_feat <- colnames(aucrf_data_LRlumen[2:6])
@@ -554,6 +554,6 @@ for(i in LRlumen_otu_feat){
 }
 axis(2, at=seq(1,index-2,2), labels=otu_taxa_LRlumen$tax_label, las=1, line=-0.5, tick=F, cex.axis=1.2)
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"), cex.axis=1.2)
-legend('topright', legend=c("Left lumen", "Right lumen"), pch=c(21, 21), pt.bg=c("brown","magenta"), cex=1.2)
+legend('topright', legend=c("Distal lumen", "Proximal lumen"), pch=c(21, 21), pt.bg=c("brown","magenta"), cex=1.2)
 
 dev.off()

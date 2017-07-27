@@ -37,7 +37,7 @@ positions <- c("RB", "RS", "LB", "LS", "SS")
 fuso_plot <- ggplot(fuso179, aes(x=location, y=Otu00179_relAbund)) +geom_jitter(width=0.3) +theme_bw() +
   ylab("F. nucleatum Relative Abundance") +
   scale_x_discrete(limits = positions, breaks=positions, 
-                   labels=c("R Mucosa", "R Lumen", "L Mucosa", "L Lumen", "Stool")) +
+                   labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
   theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=14))
 
 #IBD fuso OTU - F. varium 
@@ -50,7 +50,7 @@ positions <- c("RB", "RS", "LB", "LS", "SS")
 fusoviv_plot <- ggplot(fusoviv, aes(x=location, y=Otu00472_relAbund)) +geom_jitter(width=0.3) +theme_bw() +
   ylab("F. varium Relative Abundance") +
   scale_x_discrete(limits = positions, breaks=positions, 
-                   labels=c("R Mucosa", "R Lumen", "L Mucosa", "L Lumen", "Stool")) +
+                   labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
   theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=14))
 
 
@@ -62,7 +62,7 @@ p_asach <- shared_meta[, colnames(shared_meta) %in% c("Group", "patient", "locat
 p_asach[,4] <- (p_asach[,3]/4321) *100
 names(p_asach)[4] <- "Otu00152_abund"
 
-p_152 <-subsampled_meta[, colnames(shared_meta) %in% c("Group", "patient", "location", "Otu00152")]
+p_152 <-subsampled_meta[, colnames(subsampled_meta) %in% c("Group", "patient", "location", "Otu00152")]
 
 p_152[,4] <- (p_152[,3]/4321) *100
 names(p_152)[4] <- "Otu152_abund"
@@ -75,7 +75,7 @@ positions <- c("RB", "RS", "LB", "LS", "SS")
 porphy_plot <- ggplot(p_152, aes(x=location, y=Otu152_abund)) +geom_jitter(width=0.3) +theme_bw() +
   ylab("P. asacharolytica Relative Abundance") +
   scale_x_discrete(limits = positions, breaks=positions, 
-                   labels=c("R Mucosa", "R Lumen", "L Mucosa", "L Lumen", "Stool")) +
+                   labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
   theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=14))
 
 
@@ -90,13 +90,15 @@ ggplot(p_micra, aes(x=location, y=Otu00248_abund)) +geom_jitter() +theme_bw()
 ########################################Build figure 6 
 #export as PDF
 
-plot_file <- '~/Documents/Schloss_Lab/KWS_Project/Flynn_LRColon_XXXX_2017/submission/figure_6.pdf'
+plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_6.pdf'
 pdf(file=plot_file, width=9, height=6)
 layout(matrix(c(1,
                 2), 
               nrow=2, byrow = TRUE))
 
 fuso_plot
+
+fusoviv_plot
 
 porphy_plot
 

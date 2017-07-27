@@ -38,14 +38,14 @@ tycpositions <- c("RB_RS", "LS_RS", "LB_RB", "LB_LS")
 lvr_plot <- ggplot(lvsr, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) +theme_bw() + 
   theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=16)) + 
   scale_x_discrete(limits = tycpositions, breaks = tycpositions,
-                   labels=c("R Mucosa vs R Lumen", "L Lumen vs R Lumen", "L Mucosa vs R Mucosa", "L Mucosa vs L Lumen")) +
+                   labels=c("P Mucosa vs P Lumen", "D Lumen vs P Lumen", "D Mucosa vs P Mucosa", "D Mucosa vs D Lumen")) +
   ylab("ThetaYC distance") 
 
 exitpositions <- c("RB_SS", "RS_SS", "LB_SS", "LS_SS")
 exit_plot <- ggplot(exittyc, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) +theme_bw() +
   theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=16)) +
   scale_x_discrete(limits=exitpositions, breaks=exitpositions,
-                   labels=c("R Mucosa vs Stool", "R Lumen vs Stool", "L Mucosa vs Stool", "L Lumen vs Stool")) +
+                   labels=c("P Mucosa vs Stool", "P Lumen vs Stool", "D Mucosa vs Stool", "D Lumen vs Stool")) +
   theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")
 
 #trying to get adonis to work for comparisons 
@@ -141,7 +141,7 @@ wilcox.test(thetayc ~ same_pt, data = alltyc)
 # build and export figure 
 #export as PDF
 
-plot_file <- '~/Documents/Schloss_Lab/Flynn_LRColon_XXXX_2017/submission/figure_3.pdf'
+plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_3.pdf'
 pdf(file=plot_file, width=12, height=11)
 layout(matrix(c(1,
                 2,

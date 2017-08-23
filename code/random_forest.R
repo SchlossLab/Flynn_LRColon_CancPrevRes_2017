@@ -73,7 +73,18 @@ aucrf_data_LRlumen <- auc_loc(rel_meta, "LS", "RS")
 aucrf_data_allum <- auc_site(rel_meta, "mucosa", "stool")
 
 #testing building the model on filtered data
-aucrf_filter_left_bs <- auc_loc(filter_abund_meta, "LB", "LS") # this is not working
+aucrf_filter_left_bs <- auc_loc(filter_abund_meta, "LB", "LS") # this works but we need it to output an aucrf object. change function?
+
+#testing the AUCRFcv approach for optimalset feature selection 
+aucrf_cv_left_bs <- AUCRFcv(rf_aucrf, nCV=10, M=20)
+optimal_leftbs <- OptimalSet(aucrf_cv_left_bs)
+
+#take top ten OTUs from optimal set, put in a list, then use list to subset filtered data
+
+#put new subsetted data in to randomForest, get auc, do CV
+
+#then do that for all models and plot 
+
 
 #need to fix specific function for these to output just the rf object 
 #rf_exitlum_aucrf <- auc_site(rel_meta, "stool", "exit") # not working 

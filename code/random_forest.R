@@ -15,13 +15,19 @@ for (dep in pack_used){
 meta_file <- read.table(file='data/raw/kws_metadata.tsv', header = T)
 shared_file <- read.table(file='data/mothur/kws_final.an.shared', sep = '\t', header=T, row.names=2)
 tax_file <- read.table(file='data/mothur/kws_final.an.cons.taxonomy', sep = '\t', header=T, row.names=1)
+filter_shared <- shared_file <- read.table(file='data/mothur/kws_final.an.0.03.filter.shared', sep = '\t', header=T, row.names=2)
 
 #make OTU abundance file
 #Create df with relative abundances
 shared_file <- subset(shared_file, select = -c(numOtus, label))
 shared_meta <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
 
+filter_shared <- subset(shared_file, select = -c(numOtus, label))
+filter_meta <- merge(meta_file, filter_shared, by.x='group', by.y='row.names')
+
 rel_abund <- 100*shared_file/unique(apply(shared_file, 1, sum))
+
+filter_relabund <- 100*filter_shared/unique(apply(filter_shared, 1, sum))
 
 #Create vector of OTUs with median abundances >1%
 OTUs_1 <- apply(rel_abund, 2, max) > 1
@@ -29,6 +35,12 @@ OTU_list <- colnames(rel_abund)[OTUs_1]
 #get df of just top OTUs
 rel_abund_top <- rel_abund[, OTUs_1]
 rel_meta <- merge(meta_file, rel_abund_top, by.x='group', by.y="row.names")
+
+OTUs_filter <- apply(filter_relabund, 2, max) >1
+OTU_filter_list <- colnames(filter_relabund)[OTUs_filter]
+
+filter_top <- filter_relabund[, OTUs_filter]
+filter_abund_meta <- merge(meta_file, filter_top, by.x='group', by.y='row.names')
 
 seed <- 1
 n_trees <- 2001
@@ -59,6 +71,9 @@ aucrf_data_LRbowel <- auc_loc(rel_meta, "LB", "RB")
 aucrf_data_right_bs <- auc_loc(rel_meta, "RB", "RS")
 aucrf_data_LRlumen <- auc_loc(rel_meta, "LS", "RS")
 aucrf_data_allum <- auc_site(rel_meta, "mucosa", "stool")
+
+#testing building the model on filtered data
+aucrf_filter_left_bs <- auc_loc(filter_abund_meta, "LB", "LS") # this is not working
 
 #need to fix specific function for these to output just the rf object 
 #rf_exitlum_aucrf <- auc_site(rel_meta, "stool", "exit") # not working 

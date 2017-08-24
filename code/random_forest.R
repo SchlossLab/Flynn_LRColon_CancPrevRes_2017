@@ -79,11 +79,41 @@ aucrf_filter_left_bs <- auc_loc(filter_abund_meta, "LB", "LS") # this works but 
 aucrf_cv_left_bs <- AUCRFcv(rf_aucrf, nCV=10, M=20)
 optimal_leftbs <- OptimalSet(aucrf_cv_left_bs)
 
+#testing AUCRFcv approach on unfiltered data
+left_test <- subset(rel_meta, location %in% c("LB", "LS"))
+left_test$location <- factor(left_test$location)
+#change levels of variable of interest to 0/1
+levels(left_test$location) <- c(1:length(levels(left_test$location))-1)
+# create RF model
+set.seed(seed)
+rf_left_test <- AUCRF(location ~ ., data = select(left_test, location, contains("Otu")),
+                  ntree = n_trees, pdel = 0.05, ranking = 'MDA')
+
+aucrf_cv_left_unfiltered <- AUCRFcv(rf_left_test, nCV=10, M=20)
+optimal_left_unfiltered <- OptimalSet(aucrf_cv_left_unfiltered)
+
 #take top ten OTUs from optimal set, put in a list, then use list to subset filtered data
+
+left_top6 <- as.list(optimal_left_unfiltered[,1])
+#but this is the same list as the Xopt from the rf object. so do i even need to do the aucrfcv with optimim set?? this is still main issue to figure out
 
 #put new subsetted data in to randomForest, get auc, do CV
 
 #then do that for all models and plot 
+
+#lets try testing with a bigger dataset 
+bowel_test <- subset(rel_meta, location %in% c("LB", "RB"))
+bowel_test$location <- factor(bowel_test$location)
+#change levels of variable of interest to 0/1
+levels(bowel_test$location) <- c(1:length(levels(bowel_test$location))-1)
+# create RF model
+set.seed(seed)
+rf_bowel_test <- AUCRF(location ~ ., data = select(bowel_test, location, contains("Otu")),
+                      ntree = n_trees, pdel = 0.05, ranking = 'MDA')
+
+aucrf_cv_bowel_unfiltered <- AUCRFcv(rf_bowel_test, nCV=10, M=20)
+optimal_bowel_unfiltered <- OptimalSet(aucrf_cv_bowel_unfiltered)
+
 
 
 #need to fix specific function for these to output just the rf object 

@@ -94,9 +94,9 @@ optimal_left_unfiltered <- OptimalSet(aucrf_cv_left_unfiltered)
 
 #take top ten OTUs from optimal set, put in a list, then use list to subset filtered data
 
-left_top6 <- as.list(optimal_left_unfiltered[,1])
+left_top6 <- as.vector(optimal_left_unfiltered$Name)
 #but this is the same list as the Xopt from the rf object. so do i even need to do the aucrfcv with optimim set?? this is still main issue to figure out
-
+#maybe need to do 100 iters??
 #put new subsetted data in to randomForest, get auc, do CV
 
 #then do that for all models and plot 
@@ -111,8 +111,40 @@ set.seed(seed)
 rf_bowel_test <- AUCRF(location ~ ., data = select(bowel_test, location, contains("Otu")),
                       ntree = n_trees, pdel = 0.05, ranking = 'MDA')
 
-aucrf_cv_bowel_unfiltered <- AUCRFcv(rf_bowel_test, nCV=10, M=20)
+aucrf_cv_bowel_unfiltered <- AUCRFcv(rf_bowel_test, nCV=10, M=100)
 optimal_bowel_unfiltered <- OptimalSet(aucrf_cv_bowel_unfiltered)
+
+bowel_top10 <- as.vector(optimal_bowel_unfiltered$Name[1:10])
+
+#subset shared to just be these columns then run randomForest again 
+
+bowel_top10_shared <- subset(rel_meta, select=colnames(rel_meta) %in% c('location',bowel_top10))
+rf_bowel_top10 <- randomize_loc(bowel_top10_shared, "LB", "RB")
+auc_bowel_top10 <- auc_loc(bowel_top10_shared, "LB", "RB")
+
+
+######doing the feat selection thing for the LS and RS model, see if it changes AUC or model, then decide if all of this is worth it.
+
+lumen_test <- subset(rel_meta, location %in% c("LS", "RS"))
+lumen_test$location <- factor(lumen_test$location)
+levels(lumen_test$location) <- c(1:length(levels(lumen_test$location))-1)
+set.seed(seed)
+rf_lumen_test <- AUCRF(location ~ ., data = select(lumen_test, location, contains("Otu")),
+                       ntree = n_trees, pdel = 0.05, ranking = 'MDA')
+
+aucrf_cv_lumen_unfiltered <- AUCRFcv(rf_bowel_test, nCV=10, M=100)
+optimal_lumen_unfiltered <- OptimalSet(aucrf_cv_lumen_unfiltered)
+
+bowel_top10 <- as.vector(optimal_bowel_unfiltered$Name[1:10])
+
+#subset shared to just be these columns then run randomForest again 
+
+bowel_top10_shared <- subset(rel_meta, select=colnames(rel_meta) %in% c('location',bowel_top10))
+rf_bowel_top10 <- randomize_loc(bowel_top10_shared, "LB", "RB")
+auc_bowel_top10 <- auc_loc(bowel_top10_shared, "LB", "RB")
+
+
+
 
 
 
@@ -216,6 +248,31 @@ for(j in 1:iters){
 }
 cv10f_roc_muc <- roc(cv10f_all_resp_muc~cv10f_all_pred_muc)
 
+######10fold cross v with reduced feature input
+#10 fold cross validation for L vs R mucosa
+
+iters <- 100
+cv10f_aucs_muc10 <- c()
+cv10f_all_resp_muc10 <- c()
+cv10f_all_pred_muc10 <- c()
+for(j in 1:iters){
+  set.seed(j)
+  sampling_muc <- sample(1:nrow(auc_bowel_top10),nrow(auc_bowel_top10),replace=F)
+  cv10f_probs_muc10 <- rep(NA,39)
+  for(i in seq(1,36,4)){
+    train_muc <- auc_bowel_top10[sampling_muc[-(i:(i+3))],]
+    test_muc <- auc_bowel_top10[sampling_muc[i:(i+3)],]
+    set.seed(seed)
+    temp_model_muc <- AUCRF(location~., data=train_muc, pdel=0.99, ntree=500)
+    cv10f_probs_muc10[sampling_muc[i:(i+3)]] <- predict(temp_model_muc$RFopt, test_muc, type='prob')[,2]
+  }
+  cv10f_roc_muc10 <- roc(auc_bowel_top10$location~cv10f_probs_muc10)
+  cv10f_all_pred_muc10 <- c(cv10f_all_pred_muc10, cv10f_probs_muc10)
+  cv10f_all_resp_muc10 <- c(cv10f_all_resp_muc10, auc_bowel_top10$location)
+  cv10f_aucs_muc10[j] <- cv10f_roc_muc10$auc #stores aucs for all iterations, can use to calc IQR
+}
+cv10f_roc_muc10 <- roc(cv10f_all_resp_muc10~cv10f_all_pred_muc10)
+
 
 #10 fold cross validation for L vs R lumen
 iters <- 100
@@ -270,6 +327,21 @@ legend('bottom', legend=c(sprintf('D mucosa vs P mucosa 10-fold CV, AUC = 0.912'
                           # sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
                           # sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
 ),lty=c(1, 1), lwd=2, col=c('green4', 'orange'), bty='n', cex=1.2)
+
+
+#####10fold plot left vs right mucosa and lumen plot 
+par(mar=c(4,4,1,1))
+plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
+plot(cv10f_roc_muc10,col = 'green4', lwd=3, add=T, lty=1) #r vs l mucosa cross validation
+plot(cv10f_roc_muc, col = 'orange', lwd=3, add=T, lty=1) #r vs l lumen cross validation
+mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.2)
+mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.2)
+legend('bottom', legend=c(sprintf('D mucosa vs P mucosa 10-fold CV, AUC = 0.912'),
+                          sprintf('D lumen vs P lumen 10-fold CV, AUC = 0.7551')
+                          # sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
+                          # sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
+),lty=c(1, 1), lwd=2, col=c('green4', 'orange'), bty='n', cex=1.2)
+
 
 #generate entire figure just of exit comparisons 
 par(mar=c(4,4,1,1))

@@ -64,6 +64,7 @@ rf_exitmuc <- randomize_site(rel_meta, "mucosa", "exit")
 
 
 #####AUCRF#####################################################################################
+#wait should i plot new and old models on the same plot for lab meeting? YES. do in other script window 
 
 # create RF model with AUCRF outputs top OTUs
 aucrf_data_left_bs <- auc_loc(rel_meta, "LB", "LS")
@@ -76,6 +77,11 @@ aucrf_data_allum <- auc_site(rel_meta, "mucosa", "stool")
 aucrf_filter_left_bs <- auc_loc(filter_abund_meta, "LB", "LS") # this works but we need it to output an aucrf object. change function?
 
 #testing the AUCRFcv approach for optimalset feature selection 
+testsub <- subset(filter_abund_meta, location %in% c("LB", "LS"))
+testsub$location <- factor(testsub$location)
+levels(testsub$location) <- c(1:length(levels(testsub$location))-1)
+
+rf_aucrf <- AUCRF(location~., data=select(testsub, location, contains("Otu")), ntree=n_trees, pdel=0.05, ranking="MDA")
 aucrf_cv_left_bs <- AUCRFcv(rf_aucrf, nCV=10, M=20)
 optimal_leftbs <- OptimalSet(aucrf_cv_left_bs)
 

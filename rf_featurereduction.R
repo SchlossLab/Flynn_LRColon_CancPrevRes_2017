@@ -155,13 +155,13 @@ auc_left_top6 <- auc_loc(left_top6_shared, "LB", "LS")
 
 #10fold CV for L lumen vs L mucosa
 iters <- 100
-cv10f_aucs <- c()
+cv10f_aucs_left6 <- c()
 cv10f_all_resp_left_bs6 <- c()
 cv10f_all_pred_left_bs6 <- c()
 for(j in 1:iters){
   set.seed(j)
   sampling <- sample(1:nrow(auc_left_top6),nrow(auc_left_top6),replace=F)
-  cv10f_probs <- rep(NA,39)
+  cv10f_probs_left6 <- rep(NA,39)
   for(i in seq(1,36,4)){
     train_left_bs <- auc_left_top6[sampling[-(i:(i+3))],]
     test_left_bs <- auc_left_top6[sampling[i:(i+3)],]
@@ -195,13 +195,13 @@ auc_right_top6 <- auc_loc(right_top6_shared, "RB", "RS")
 
 #10fold CV for R lumen vs R mucosa
 iters <- 100
-cv10f_aucs <- c()
+cv10f_aucs_right6 <- c()
 cv10f_all_resp_right_bs6 <- c()
 cv10f_all_pred_right_bs6 <- c()
 for(j in 1:iters){
   set.seed(j)
   sampling <- sample(1:nrow(auc_right_top6),nrow(auc_right_top6),replace=F)
-  cv10f_probs <- rep(NA,39)
+  cv10f_probs_right6 <- rep(NA,39)
   for(i in seq(1,36,4)){
     train_right_bs <- auc_right_top6[sampling[-(i:(i+3))],]
     test_right_bs <- auc_right_top6[sampling[i:(i+3)],]
@@ -235,7 +235,20 @@ legend('bottom', legend=c(sprintf('D mucosa vs P mucosa 10-fold CV, AUC = 0.912'
 ),lty=c(1, 1), lwd=2, col=c('green4', 'orange'), bty='n', cex=1.2)
 
 
-
+#Lumen vs mucosa plot 
+par(mar=c(4,4,1,1))
+plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
+plot(cv10f_roc_right_bs6, col='blue', lwd=3, add=T, lty=1)
+#plot(cv10f_roc, col = 'purple', lwd=3, add=T, lty=1)
+plot(cv10f_roc_left_bs6, col = 'red', lwd=3, add=T, lty=1)
+mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.5)
+mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.5)
+legend('bottom', legend=c(#sprintf('Lumen vs Mucosa, 10-fold CV, AUC = 0.925'),
+  sprintf('D Lumen vs D Mucosa, 10-fold CV, AUC ='),
+  sprintf('P Lumen vs P Mucosa, 10-fold CV, AUC = ')
+  #sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
+  #sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
+),lty=c(1, 1, 1), lwd=3, col=c('red', 'blue'), bty='n', cex=1.2)
 
 
 

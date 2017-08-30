@@ -92,6 +92,7 @@ for(j in 1:iters){
 }
 cv10f_roc_muc10 <- roc(cv10f_all_resp_muc10~cv10f_all_pred_muc10)
 
+one_run <- roc(auc_bowel_top10$location~)
 
 ###########Left lumen (stool) vs Right lumen (stool)
 
@@ -225,41 +226,76 @@ cv10f_roc_right_bs6 <- roc(cv10f_all_resp_right_bs6~cv10f_all_pred_right_bs6)
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
 plot(cv10f_roc_muc10,col = 'green4', lwd=3, add=T, lty=1) #r vs l mucosa cross validation
-plot(cv10f_roc_lum10, col = 'orange', lwd=3, add=T, lty=1) #r vs l lumen cross validation
+plot(cv10f_roc_muc,col = 'green4', lwd=3, add=T, lty=2) 
+plot(cv10f_roc_lum10, col = 'orange', lwd=3, add=T, lty=1)
+plot(cv10f_roc_lum, col = 'orange', lwd=3, add=T, lty=2) #r vs l lumen cross validation
 mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.2)
 mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.2)
-legend('bottom', legend=c(sprintf('D mucosa vs P mucosa 10-fold CV, AUC = 0.912'),
-                          sprintf('D lumen vs P lumen 10-fold CV, AUC = 0.6243'),
-                          sprintf('Mucosa model vs Lumen model', roc.test(cv10f_all_resp_lum10~cv10f_all_pred_lum10)$p.value)
+legend('bottom', legend=c(sprintf('D mucosa vs P mucosa, 10 inputs, AUC = 0.9123'),
+                          sprintf('D mucosa vs P mucosa, all inputs, AUC = 0.9159'),
+                          sprintf('D lumen vs P lumen, 10 inputs, AUC = 0.6243'),
+                          sprintf('D lumen vs P lumen, all inputs, AUC = 0.7551')
                           # sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
-),lty=c(1, 1), lwd=2, col=c('green4', 'orange'), bty='n', cex=1.2)
+),lty=c(1, 2, 1, 2), lwd=2, col=c('green4', 'green4', 'orange', 'orange'), bty='n', cex=1.2)
 
 
 #Lumen vs mucosa plot 
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
 plot(cv10f_roc_right_bs6, col='blue', lwd=3, add=T, lty=1)
+plot(cv10f_roc_right_bs, col='blue', lwd=3, add=T, lty=2)
 #plot(cv10f_roc, col = 'purple', lwd=3, add=T, lty=1)
 plot(cv10f_roc_left_bs6, col = 'red', lwd=3, add=T, lty=1)
+plot(cv10f_roc_left_bs, col = 'red', lwd=3, add=T, lty=2)
 mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.5)
 mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.5)
-legend('bottom', legend=c(#sprintf('Lumen vs Mucosa, 10-fold CV, AUC = 0.925'),
-  sprintf('D Lumen vs D Mucosa, 10-fold CV, AUC ='),
-  sprintf('P Lumen vs P Mucosa, 10-fold CV, AUC = ')
-  #sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
+legend('bottom', legend=c(sprintf('D Lumen vs D Mucosa, 6 inputs, AUC = 0.925'),
+  sprintf('D Lumen vs D Mucosa, all input, AUC = 0.9833'),
+  sprintf('P Lumen vs P Mucosa, 6 inputs, AUC = 0.8561'),
+  sprintf('P Lumen vs P Mucosa, all inputs, AUC = 0.8313')
   #sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
-),lty=c(1, 1, 1), lwd=3, col=c('red', 'blue'), bty='n', cex=1.2)
+),lty=c(1, 2, 1, 2), lwd=3, col=c('red', 'red', 'blue', 'blue'), bty='n', cex=1.2)
 
-
-
-
+#add p values 
 
 
 
 #####P value for comparing AUC/models#######
 
-pval <- roc.test(cv10f_roc_muc10, cv10f_roc_lum10)
+muc_vs_lum_pval <- roc.test(cv10f_roc_muc10, cv10f_roc_lum10)
 
+#########################Trying Niel's version of the optimizing RF models
 
+#Optimized RF regression/classification
+left_test <- subset(rel_meta, location %in% c("LB", "LS"))
+left_test$location <- factor(left_test$location)
+#change levels of variable of interest to 0/1
+levels(left_test$location) <- c(1:length(levels(left_test$location))-1)
+left_test_otu <- select(left_test, location, contains("Otu"))
+reg <- randomForest(location~., data=left_test_otu, ranking='MDA') #initial model with all OTUs
+imp <- importance(reg)[order(importance(reg), decreasing=T),]
+
+opt_sets <- list() 
+for(j in 1:100){ # This outer for loop does 100 iterations and saves the optimal model for each iteration. Then you could pick the 10 OTUs that are most often in the top 10
+  
+  mda <- c() # stores MSE for each model (would be MDA or MDG for classification models)
+  numOtus <- c() # stores number of features in each model
+  features <- list() # stores the list of OTUs used in each model
+  numSeqs <- c()
+  i<-1
+  temp_imp <- imp
+  while(length(temp_imp)>10){ #setting this to 10 means it will stop when it reaches a 10 OTU model
+    imp_otus <- names(temp_imp)[1:floor(0.9*length(temp_imp))] # saves 90% most important OTUs (leaves out 10% least important)
+    temp_dat <- left_test_otu[,c('location',imp_otus)] # new data with top OTUs
+    temp_reg <- randomForest(location~., data=temp_dat, ntree=500, ranking='MDA') # new model with top OTUs
+    mda[i] <- temp_reg$mda[500]
+    numSeqs[i] <- length(imp_otus)
+    features[[i]] <- imp_otus
+    temp_imp <- importance(temp_reg)[order(importance(temp_reg), decreasing=T),]
+    i<-i+1
+  }
+  
+  opt_sets[[j]] <- unlist(features[which.min(mda)]) # This saves the best model from each iteration, but you couldl change it save the model with 10 OTUs
+}
 
 

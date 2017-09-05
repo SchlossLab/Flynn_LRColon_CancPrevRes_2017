@@ -3,7 +3,7 @@
 
 ###########################################################
 
-pack_used <- c('ggplot2','dplyr', 'tidyr', 'RColorBrewer', 'reshape2', 'wesanderson')
+pack_used <- c('ggplot2','dplyr', 'tidyr', 'RColorBrewer', 'reshape2', 'wesanderson', 'cowplot')
 for (dep in pack_used){
   if (dep %in% installed.packages()[,"Package"] == FALSE){
     install.packages(as.character(dep), repos = 'http://cran.us.r-project.org', 
@@ -36,14 +36,16 @@ exittyc <- subset(tyc, samp2 == 'SS')
 #plots
 tycpositions <- c("RB_RS", "LS_RS", "LB_RB", "LB_LS")
 lvr_plot <- ggplot(lvsr, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) +theme_bw() + 
-  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=16)) + 
+  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12)) + 
   scale_x_discrete(limits = tycpositions, breaks = tycpositions,
                    labels=c("P Mucosa vs P Lumen", "D Lumen vs P Lumen", "D Mucosa vs P Mucosa", "D Mucosa vs D Lumen")) +
   ylab("ThetaYC distance") 
 
+
+
 exitpositions <- c("RB_SS", "RS_SS", "LB_SS", "LS_SS")
 exit_plot <- ggplot(exittyc, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) +theme_bw() +
-  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=16)) +
+  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12)) +
   scale_x_discrete(limits=exitpositions, breaks=exitpositions,
                    labels=c("P Mucosa vs Stool", "P Lumen vs Stool", "D Mucosa vs Stool", "D Lumen vs Stool")) +
   theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")
@@ -130,8 +132,8 @@ for (i in 1:nrow(alltyc)){
 alltyc[10] <- as.factor(alltyc[10])
 
 inter_plot <- ggplot(alltyc, aes(x=as.factor(same_pt), y=thetayc)) + geom_boxplot(width=0.5) + theme_bw()+
-  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=16)) +
-  scale_x_discrete(labels=c("interpersonal", "intrapersonal")) +
+  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12)) +
+  scale_x_discrete(labels=c("Interpersonal", "Intrapersonal")) +
   theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")
 
 inter_medians <- aggregate(thetayc ~ same_pt, alltyc, median)
@@ -148,10 +150,21 @@ layout(matrix(c(1,
                 3), 
               nrow=3, byrow = TRUE))
 
-lvr_plot
+lvr_plot 
+ggdraw(lvr_plot) + 
+  draw_plot_label("A", size = 14)
 
 exit_plot
 
 inter_plot
 
 dev.off()
+
+
+#cowplot way- use this way!!
+
+
+fig3 <- plot_grid(lvr_plot, exit_plot, inter_plot, labels = c("A", "B", "C"), ncol = 1, align = "v")  
+save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_3.pdf', fig3, ncol=1, nrow=3, base_width=8)
+
+

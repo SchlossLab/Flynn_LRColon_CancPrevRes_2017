@@ -38,7 +38,7 @@ fuso_plot <- ggplot(fuso179, aes(x=location, y=Otu00179_relAbund)) +geom_jitter(
   ylab("F. nucleatum Relative Abundance") +
   scale_x_discrete(limits = positions, breaks=positions, 
                    labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
-  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=14))
+  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12))
 
 #IBD fuso OTU - F. varium 
 
@@ -51,7 +51,7 @@ fusoviv_plot <- ggplot(fusoviv, aes(x=location, y=Otu00472_relAbund)) +geom_jitt
   ylab("F. varium Relative Abundance") +
   scale_x_discrete(limits = positions, breaks=positions, 
                    labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
-  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=14))
+  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12))
 
 
 
@@ -76,7 +76,7 @@ porphy_plot <- ggplot(p_152, aes(x=location, y=Otu152_abund)) +geom_jitter(width
   ylab("P. asacharolytica Relative Abundance") +
   scale_x_discrete(limits = positions, breaks=positions, 
                    labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
-  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 14), axis.title= element_text(size=14))
+  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12))
 
 
 
@@ -103,4 +103,10 @@ fusoviv_plot
 porphy_plot
 
 dev.off()
+
+####Cowplot way!
+
+fig6 <- plot_grid(fuso_plot, fusoviv_plot, porphy_plot, labels = c("A", "B", "C"), ncol = 1, align = "v")  
+save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_6.pdf', fig6, ncol=1, nrow=3, base_width = 8)
+
 

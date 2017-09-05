@@ -346,20 +346,39 @@ muc_vs_lum_pval <- roc.test(cv10f_roc_muc10, cv10f_roc_lum10)
 plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_S1.pdf'
 pdf(file=plot_file, width=9, height=12)
 layout(matrix(c(1,
-                2,
-                3), 
-              nrow=3, byrow = TRUE))
+                2), 
+              nrow=2, byrow = TRUE))
+
+#Lumen vs mucosa plot - 5 features 
+par(mar=c(4,5,1,1))
+plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.2)
+plot(cv10f_roc_right_bs6, col='blue', lwd=3, add=T, lty=1)
+plot(cv10f_roc_left_bs6, col = 'red', lwd=3, add=T, lty=1)
+mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.5)
+mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.5)
+legend('bottom', legend=c(
+  sprintf('D Lumen vs D Mucosa, AUC = 0.975'),
+  sprintf('P Lumen vs P Mucosa, AUC = 0.856')
+  #sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
+),lty=c(1, 1), lwd=3, col=c('red', 'blue'), bty='n', cex=1.2)
+
+mtext('A.', side=2, line=1.5, las=1, adj=2, padj=-10, cex=2, font=2)
+
 
 #####10fold plot left vs right mucosa and lumen plot - 5 features 
-par(mar=c(4,4,1,1))
-plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
+par(mar=c(4,5,1,1))
+plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.2)
 plot(cv10f_roc_muc5,col = 'green4', lwd=3, add=T, lty=1) #r vs l mucosa cross validation
 plot(cv10f_roc_lum5, col = 'orange', lwd=3, add=T, lty=1)
-mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.2)
-mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.2)
-legend('bottom', legend=c(sprintf('D mucosa vs P mucosa, 5 inputs'),
-                          sprintf('D lumen vs P lumen, 5 inputs')
+mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.5)
+mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.5)
+legend('bottom', legend=c(sprintf('D mucosa vs P mucosa, AUC = 0.920'),
+                          sprintf('D lumen vs P lumen, AUC = 0.575')
 ),lty=c(1, 1), lwd=2, col=c('green4', 'orange'), bty='n', cex=1.2)
+
+mtext('B.', side=2, line=1.5, las=1, adj=2, padj=-10, cex=2, font=2)
+
+dev.off()
 
 
 

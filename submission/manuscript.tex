@@ -84,6 +84,8 @@
 \doublespacing
 \usepackage{lineno}
 \linenumbers
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{graphicx}
 
 \begin{document}
 \maketitle
@@ -148,14 +150,14 @@ identify key taxa that the two sites in the lumen and mucosa. Random
 Forest classification models were built using taxa abundance and sample
 location and revealed distinct populations that were found in each
 location. A model differentiating the proximal mucosa and lumen was
-built with an AUC of 0.831. The proximal mucosa had a higher abundance
+built with an AUC of 0.856. The proximal mucosa had a higher abundance
 of the genera \emph{Enterobacteriaceae} and \emph{Bacteriodes}.
 \emph{Peptoniphilus, Anaerococcus, Finegoldia,} and \emph{Turicibacter}
 were most likely to be found in distal mucosal samples versus distal
-luminal samples (AUC = 0.98). The classification model performed well
-(AUC = 0.912) when classifying mucosal samples into proximal or distal
+luminal samples (AUC = 0.975). The classification model performed well
+(AUC = 0.920) when classifying mucosal samples into proximal or distal
 sides, but separating luminal samples from each side proved more
-challenging (AUC = 0.755). The distal mucosa was found to have high
+challenging (AUC = 0.575). The distal mucosa was found to have high
 populations of \emph{Finegoldia, Murdochiella} and \emph{Porphyromonas}.
 Proximal and distal luminal samples were comprised of many of the same
 taxa, likely reflecting the fact that stool moves along the colon from
@@ -180,7 +182,7 @@ microbial communities to flourish. The identity of these specific
 microbes and communities are important for understanding the etiology of
 complex colon diseases such as Inflammatory Bowel Disease (IBD) and
 Colorectal Cancer (CRC). IBD and CRC are known to be preceded or
-accelerated by perturbations in gut microbes (1) (2) (3). The severity,
+accelerated by perturbations in gut microbes (1--3). The severity,
 symptoms, morbidity and mortality of these diseases is known to vary
 based upon the biogeographical location in which they occur. For
 instance, CRC tumors that arise on the distal side of the colon are
@@ -190,7 +192,7 @@ are sessile and form along the wall of the colon, often remaining
 asymptomatic until advanced carcinogenesis (4). The distal and proximal
 sides of the colon differ in the amount of inflammation present and the
 genomic instability of precancerous cells, respectively, in addition to
-variation in the previously mentioned chemical gradients (1) (5) (6). In
+variation in the previously mentioned chemical gradients (1, 5, 6). In
 IBD patients, disease flares in the distal colon are usually indicative
 of ulcerative colitis (UC), whereas Crohn's disease (CD) patients
 typically experience disease in the small intestine, ileum and proximal
@@ -206,7 +208,7 @@ pathophysiology of both diseases.
 
 Several recent findings have shown that development and progression of
 IBD or CRC can be attributed to specific molecular events as a result of
-interactions between the gut microbiota and human host (1) (3). For
+interactions between the gut microbiota and human host (1, 3). For
 instance, comparison of the bacteria present on CRC tumors with those
 found on nearby healthy tissue has identified specific species that are
 tumor-associated (7). These species include the oral pathogens
@@ -243,7 +245,7 @@ this procedure is preceded by the use of bowel preparation methods such
 as the consumption of laxatives to cleanse the bowel. Bowel preparation
 is essential for detecting cancerous or precancerous lesions in the
 colon, but complicates microbiome profiling as the chemicals strip the
-bowel of contents and disrupt the mucosal layer (10) (11). As such, what
+bowel of contents and disrupt the mucosal layer (10, 11). As such, what
 little information we do have about the biogeographical distribution of
 the microbes in the proximal and distal colon is confounded by the bowel
 preparation procedure.
@@ -310,7 +312,7 @@ between samples from all subjects (interpersonal) versus samples from
 within one subject (intrapersonal). We found that samples from one
 individual were far more similar to each other than to other study
 subjects (Figure 3C), consistent with previous human microbiome studies
-that have sampled multiple sites of the human colon (13) (14) (15). Thus
+that have sampled multiple sites of the human colon (13--15). Thus
 interpersonal variation between subjects drove the differences between
 samples more than sample site or location. Overall, the results
 comparing the structure of the communities suggest that the contents of
@@ -325,37 +327,36 @@ To identify OTUs that were distinct at each biogeographical site, we
 constructed several Random Forest models trained using OTU abundances.
 We used 10-fold cross validation to build the first model to classify
 the lumenal versus mucosal samples for the proximal and distal sides,
-independently (Figure 4A). The constructed model used 14 features for
-the proximal and 6 for the distal. The models performed well when
-classifying these samples (0.831 and 0.98, respectively). The OTUs that
-were most predictive of each site were identified by their greatest mean
-decrease in accuracy when removed from the model. For distinguishing the
-proximal lumen and mucosa, OTUs from the \emph{Bacteriodes},
-\emph{Actinomyces}, \emph{Psuedomonas} and two OTUs from the
-\emph{Enterobacteraceae} genera were differentially abundant (Figure
-4B). The model classifying the distal lumen and mucosa identified OTUs
-from \emph{Turicibacter}, \emph{Finegoldia}, \emph{Peptoniphilus} and
-two OTUs from the \emph{Anaerococcus} genera (Figure 4C). These results
-indicated that there were fine differences between the different sites
-of the colon, and that these could be traced to specific OTUs on each
-side.
+independently (Figure S1A). The models were constructed to only use the
+five most predictive OTUs as input to reduce overfitting between
+samples. The models performed well when classifying these samples (AUC =
+0.856 and AUC = 0.975, respectively). The OTUs that were most predictive
+of each site were identified by their greatest mean decrease in accuracy
+when removed from the model. For distinguishing the proximal lumen and
+mucosa, OTUs from the \emph{Bacteriodes}, \emph{Actinomyces},
+\emph{Psuedomonas} and two OTUs from the \emph{Enterobacteraceae} genera
+were differentially abundant (Figure 4A). The model classifying the
+distal lumen and mucosa identified OTUs from \emph{Turicibacter},
+\emph{Finegoldia}, \emph{Peptoniphilus} and two OTUs from the
+\emph{Anaerococcus} genera (Figure 4B). These results indicated that
+there were fine differences between the different sites of the colon,
+and that these could be traced to specific OTUs on each side.
 
 Next, we built a model to differentiate the proximal and distal lumenal
 samples using 10-fold cross validation. The model performed best when
-distinguishing the proximal versus distal mucosa (Figure 5A, AUC =
-0.912) compared to the proximal versus distal lumen (AUC = 0.755). The
-model that separated proximal and distal mucosal samples used 6
-features. OTUs that were differentially abundant between the distal and
-proximal mucosa included members of the \emph{Porphyromonas},
-\emph{Murdochiella}, \emph{Finegoldia}, \emph{Anaerococcus} and
-\emph{Peptoniphilus} genera (Figure 5B). The model used 44 features to
-separate proximal and distal lumenal samples. Differentially abundant
-OTUs of the proximal and distal lumen included three OTUs of the
-\emph{Bacteroides} genus, a \emph{Clostridium IV} OTU and an
-\emph{Oscillibacter} OTU (Figure 5C). This analysis found that some of
-the same OTUs that are distinct between the mucosa and lumen also helped
-to differentiate between the two sides- such as \emph{Anaerococcus} and
-\emph{Finegoldia}.
+distinguishing the proximal versus distal mucosa (Figure S1B, AUC =
+0.920) compared to the proximal versus distal lumen (AUC = 0.575). These
+models were also constructed to use only the five most predictive OTUs
+as input to reduce overfitting. OTUs that were differentially abundant
+between the distal and proximal mucosa included members of the
+\emph{Porphyromonas}, \emph{Murdochiella}, \emph{Finegoldia},
+\emph{Anaerococcus} and \emph{Peptoniphilus} genera (Figure 5A).
+Differentially abundant OTUs of the proximal and distal lumen included
+three OTUs of the \emph{Bacteroides} genus, a \emph{Clostridium IV} OTU
+and an \emph{Oscillibacter} OTU (Figure 5B). This analysis found that
+some of the same OTUs that are distinct between the mucosa and lumen
+also helped to differentiate between the two sides- such as
+\emph{Anaerococcus} and \emph{Finegoldia}.
 
 \paragraph{Bacterial OTUs associated with cancer are found in healthy
 individuals}\label{bacterial-otus-associated-with-cancer-are-found-in-healthy-individuals}
@@ -423,18 +424,32 @@ patchiness between subjects.
 
 To get around the noisiness from a diverse set of samples, we built a
 Random Forest model to identify microbes specific to each side. For each
-comparison we identified top 5 OTUs that were strongly predictive of one
-site or another. Generally, OTUs identified in each location were
+comparison we identified the top five OTUs that were strongly predictive
+of one site or another. Generally, OTUs identified in each location were
 consistent with known physiological gradients along the gut axis (6).
 For instance, the proximal mucosa contains the highest oxygen
 concentratons of the colon and harbored mucosa-associated facultative
 anaerobes such as \emph{Actinomyces} and \emph{Enterobacteraceae} and
 aerobic \emph{Psuedomonas}. The distal mucosa was far more likely to
 host strictly anaerobic species such as \emph{Porphyromonas},
-\emph{Anaerococcus}, \emph{Finegoldia} and \emph{Peptoniphilus}. The
-model was less effective at classifying the proximal and distal lumenal
-contents, probably because the samples are arguably composed of the same
-bacteria but differ in water content.
+\emph{Anaerococcus}, \emph{Finegoldia} and \emph{Peptoniphilus}. Thus
+the gut microenvironment of each location likely enriches for these
+specific microbes.
+
+In addition to identifying features that are specific to each side of
+the gut, the ability of the Random Forest to classify samples can serve
+as a proxy for similarity. That is, a higher AUC value means the samples
+are more efficiently classfied (and thus more different) than a model
+with a lower AUC value. For instance, the model separating the proximal
+and distal mucosa has an AUC of 0.925 whereas the model for classifying
+the proximal and distal lumen has a much lower AUC of 0.575. Further,
+prior to reducing the input to five OTUs, the latter model required 44
+OTUs to best separate the samples (AUC = 0.755). The much lower AUC and
+need for a high number of features compared to other models suggest
+these locations are the most similar of the comparisons tested. We
+speculate that the model was least effective at classifying the proximal
+and distal lumenal contents because the samples are arguably composed of
+the same bacteria but differ in water content.
 
 We detected \emph{F. nucleatum} and \emph{P. asacharolytica} in 8 and 5
 of our subjects, respectively. These bacteria have been shown to be
@@ -601,6 +616,8 @@ reproducible data analysis pipeline can be found at
 
 \paragraph{Figure 1}\label{figure-1}
 
+\includegraphics{../submission/figure_1.pdf}
+
 Sampling strategy. A flexible sigmoidoscope was used to sample the
 distal colonic luminal contents and mucosa. The scope was inserted
 \textasciitilde{} 25cm into the subject and endoscopy brushes were used
@@ -614,6 +631,8 @@ Representative images from one individual are shown.
 
 \newpage
 
+\includegraphics{../submission/figure_2.pdf}
+
 \paragraph{Figure 2}\label{figure-2}
 
 Microbial membership and diversity of the proximal and distal human
@@ -623,6 +642,8 @@ B) Simpson diversity of the microbial communities at each location. The
 lines represent the median values.
 
 \newpage
+
+\includegraphics{../submission/figure_3.pdf}
 
 \paragraph{Figure 3}\label{figure-3}
 
@@ -634,28 +655,27 @@ of each site to the exit stool are shown.
 
 \newpage
 
+\includegraphics{../submission/figure_4.pdf}
+
 \paragraph{Figure 4}\label{figure-4}
 
-Random Forest classifies the mucosa and lumen of each side of the colon.
-A) Receiver Operator Characteristic curves are shown for the 10-fold
-cross validation of the Random Forest model classifying lumen and
-mucosal samples for the distal and proximal sides of the colon. (B) Top
-five OTUs that are most important for the classification model for the
-distal mucosa and lumen (B) and the proximal mucosa and lumen (C).
+Taxa specific to the distal and proximal sides of the colon. Top five
+OTUs that are most important for the classification model for the distal
+mucosa and lumen (A) and the proximal mucosa and lumen (B).
 
 \newpage
+
+\includegraphics{../submission/figure_5.pdf}
 
 \paragraph{Figure 5}\label{figure-5}
 
-Random Forest classifies the distal and proximal sides of the colon. A)
-Receiver Operator Characteristic curves are shown for the 10-fold cross
-validation of the Random Forest model classifying distal lumen versus
-proximal lumen (orange) and distal mucosa vs proximal mucosa (green).
-(B) Top five OTUs that are most important for the classification model
-for the distal and proximal mucosa (B) and the distal and proximal lumen
-(C).
+Taxa specific to the distal and proximal mucosa and lumen. Top five OTUs
+that are most important for the classification model for the distal and
+proximal mucosa (A) and the distal and proximal lumen (B).
 
 \newpage
+
+\includegraphics{../submission/figure_6.pdf}
 
 \paragraph{Figure 6}\label{figure-6}
 
@@ -663,6 +683,20 @@ Location and abundance of cancer-associated OTUs. Relative abundance was
 calculated and plotted by sample site for each OTU of interest: (A)
 \emph{Fusobacterium nucleatum subsp. animalis} (B) \emph{Fusobacterium
 varium} and (C) \emph{Porphyromonas asacharolytica}
+
+\newpage
+
+\includegraphics{../submission/figure_S1.pdf}
+
+\paragraph{Figure S1}\label{figure-s1}
+
+Random Forest classifies locations in the colon. A) Receiver Operator
+Characteristic curves are shown for the 10-fold cross validation of the
+Random Forest model classifying distal lumen versus proximal lumen
+(orange) and distal mucosa vs proximal mucosa (green). (B) Receiver
+Operator Characteristic curves are shown for the 10-fold cross
+validation of the Random Forest model classifying lumen and mucosal
+samples for the distal (red) and proximal (blue) sides of the colon.
 
 \subsubsection*{References}\label{references}
 \addcontentsline{toc}{subsubsection}{References}

@@ -1,13 +1,13 @@
 ---
-title: The microbiota of the proximal and distal human colon
+title: "The microbiota of the proximal and distal human colon"
 csl: mbio.csl
 fontsize: 11pt
 output:
+  word_document: default
   pdf_document:
     includes: null
     keep_tex: yes
   html_document: default
-  word_document: default
 header-includes:
 - \usepackage{setspace}
 - \doublespacing

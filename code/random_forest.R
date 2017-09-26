@@ -343,8 +343,8 @@ plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i
 plot(cv10f_roc_right_bs, col='blue', lwd=3, add=T, lty=1)
 #plot(cv10f_roc, col = 'purple', lwd=3, add=T, lty=1)
 plot(cv10f_roc_left_bs, col = 'red', lwd=3, add=T, lty=1)
-mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.5)
-mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.5)
+mtext(side=2, text="Sensitivity", line=2.5, cex=1.5)
+mtext(side=1, text="Specificity", line=2.5, cex=1.5)
 legend('bottom', legend=c(#sprintf('Lumen vs Mucosa, 10-fold CV, AUC = 0.925'),
                           sprintf('D Lumen vs D Mucosa, 10-fold CV, AUC =0.980'),
                           sprintf('P Lumen vs P Mucosa, 10-fold CV, AUC = 0.797')
@@ -358,8 +358,8 @@ par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
 plot(cv10f_roc_muc,col = 'green4', lwd=3, add=T, lty=1) #r vs l mucosa cross validation
 plot(cv10f_roc_lum, col = 'orange', lwd=3, add=T, lty=1) #r vs l lumen cross validation
-mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.2)
-mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.2)
+mtext(side=2, text="Sensitivity", line=2.5, cex=1.2)
+mtext(side=1, text="Specificity", line=2.5, cex=1.2)
 legend('bottom', legend=c(sprintf('D mucosa vs P mucosa 10-fold CV, AUC = 0.9159'),
                           sprintf('D lumen vs P lumen 10-fold CV, AUC = 0.7551')
                           # sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
@@ -372,8 +372,8 @@ par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
 plot(cv10f_roc_muc10,col = 'green4', lwd=3, add=T, lty=1) #r vs l mucosa cross validation
 plot(cv10f_roc_lum10, col = 'orange', lwd=3, add=T, lty=1) #r vs l lumen cross validation
-mtext(side=2, text="True Positive (Sensitivity)", line=2.5, cex=1.2)
-mtext(side=1, text="True Negative (Specificity)", line=2.5, cex=1.2)
+mtext(side=2, text="Sensitivity", line=2.5, cex=1.2)
+mtext(side=1, text="Specificity", line=2.5, cex=1.2)
 legend('bottom', legend=c(sprintf('D mucosa vs P mucosa 10-fold CV, AUC = 0.912'),
                           sprintf('D lumen vs P lumen 10-fold CV, AUC = 0.6243')
                           # sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),

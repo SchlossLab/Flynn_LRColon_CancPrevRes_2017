@@ -3,6 +3,7 @@
 #first gotta find the OTU numbers for the cancer bugs
 
 #fuso OTU numbers: Otu00179, Otu00184, Otu00314, Otu00472, Otu01440
+library(cowplot)
 
 meta_file <- read.table(file='data/raw/kws_metadata.tsv', header = T)
 shared_file <- read.table(file='data/mothur/kws_final.an.shared', sep = '\t', header=T, row.names=2)
@@ -38,7 +39,7 @@ fuso_plot <- ggplot(fuso179, aes(x=location, y=Otu00179_relAbund)) +geom_jitter(
   ylab("F. nucleatum Relative Abundance") +
   scale_x_discrete(limits = positions, breaks=positions, 
                    labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
-  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12))
+  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12), panel.grid.major = element_blank(),panel.grid.minor = element_blank())
 
 #IBD fuso OTU - F. varium 
 
@@ -51,7 +52,7 @@ fusoviv_plot <- ggplot(fusoviv, aes(x=location, y=Otu00472_relAbund)) +geom_jitt
   ylab("F. varium Relative Abundance") +
   scale_x_discrete(limits = positions, breaks=positions, 
                    labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
-  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12))
+  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12), panel.grid.major = element_blank(),panel.grid.minor = element_blank())
 
 
 
@@ -76,7 +77,7 @@ porphy_plot <- ggplot(p_152, aes(x=location, y=Otu152_abund)) +geom_jitter(width
   ylab("P. asacharolytica Relative Abundance") +
   scale_x_discrete(limits = positions, breaks=positions, 
                    labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
-  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12))
+  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12), panel.grid.major = element_blank(),panel.grid.minor = element_blank())
 
 
 
@@ -106,7 +107,7 @@ dev.off()
 
 ####Cowplot way!
 
-fig6 <- plot_grid(fuso_plot, fusoviv_plot, porphy_plot, labels = c("A", "B", "C"), ncol = 1, align = "v")  
-save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_6.pdf', fig6, ncol=1, nrow=3, base_width = 8)
+figS2 <- plot_grid(fuso_plot, fusoviv_plot, porphy_plot, labels = c("A", "B", "C"), ncol = 1, align = "v")  
+save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_S2.pdf', figS2, ncol=1, nrow=3, base_width = 8)
 
 

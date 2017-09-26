@@ -36,7 +36,7 @@ exittyc <- subset(tyc, samp2 == 'SS')
 #plots
 tycpositions <- c("RB_RS", "LS_RS", "LB_RB", "LB_LS")
 lvr_plot <- ggplot(lvsr, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) +theme_bw() + 
-  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12)) + 
+  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12), panel.grid.major = element_blank(),panel.grid.minor = element_blank()) + 
   scale_x_discrete(limits = tycpositions, breaks = tycpositions,
                    labels=c("P Mucosa vs P Lumen", "D Lumen vs P Lumen", "D Mucosa vs P Mucosa", "D Mucosa vs D Lumen")) +
   ylab("ThetaYC distance") 
@@ -45,7 +45,7 @@ lvr_plot <- ggplot(lvsr, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) +the
 
 exitpositions <- c("RB_SS", "RS_SS", "LB_SS", "LS_SS")
 exit_plot <- ggplot(exittyc, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) +theme_bw() +
-  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12)) +
+  theme(legend.position="none", axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12), panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
   scale_x_discrete(limits=exitpositions, breaks=exitpositions,
                    labels=c("P Mucosa vs Stool", "P Lumen vs Stool", "D Mucosa vs Stool", "D Lumen vs Stool")) +
   theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")

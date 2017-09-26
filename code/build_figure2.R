@@ -3,6 +3,7 @@
 #
 #
 ##########################################
+library(reshape2)
 
 meta <- 'data/raw/kws_metadata.tsv'
 shared <- 'data/mothur/kws_final.an.shared'
@@ -43,7 +44,7 @@ phy_plot <- ggplot(phyla_RAmelt, aes(x=location, y=value)) + geom_boxplot(aes(co
   theme(axis.text = element_text(size= 10), axis.title= element_text(size=12), legend.text=element_text(size=10), legend.title=element_text(size=12)) +
   scale_x_discrete(limits = positions, breaks=positions, 
                    labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
-  theme(axis.title.x=element_blank(), panel.grid.major.x = element_blank(),panel.grid.minor.x = element_blank()) +
+  theme(axis.title.x=element_blank(), panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
   theme(legend.justification = c(0.999, 0.999), legend.position = c(0.999, 0.999)) + scale_fill_brewer(palette="Dark2", name="Phylum") +
   ylab("% Relative Abundance") 
 
@@ -58,7 +59,8 @@ positions <- c("RB", "RS", "LB", "LS", "SS")
 simp_plot <- ggplot(simpmeta, aes(x=location, y=invsimpson, group =1)) +geom_point() +geom_jitter(width=0.2) +theme_bw() + ylab("Inverse Simpson Diversity") +
   scale_x_discrete(limits = positions, breaks=positions, 
                    labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
-  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12)) +
+  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=12), panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) +
   stat_summary(aes(x=location, y=invsimpson), data = simpmeta, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 
 #export as PDF

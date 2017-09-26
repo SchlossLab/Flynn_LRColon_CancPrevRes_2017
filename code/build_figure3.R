@@ -74,7 +74,7 @@ wilcox.test(thetayc ~ match, data=leftandrighttyc, paired = T)
 #lvsr$match <- factor(lvsr$match, levels=lvsr$match[order(lvsr$samp1)])
 ggplot(lvsr, aes(x=match, y=thetayc)) + geom_point() + geom_jitter(width= 0.2) +theme_bw() +
   scale_x_discrete(labels=c("L Mucosa vs L Lumen", "L Mucosa vs R Lumen", "L Lumen vs R Lumen", "R Mucosa vs R Lumen")) +
-  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 16), axis.title= element_text(size=18)) +
+  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 16), axis.title= element_text(size=18), panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
   ylab("ThetaYC distance") + stat_summary(aes(x=match, y=thetayc), data = lvsr, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 
 

@@ -54,17 +54,23 @@ source('code/tax_level.R')
 testsub <- subset(rel_meta, location %in% c("LB", "LS"))
 testsub$location <- factor(testsub$location)
 levels(testsub$location) <- c(1:length(levels(testsub$location))-1)
-
+p <- 6
 for(p in testsub$patient){
   test_set <- subset(testsub, testsub$patient != p)
   held_out <- subset(testsub, testsub$patient == p)
   rf_testset <- AUCRF(location~., data=select(test_set, location, contains("Otu")), ntree=n_trees, pdel=0.05, ranking="MDA")
   aucrf_test <- AUCRFcv(rf_testset, nCV=10, M=20)
-  test_held_out <- predict(held_out, model=aucrf_test)
+  test_held_out <- predict(aucrf_test$RFopt, held_out, type='prob')
+  #store output in something here 
   }
-
-
 
 aucrf_cv_left_bs <- AUCRFcv(rf_aucrf, nCV=10, M=20)
 
+#wait ok lets try it using base randomForest package
 
+rf_only  <- randomForest(location ~ ., data = select(test_set, location, contains("Otu")), importance = T, ntree=n_trees)
+#add cross validation in here before testing held out set?
+held_out_fixed <- held_out[,-3]
+held_prediction <- predict(rf_only, held_out)
+
+#so wait, isn't this already what I'm doing? 

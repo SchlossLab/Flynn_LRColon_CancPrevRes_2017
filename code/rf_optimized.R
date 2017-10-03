@@ -46,7 +46,7 @@ source('code/tax_level.R')
 #1) select 19 samples (patients) from the 20, hold out the other one
 #2) train the model using AUCRF and cross validation.
 #3) from that model, will have an AUCRF object that i can use to predict/test on the held out sample
-#4) record the # of variables used in each model, the AUC of the training model and the mtry. Store in a list the value (0/1) that was predicted for the sample from the model
+#4) record the n of variables used in each model, the AUC of the training model and the mtry. Store in a list the value (0/1) that was predicted for the sample from the model
 #5) do that 20x
 
 #testing 
@@ -54,14 +54,23 @@ source('code/tax_level.R')
 testsub <- subset(rel_meta, location %in% c("LB", "LS"))
 testsub$location <- factor(testsub$location)
 levels(testsub$location) <- c(1:length(levels(testsub$location))-1)
+#create empty list to store in
+test_results <- data.frame(Patient = character(), zero = double(), one = double())
 p <- 6
+counter <- 0
 for(p in testsub$patient){
+  counter <- counter +1
   test_set <- subset(testsub, testsub$patient != p)
   held_out <- subset(testsub, testsub$patient == p)
   rf_testset <- AUCRF(location~., data=select(test_set, location, contains("Otu")), ntree=n_trees, pdel=0.05, ranking="MDA")
   aucrf_test <- AUCRFcv(rf_testset, nCV=10, M=20)
   test_held_out <- predict(aucrf_test$RFopt, held_out, type='prob')
-  #store output in something here 
+  held_out_results <- as.data.frame(test_held_out)
+  held_out_results$Patient[counter] <- 7
+  colnames(held_out_results) <- c("zero", "one")
+  test_results <- rbind(test_results, held_out_results)
+  
+  #store output in something here - append pt with test results to new table, then can plot curve outside of the loop
   }
 
 aucrf_cv_left_bs <- AUCRFcv(rf_aucrf, nCV=10, M=20)

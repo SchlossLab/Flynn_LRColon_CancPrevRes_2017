@@ -54,24 +54,31 @@ source('code/tax_level.R')
 testsub <- subset(rel_meta, location %in% c("LB", "LS"))
 testsub$location <- factor(testsub$location)
 levels(testsub$location) <- c(1:length(levels(testsub$location))-1)
+
+#create subset of just three patients to test on
+
+test_input <- subset(testsub, patient %in% c('11', '15', '17'))
+
 #create empty list to store in
 test_results <- data.frame(Patient = character(), zero = double(), one = double())
-p <- 6
-counter <- 0
-for(p in testsub$patient){
-  counter <- counter +1
-  test_set <- subset(testsub, testsub$patient != p)
-  held_out <- subset(testsub, testsub$patient == p)
+held_out_results <- data.frame()
+for(p in test_input$patient){
+  test_set <- subset(test_input, test_input$patient != p)
+  held_out <- subset(test_input, test_input$patient == p)
   rf_testset <- AUCRF(location~., data=select(test_set, location, contains("Otu")), ntree=n_trees, pdel=0.05, ranking="MDA")
   aucrf_test <- AUCRFcv(rf_testset, nCV=10, M=20)
   test_held_out <- predict(aucrf_test$RFopt, held_out, type='prob')
   held_out_results <- as.data.frame(test_held_out)
-  held_out_results$Patient[counter] <- 7
-  colnames(held_out_results) <- c("zero", "one")
+  held_out_results$Patient <- p
+  colnames(held_out_results) <- c("zero", "one", "Patient")
   test_results <- rbind(test_results, held_out_results)
-  
-  #store output in something here - append pt with test results to new table, then can plot curve outside of the loop
   }
+
+#then plot curve outside of the loop 
+
+#do for all models!
+
+
 
 aucrf_cv_left_bs <- AUCRFcv(rf_aucrf, nCV=10, M=20)
 

@@ -62,9 +62,9 @@ test_input <- subset(testsub, patient %in% c('11', '15', '17'))
 #create empty list to store in
 test_results <- data.frame(Patient = character(), zero = double(), one = double())
 held_out_results <- data.frame()
-for(p in test_input$patient){
-  test_set <- subset(test_input, test_input$patient != p)
-  held_out <- subset(test_input, test_input$patient == p)
+for(p in unique(testsub$patient)){
+  test_set <- subset(testsub, testsub$patient != p)
+  held_out <- subset(testsub, testsub$patient == p)
   rf_testset <- AUCRF(location~., data=select(test_set, location, contains("Otu")), ntree=n_trees, pdel=0.05, ranking="MDA")
   aucrf_test <- AUCRFcv(rf_testset, nCV=10, M=20)
   test_held_out <- predict(aucrf_test$RFopt, held_out, type='prob')

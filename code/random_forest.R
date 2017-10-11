@@ -346,10 +346,10 @@ plot(cv10f_roc_left_bs, col = 'red', lwd=3, add=T, lty=1)
 mtext(side=2, text="Sensitivity", line=2.5, cex=1.5)
 mtext(side=1, text="Specificity", line=2.5, cex=1.5)
 legend('bottom', legend=c(#sprintf('Lumen vs Mucosa, 10-fold CV, AUC = 0.925'),
-                          sprintf('D Lumen vs D Mucosa, 10-fold CV, AUC =0.980'),
-                          sprintf('P Lumen vs P Mucosa, 10-fold CV, AUC = 0.797')
-                               #sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
-                               #sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
+  sprintf('D Lumen vs D Mucosa, 10-fold CV, AUC =0.980'),
+  sprintf('P Lumen vs P Mucosa, 10-fold CV, AUC = 0.797')
+  #sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
+  #sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
 ),lty=c(1, 1, 1), lwd=3, col=c('red', 'blue'), bty='n', cex=1.2)
 
 

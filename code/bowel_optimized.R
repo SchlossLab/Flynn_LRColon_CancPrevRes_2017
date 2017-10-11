@@ -49,7 +49,7 @@ source('code/tax_level.R')
 #6) aggregate all of the models from the left-out-list to get the AUC table to plot a curve and get an AUC value for the whole model
 # do that for all of the models we have
 
-testsub <- subset(rel_meta, location %in% c("LB", "LS"))
+testsub <- subset(rel_meta, location %in% c("LB", "RB"))
 testsub$location <- factor(testsub$location)
 levels(testsub$location) <- c(1:length(levels(testsub$location))-1)
 
@@ -68,53 +68,6 @@ for(p in unique(testsub$patient)){
   held_out_results$Patient <- p
   colnames(held_out_results) <- c("zero", "one", "Patient")
   test_results <- rbind(test_results, held_out_results)
-  }
+}
 
-left_optimized <- write.table(test_results, file = 'data/process/left_optimized.tsv', sep = '\t')
-
-
-#then plot curve outside of the loop 
-
-#do for all models!
-
-left_optimized_results <- read.table(file = 'data/process/left_optimized.tsv', sep = '\t')
-
-left_roc <- roc(testsub$location ~ left_optimized_results$one)
-
-
-#Lumen vs mucosa plot 
-par(mar=c(4,4,1,1))
-plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
-plot(left_roc, col='pink', lwd=3, add=T, lty=1)
-#plot(cv10f_roc, col = 'purple', lwd=3, add=T, lty=1)
-plot(cv10f_roc_left_bs, col = 'red', lwd=3, add=T, lty=1)
-mtext(side=2, text="Sensitivity", line=2.5, cex=1.5)
-mtext(side=1, text="Specificity", line=2.5, cex=1.5)
-legend('bottom', legend=c(#sprintf('Lumen vs Mucosa, 10-fold CV, AUC = 0.925'),
-  sprintf('D Lumen vs D Mucosa, 10-fold CV, hold-one-out, AUC = 0.9079'),
-  sprintf('D Lumen vs D Mucosa, 10-fold CV, unoptimized, AUC = 0.980')
-  #sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
-  #sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
-),lty=c(1, 1, 1), lwd=3, col=c('pink', 'red'), bty='n', cex=1.2)
-
-
-#do for all models
-
-#then, double check OTU table 
-
-tax_function <- 'code/tax_level.R'
-source(tax_function)
-
-n_features <- 10
-#importance for left bowel vs lumen 
-importance_sorted_rfleft <- sort(importance(rf_left)[,1], decreasing = T)
-top_important_OTU_rfleft <- data.frame(head(importance_sorted_rfleft, n_features))
-colnames(top_important_OTU_rfleft) <- 'Importance'
-top_important_OTU_rfleft$OTU <- rownames(top_important_OTU_rfleft)
-otu_taxa_rfleft <- get_tax(1, top_important_OTU_rfleft$OTU, tax_file)
-ggplot(data = top_important_OTU_rfleft, aes(x = factor(OTU), y = Importance)) + 
-  geom_point() + scale_x_discrete(limits = rev(top_important_OTU_rfleft$OTU),
-                                  labels = rev(paste(otu_taxa_rfleft[,1],' (',
-                                                     rownames(otu_taxa_rfleft),')',
-                                                     sep=''))) +
-  labs(x= '', y = '% Increase in MSE') + theme_bw() + coord_flip() + ggtitle('LB vs LS')
+bowel_optimized <- write.table(test_results, file = 'data/process/bowel_optimized.tsv', sep = '\t')

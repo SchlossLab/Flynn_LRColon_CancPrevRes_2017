@@ -63,7 +63,7 @@ for(p in unique(testsub$patient)){
   held_out <- subset(testsub, testsub$patient == p)
   rf_testset <- AUCRF(location~., data=select(test_set, location, contains("Otu")), ntree=n_trees, pdel=0.05, ranking="MDA")
   aucrf_test <- AUCRFcv(rf_testset, nCV=10, M=20)
-  test_held_out <- predict(aucrf_test$RFopt, held_out, type='prob')[,2]
+  test_held_out <- predict(aucrf_test$RFopt, held_out, type='prob')
   held_out_results <- as.data.frame(test_held_out)
   held_out_results$Patient <- p
   colnames(held_out_results) <- c("zero", "one", "Patient")

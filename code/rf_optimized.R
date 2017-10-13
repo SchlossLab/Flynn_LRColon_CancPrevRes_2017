@@ -104,71 +104,91 @@ stool_roc <- roc(testsubS$location ~ stool_optimized_results$one)
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
 plot(left_roc, col='pink', lwd=3, add=T, lty=1)
-#plot(cv10f_roc, col = 'purple', lwd=3, add=T, lty=1)
 plot(cv10f_roc_left_bs, col = 'red', lwd=3, add=T, lty=1)
 mtext(side=2, text="Sensitivity", line=2.5, cex=1.5)
 mtext(side=1, text="Specificity", line=2.5, cex=1.5)
-legend('bottom', legend=c(#sprintf('Lumen vs Mucosa, 10-fold CV, AUC = 0.925'),
+legend('bottom', legend=c(
   sprintf('D Lumen vs D Mucosa, 10-fold CV, hold-one-out, AUC = 0.9079'),
   sprintf('D Lumen vs D Mucosa, 10-fold CV, unoptimized, AUC = 0.980')
-  #sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
-  #sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
 ),lty=c(1, 1, 1), lwd=3, col=c('pink', 'red'), bty='n', cex=1.2)
 
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
 plot(right_roc, col='green', lwd=3, add=T, lty=1)
-#plot(cv10f_roc, col = 'purple', lwd=3, add=T, lty=1)
 plot(cv10f_roc_right_bs, col = 'darkgreen', lwd=3, add=T, lty=1)
 mtext(side=2, text="Sensitivity", line=2.5, cex=1.5)
 mtext(side=1, text="Specificity", line=2.5, cex=1.5)
-legend('bottom', legend=c(#sprintf('Lumen vs Mucosa, 10-fold CV, AUC = 0.925'),
+legend('bottom', legend=c(
   sprintf('P Lumen vs P Mucosa, 10-fold CV, hold-one-out, AUC = 0.7645'),
   sprintf('P Lumen vs P Mucosa, 10-fold CV, unoptimized, AUC = 0.8313')
-  #sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
-  #sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
 ),lty=c(1, 1, 1), lwd=3, col=c('green', 'darkgreen'), bty='n', cex=1.2)
 
 
 #left vs right mucosa plot 
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
-plot(cv10f_roc_muc,col = 'black', lwd=3, add=T, lty=1) #r vs l mucosa cross validation
+plot(cv10f_roc_muc,col = 'black', lwd=3, add=T, lty=1) 
 plot(muc_roc, col = 'purple', lwd=3, add=T, lty=1)
 mtext(side=2, text="Sensitivity", line=2.5, cex=1.2)
 mtext(side=1, text="Specificity", line=2.5, cex=1.2)
 legend('bottom', legend=c(sprintf('P mucosa vs D mucosa, hold-one-out, AUC = 0.850'),
                           sprintf('P mucosa vs D mucosa, unoptimized, AUC = 0.9123')
-                          # sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
-                          # sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
 ),lty=c(1, 1), lwd=2, col=c('purple', 'black'), bty='n', cex=1.2)
-
 
 #left vs right lumen plot 
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
-plot(cv10f_roc_lum,col = 'darkblue', lwd=3, add=T, lty=1) #r vs l mucosa cross validation
+plot(cv10f_roc_lum,col = 'darkblue', lwd=3, add=T, lty=1) 
 plot(stool_roc, col = 'lightblue', lwd=3, add=T, lty=1)
 mtext(side=2, text="Sensitivity", line=2.5, cex=1.2)
 mtext(side=1, text="Specificity", line=2.5, cex=1.2)
-legend('bottom', legend=c(sprintf('P mucosa vs D lumen, hold-one-out, AUC = 0.5803'),
-                          sprintf('P mucosa vs D mucosa, unoptimized, AUC = 0.7551')
-                          # sprintf('OOB vs Leave-1-out: p=%.2g', roc.test(otu_euth_roc,LOO_roc)$p.value),
-                          # sprintf('OOB vs 10-fold CV: p=%.2g', roc.test(otu_euth_roc,cv10f_roc)$p.value)
-),lty=c(1, 1), lwd=2, col=c('darkblue', 'lightblue'), bty='n', cex=1.2)
+legend('bottom', legend=c(sprintf('P lumen vs D lumen, hold-one-out, AUC = 0.5803'),
+                          sprintf('P lumen vs D lumen, unoptimized, AUC = 0.7551')
+),lty=c(1, 1), lwd=2, col=c('lightblue', 'darkblue'), bty='n', cex=1.2)
+
+#plots for figures 
+#Left and right new method plot
+par(mar=c(4,4,1,1))
+plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
+plot(left_roc, col='red', lwd=3, add=T, lty=1)
+plot(right_roc, col = 'blue', lwd=3, add=T, lty=1)
+mtext(side=2, text="Sensitivity", line=2.5, cex=1.5)
+mtext(side=1, text="Specificity", line=2.5, cex=1.5)
+legend('bottom', legend=c(
+  sprintf('D Lumen vs D Mucosa, 10-fold CV, hold-one-out, AUC = 0.9079'),
+  sprintf('P Lumen vs P Mucosa, 10-fold CV, hold-one-out, AUC = 0.7645')
+),lty=c(1, 1, 1), lwd=3, col=c('red', 'blue'), bty='n', cex=1.2)
+
+#stool and mucosa new method plot 
+par(mar=c(4,4,1,1))
+plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='', cex.axis=1.5)
+plot(muc_roc, col='darkgreen', lwd=3, add=T, lty=1)
+plot(stool_roc, col = 'purple', lwd=3, add=T, lty=1)
+mtext(side=2, text="Sensitivity", line=2.5, cex=1.5)
+mtext(side=1, text="Specificity", line=2.5, cex=1.5)
+legend('bottom', legend=c(
+  sprintf('D Mucosa vs P Mucosa, 10-fold CV, hold-one-out, AUC = 0.850'),
+  sprintf('D Lumen vs P Lumen, 10-fold CV, hold-one-out, AUC = 0.5803')
+),lty=c(1, 1, 1), lwd=3, col=c('darkgreen', 'purple'), bty='n', cex=1.2)
 
 
 
-#do for all models
+
+
+
+
+
 
 #then, double check OTU table 
 
 tax_function <- 'code/tax_level.R'
 source(tax_function)
 
+rf_testset <- randomForest(location ~ ., data = select(test_set, location, contains("Otu")), importance = T, ntree=n_trees)
+
 n_features <- 10
 #importance for left bowel vs lumen 
-importance_sorted_rfleft <- sort(importance(rf_left)[,1], decreasing = T)
+importance_sorted_rfleft <- sort(importance(rf_testset)[,1], decreasing = T)
 top_important_OTU_rfleft <- data.frame(head(importance_sorted_rfleft, n_features))
 colnames(top_important_OTU_rfleft) <- 'Importance'
 top_important_OTU_rfleft$OTU <- rownames(top_important_OTU_rfleft)

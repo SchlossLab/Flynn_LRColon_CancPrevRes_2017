@@ -344,7 +344,7 @@ muc_vs_lum_pval <- roc.test(cv10f_roc_muc10, cv10f_roc_lum10)
 #############PLOTS
 
 plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_S1.pdf'
-pdf(file=plot_file, width=9, height=12)
+pdf(file=plot_file, width=7, height=9)
 layout(matrix(c(1,
                 2), 
               nrow=2, byrow = TRUE))

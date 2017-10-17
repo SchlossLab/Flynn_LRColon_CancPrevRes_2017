@@ -40,12 +40,11 @@ phyla_RAmelt <- melt(phyla_RA[, phylaRAnames], id.vars=1)
 positions <- c("RB", "RS", "LB", "LS", "SS")
 phy_plot <- ggplot(phyla_RAmelt, aes(x=location, y=value)) + geom_boxplot(aes(color=variable)) + 
   scale_color_discrete(guide=FALSE)+
-  geom_boxplot(aes(fill=variable), outlier.shape=21, outlier.size=2.5) + theme_bw() + 
-  theme(axis.text = element_text(size= 10), axis.title= element_text(size=12), legend.text=element_text(size=10), legend.title=element_text(size=12)) +
+  geom_boxplot(aes(fill=variable), outlier.shape=21) + theme_bw() + 
+  theme(axis.text = element_text(size= 10), axis.title= element_text(size=12)) +
   scale_x_discrete(limits = positions, breaks=positions, 
                    labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
-  theme(axis.title.x=element_blank(), panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
-  theme(legend.justification = c(0.999, 0.999), legend.position = c(0.999, 0.999)) + scale_fill_brewer(palette="Dark2", name="Phylum") +
+  theme(axis.title.x=element_blank(), panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) + scale_fill_brewer(palette="Dark2", name="Phylum") +
   ylab("% Relative Abundance") 
 
 
@@ -78,6 +77,6 @@ simp_plot
 dev.off()
 
 ##### Cowplot way to save the plots! 
-fig2 <- plot_grid(phy_plot, simp_plot, labels = c("A", "B"), ncol = 1, align = "v")  
-save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_2.pdf', fig2, ncol=1, nrow=2, base_width=12, base_height = 7)
+fig2 <- plot_grid(phy_plot, simp_plot, labels = c("A", "B"), label_size=16, ncol = 1, align = "v")  
+save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_2.pdf', fig2, ncol=1, nrow=2, base_width=7, base_height = 4)
 

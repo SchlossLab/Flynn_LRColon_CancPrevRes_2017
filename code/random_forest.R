@@ -592,7 +592,7 @@ legend('topright', legend=c("Left lumen", "Right lumen"), pch=c(21, 21), pt.bg=c
 #export as PDF
 
 plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_4.pdf'
-pdf(file=plot_file, width=11, height=12)
+pdf(file=plot_file, width=7, height=9)
 layout(matrix(c(1,
                 2), 
               nrow=2, byrow = TRUE))
@@ -605,21 +605,21 @@ otu_taxa_right <- get_tax(1, right_otu_feat, tax_file)
 rs_abunds <- shared_meta[shared_meta$location=='RS', right_otu_feat]/10000 + 1e-4
 rb_abunds <- shared_meta[shared_meta$location=='RB', right_otu_feat]/10000 + 1e-4
 
-par(mar=c(5, 15, 1, 1))
-plot(1, type="n", ylim=c(0,length(right_otu_feat)*2), xlim=c(1e-4,3), log="x", ylab="", xlab="Relative Abundance (%)", xaxt="n", yaxt="n", cex.lab=1.5)
+par(mar=c(5, 11, 1, 1))
+plot(1, type="n", ylim=c(0,length(right_otu_feat)*2), xlim=c(1e-4,3), log="x", ylab="", xlab="Relative Abundance (%)", xaxt="n", yaxt="n")
 index <- 1
 for(i in right_otu_feat){
-  stripchart(at=index-0.35, jitter(rs_abunds[,i], amount=1e-5), pch=21, bg="darkgray", method="jitter", jitter=0.2, add=T, cex=1.2, lwd=0.5)
-  stripchart(at=index+0.35, jitter(rb_abunds[,i], amount=1e-5), pch=21, bg="white", method="jitter", jitter=0.2, add=T, cex=1.2, lwd=0.5)
+  stripchart(at=index-0.35, jitter(rs_abunds[,i], amount=1e-5), pch=21, bg="black", method="jitter", jitter=0.2, add=T, lwd=0.5)
+  stripchart(at=index+0.35, jitter(rb_abunds[,i], amount=1e-5), pch=21, bg="white", method="jitter", jitter=0.2, add=T, lwd=0.5)
   segments(median(rs_abunds[,i]),index-0.7,median(rs_abunds[,i]),index, lwd=3)
   segments(median(rb_abunds[,i]),index+0.7,median(rb_abunds[,i]),index, lwd=3)
   index <- index + 2
 }
-axis(2, at=seq(1,index-2,2), labels=otu_taxa_right$tax_label, las=1, line=-0.5, tick=F, cex.axis=1.2)
-axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"), cex.axis=1.2)
-legend('topright', legend=c("Proximal mucosa", "Proximal lumen"), pch=c(21, 21), pt.bg=c("darkgray","white"), cex=1.2)
+axis(2, at=seq(1,index-2,2), labels=otu_taxa_right$tax_label, las=1, line=-0.5, tick=F, cex.axis=0.9)
+axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
+legend('topright', legend=c("P Mucosa", "P Lumen"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
 
-mtext('A.', side=2, line=11, las=1, adj=2, padj=-9, cex=2, font=2)
+mtext('A', side=2, line=7.5, las=1, adj=2, padj=-6.5, cex=2, font=2)
 
 #just LB vs LS 
 left_otu_feat <- colnames(aucrf_data_left_bs[2:6])
@@ -628,21 +628,21 @@ otu_taxa_left <- get_tax(1, left_otu_feat, tax_file)
 ls_abunds <- shared_meta[shared_meta$location=='LS', left_otu_feat]/10000 + 1e-4
 lb_abunds <- shared_meta[shared_meta$location=='LB', left_otu_feat]/10000 + 1e-4
 
-par(mar=c(5, 15, 1, 1))
-plot(1, type="n", ylim=c(0,length(left_otu_feat)*2), xlim=c(1e-4,3), log="x", ylab="", xlab="Relative Abundance (%)", xaxt="n", yaxt="n", cex.lab=1.5)
+par(mar=c(5, 11, 1, 1))
+plot(1, type="n", ylim=c(0,length(left_otu_feat)*2), xlim=c(1e-4,3), log="x", ylab="", xlab="Relative Abundance (%)", xaxt="n", yaxt="n")
 index <- 1
 for(i in left_otu_feat){
-  stripchart(at=index-0.35, jitter(ls_abunds[,i], amount=1e-5), pch=21, bg="darkgray", method="jitter", jitter=0.2, add=T, cex=1.2, lwd=0.5)
-  stripchart(at=index+0.35, jitter(lb_abunds[,i], amount=1e-5), pch=21, bg="white", method="jitter", jitter=0.2, add=T, cex=1.2, lwd=0.5)
+  stripchart(at=index-0.35, jitter(ls_abunds[,i], amount=1e-5), pch=21, bg="black", method="jitter", jitter=0.2, add=T, lwd=0.5)
+  stripchart(at=index+0.35, jitter(lb_abunds[,i], amount=1e-5), pch=21, bg="white", method="jitter", jitter=0.2, add=T, lwd=0.5)
   segments(median(ls_abunds[,i]),index-0.7,median(ls_abunds[,i]),index, lwd=2)
   segments(median(lb_abunds[,i]),index+0.7,median(lb_abunds[,i]),index, lwd=2)
   index <- index + 2
 }
-axis(2, at=seq(1,index-2,2), labels=otu_taxa_left$tax_label, las=1, line=-0.5, tick=F, cex.axis=1.2)
-axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"), cex.axis=1.2)
-legend('topright', legend=c("Distal mucosa", "Distal lumen"), pch=c(21, 21), pt.bg=c("darkgray","white"), cex=1.2)
+axis(2, at=seq(1,index-2,2), labels=otu_taxa_left$tax_label, las=1, line=-0.5, tick=F, cex.axis=0.9)
+axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
+legend('topright', legend=c("D Mucosa", "D Lumen"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
 
-mtext('B.', side=2, line=11, las=1, adj=2, padj=-9, cex=2, font=2)
+mtext('B', side=2, line=7.5, las=1, adj=2, padj=-6.5, cex=2, font=2)
 
 dev.off()
 
@@ -650,7 +650,7 @@ dev.off()
 #export as PDF
 
 plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_5.pdf'
-pdf(file=plot_file, width=11, height=12)
+pdf(file=plot_file, width=7, height=9)
 layout(matrix(c(1,
                 2), 
               nrow=2, byrow = TRUE))
@@ -662,21 +662,21 @@ otu_taxa_LRbowel <- get_tax(1, LRbowel_otu_feat, tax_file)
 lb_abunds <- shared_meta[shared_meta$location=='LB', LRbowel_otu_feat]/10000 + 1e-4
 rblb_abunds <- shared_meta[shared_meta$location=='RB', LRbowel_otu_feat]/10000 + 1e-4
 
-par(mar=c(5, 15, 1, 1))
-plot(1, type="n", ylim=c(0,length(LRbowel_otu_feat)*2), xlim=c(1e-4,3), log="x", ylab="", xlab="Relative Abundance (%)", xaxt="n", yaxt="n", cex.lab=1.5)
+par(mar=c(5, 11, 1, 1))
+plot(1, type="n", ylim=c(0,length(LRbowel_otu_feat)*2), xlim=c(1e-4,3), log="x", ylab="", xlab="Relative Abundance (%)", xaxt="n", yaxt="n")
 index <- 1
 for(i in LRbowel_otu_feat){
-  stripchart(at=index-0.35, jitter(lb_abunds[,i], amount=1e-5), pch=21, bg="darkgray", method="jitter", jitter=0.2, add=T, cex=1.2, lwd=0.5)
-  stripchart(at=index+0.35, jitter(rblb_abunds[,i], amount=1e-5), pch=21, bg="white", method="jitter", jitter=0.2, add=T, cex=1.2, lwd=0.5)
+  stripchart(at=index-0.35, jitter(lb_abunds[,i], amount=1e-5), pch=21, bg="black", method="jitter", jitter=0.2, add=T, lwd=0.5)
+  stripchart(at=index+0.35, jitter(rblb_abunds[,i], amount=1e-5), pch=21, bg="white", method="jitter", jitter=0.2, add=T, lwd=0.5)
   segments(median(lb_abunds[,i]),index-0.7,median(lb_abunds[,i]),index, lwd=3)
   segments(median(rblb_abunds[,i]),index+0.7,median(rblb_abunds[,i]),index, lwd=3)
   index <- index + 2
 }
-axis(2, at=seq(1,index-2,2), labels=otu_taxa_LRbowel$tax_label, las=1, line=-0.5, tick=F, cex.axis=1.2)
-axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"), cex.axis=1.2)
-legend('topright', legend=c("Distal mucosa", "Proximal mucosa"), pch=c(21, 21), pt.bg=c("darkgray","white"), cex=1.2)
+axis(2, at=seq(1,index-2,2), labels=otu_taxa_LRbowel$tax_label, las=1, line=-0.5, tick=F, cex.axis=0.9)
+axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
+legend('topright', legend=c("Distal mucosa", "Proximal mucosa"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
 
-mtext('A.', side=2, line=11, las=1, adj=2, padj=-9, cex=2, font=2)
+mtext('A', side=2, line=7.5, las=1, adj=2, padj=-6.5, cex=2, font=2)
 
 
 #LS vs RS
@@ -686,20 +686,20 @@ otu_taxa_LRlumen <- get_tax(1, LRlumen_otu_feat, tax_file)
 lsrs_abunds <- shared_meta[shared_meta$location=='LS', LRlumen_otu_feat]/10000 + 1e-4
 rsls_abunds <- shared_meta[shared_meta$location=='RS', LRlumen_otu_feat]/10000 + 1e-4
 
-par(mar=c(5, 15, 1, 1))
-plot(1, type="n", ylim=c(0,length(LRlumen_otu_feat)*2), xlim=c(1e-4,3), log="x", ylab="", xlab="Relative Abundance (%)", xaxt="n", yaxt="n", cex.lab=1.5)
+par(mar=c(5, 11, 1, 1))
+plot(1, type="n", ylim=c(0,length(LRlumen_otu_feat)*2), xlim=c(1e-4,3), log="x", ylab="", xlab="Relative Abundance (%)", xaxt="n", yaxt="n")
 index <- 1
 for(i in LRlumen_otu_feat){
-  stripchart(at=index-0.35, jitter(lsrs_abunds[,i], amount=1e-5), pch=21, bg="darkgray", method="jitter", jitter=0.2, add=T, cex=1.2, lwd=0.5)
-  stripchart(at=index+0.35, jitter(rsls_abunds[,i], amount=1e-5), pch=21, bg="white", method="jitter", jitter=0.2, add=T, cex=1.2, lwd=0.5)
+  stripchart(at=index-0.35, jitter(lsrs_abunds[,i], amount=1e-5), pch=21, bg="black", method="jitter", jitter=0.2, add=T, lwd=0.5)
+  stripchart(at=index+0.35, jitter(rsls_abunds[,i], amount=1e-5), pch=21, bg="white", method="jitter", jitter=0.2, add=T, lwd=0.5)
   segments(median(lsrs_abunds[,i]),index-0.7,median(lsrs_abunds[,i]),index, lwd=3)
   segments(median(rsls_abunds[,i]),index+0.7,median(rsls_abunds[,i]),index, lwd=3)
   index <- index + 2
 }
-axis(2, at=seq(1,index-2,2), labels=otu_taxa_LRlumen$tax_label, las=1, line=-0.5, tick=F, cex.axis=1.2)
-axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"), cex.axis=1.2)
-legend('topright', legend=c("Distal lumen", "Proximal lumen"), pch=c(21, 21), pt.bg=c("darkgray","white"), cex=1.2)
+axis(2, at=seq(1,index-2,2), labels=otu_taxa_LRlumen$tax_label, las=1, line=-0.5, tick=F, cex.axis=0.9)
+axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
+legend('topright', legend=c("D Lumen", "P Lumen"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
 
-mtext('B.', side=2, line=11, las=1, adj=2, padj=-9, cex=2, font=2)
+mtext('B', side=2, line=7.5, las=1, adj=2, padj=-6.5, cex=2, font=2)
 
 dev.off()

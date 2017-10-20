@@ -609,8 +609,8 @@ par(mar=c(5, 11, 1, 1))
 plot(1, type="n", ylim=c(0,length(right_otu_feat)*2), xlim=c(1e-4,3), log="x", ylab="", xlab="Relative Abundance (%)", xaxt="n", yaxt="n")
 index <- 1
 for(i in right_otu_feat){
-  stripchart(at=index-0.35, jitter(rs_abunds[,i], amount=1e-5), pch=21, bg="black", method="jitter", jitter=0.2, add=T, lwd=0.5)
-  stripchart(at=index+0.35, jitter(rb_abunds[,i], amount=1e-5), pch=21, bg="white", method="jitter", jitter=0.2, add=T, lwd=0.5)
+  stripchart(at=index-0.35, jitter(rs_abunds[,i], amount=1e-5), pch=21, bg="white", method="jitter", jitter=0.2, add=T, lwd=0.5)
+  stripchart(at=index+0.35, jitter(rb_abunds[,i], amount=1e-5), pch=21, bg="black", method="jitter", jitter=0.2, add=T, lwd=0.5)
   segments(median(rs_abunds[,i]),index-0.7,median(rs_abunds[,i]),index, lwd=3)
   segments(median(rb_abunds[,i]),index+0.7,median(rb_abunds[,i]),index, lwd=3)
   index <- index + 2
@@ -632,8 +632,8 @@ par(mar=c(5, 11, 1, 1))
 plot(1, type="n", ylim=c(0,length(left_otu_feat)*2), xlim=c(1e-4,3), log="x", ylab="", xlab="Relative Abundance (%)", xaxt="n", yaxt="n")
 index <- 1
 for(i in left_otu_feat){
-  stripchart(at=index-0.35, jitter(ls_abunds[,i], amount=1e-5), pch=21, bg="black", method="jitter", jitter=0.2, add=T, lwd=0.5)
-  stripchart(at=index+0.35, jitter(lb_abunds[,i], amount=1e-5), pch=21, bg="white", method="jitter", jitter=0.2, add=T, lwd=0.5)
+  stripchart(at=index-0.35, jitter(ls_abunds[,i], amount=1e-5), pch=21, bg="white", method="jitter", jitter=0.2, add=T, lwd=0.5)
+  stripchart(at=index+0.35, jitter(lb_abunds[,i], amount=1e-5), pch=21, bg="black", method="jitter", jitter=0.2, add=T, lwd=0.5)
   segments(median(ls_abunds[,i]),index-0.7,median(ls_abunds[,i]),index, lwd=2)
   segments(median(lb_abunds[,i]),index+0.7,median(lb_abunds[,i]),index, lwd=2)
   index <- index + 2
@@ -674,7 +674,7 @@ for(i in LRbowel_otu_feat){
 }
 axis(2, at=seq(1,index-2,2), labels=otu_taxa_LRbowel$tax_label, las=1, line=-0.5, tick=F, cex.axis=0.9)
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
-legend('topright', legend=c("Distal mucosa", "Proximal mucosa"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
+legend('topright', legend=c("D mucosa", "P mucosa"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
 
 mtext('A', side=2, line=7.5, las=1, adj=2, padj=-6.5, cex=2, font=2)
 

@@ -1,7 +1,7 @@
 ---
 title: "The microbiota of the proximal and distal human colon"
 csl: gastro.csl
-fontsize: 11pt
+fontsize: 12pt
 output:
   word_document: default
   pdf_document:
@@ -406,9 +406,21 @@ names(fusoviv)[5] <- "Otu00472_relAbund"
 
 ### Abstract
 
-Chemical and nutrient gradients along the human colon create microenvironments that affect the distribution and composition of the gut microbiota. The microbiome has been implicated in colorectal cancer (CRC) and inflammatory bowel disease (IBD). Further, these diseases can exhibit different findings depending on the location of the colon they are found in. CRC tumors of the proximal and distal colon are morphologically and genetically distinct. Similarly, Crohn's and Ulcerative Colitis (UC) manifest different morphological characteristics in different parts of the GI tract. Previous analysis of the fecal microbiota from healthy and CRC or IBD patients has revealed different microbial signatures associated with these diseases. We extended these observations of the fecal microbiome to include analysis of the proximal and distal healthy human colon. We used a two-colonoscope approach on subjects that had not undergone any bowel preparation procedure. In contrast, previous studies have obtained samples from colonoscopy or surgical specimens where the subjects had undergone colonic preparation. Our technique allowed characterization of native proximal and distal luminal and mucosal microbiome without prior chemical disruption. 16S rRNA gene sequencing was performed on proximal and distal mucosal and luminal biopsies and home-collected stool for 20 healthy individuals. Diversity analysis revealed that each site contained a diverse community and that a patient’s samples were more similar to each other than to that of other individuals. A patient's feces were most similar to samples taken from the distal lumen, likely reflecting the anatomical structure of the colon. Since we could not differentiate the communities in the proximal and distal colon based on community structure or community membership alone, we employed the Random Forest machine-learning algorithm to identify key taxa that the two sites in the lumen and mucosa. Random Forest classification models were built using taxa abundance and sample location and revealed distinct populations that were found in each location. A model differentiating the proximal mucosa and lumen was built with an AUC of 0.856. The proximal mucosa had a higher abundance of the genera _Enterobacteriaceae_ and _Bacteriodes_. _Peptoniphilus, Anaerococcus, Finegoldia,_ and _Turicibacter_ were most likely to be found in distal mucosal samples versus distal luminal samples (AUC = 0.975). The classification model performed well (AUC = 0.920) when classifying mucosal samples into proximal or distal sides, but separating luminal samples from each side proved more challenging (AUC = 0.575). The distal mucosa was found to have high populations of _Finegoldia, Murdochiella_ and _Porphyromonas_. Proximal and distal luminal samples were comprised of many of the same taxa, likely reflecting the fact that stool moves along the colon from the proximal to distal end. By sampling the unprepped human colon, our results have identified distinct bacterial populations native to the proximal and distal sides. Further investigation of these bacteria may elucidate if and how these groups contribute to different pathogenesis processes on the respective sides of the colon. 
+**Background and Aims:**
+The microbiome has been implicated in the development of colorectal cancer (CRC). CRC tumors of the proximal and distal colon are morphologically and genetically distinct but the microbes that reside in each location are not well described. Prior studies have used fecal samples from healthy and CRC patients to examine disease-associated microbes, which cannot reflect different biogeographic sites in the colon. Here we profile the microbes of the healthy proximal and distal mucosa and lumen.  
 
-Keywords: 
+**Methods:**
+We used a two-colonoscope sampling approach on 20 healthy subjects that had not undergone any bowel preparation procedure. 16S rRNA gene sequencing was performed on proximal and distal mucosal and luminal biopsies and home-collected stool. Alpha and beta diversity metrics for each site were calculated. Random Forest classification models were built using taxa abundance and sample location.
+
+**Results:**
+Beta diversity analysis showed that the right mucosa and lumen were the most similar to each other. The distal mucosa had higher abundance of _Finegoldia, Murdochiella_, _Peptoniphilus_, _Porphyromonas_ and  _Anaerococcus_. The proximal mucosa had more of the genera _Enterobacteriaceae_, _Bacteroides_ and _Psuedomonas_. The classification model performed well when classifying mucosal samples into proximal or distal sides (AUC = 0.8500). Separating proximal and distal luminal samples proved more challenging (AUC = 0.5803) and specific microbiota that differentiated the two were hard to identify. 
+
+**Conclusions:**
+By sampling the unprepped human colon, we identified distinct bacterial populations native to the proximal and distal sides. Further investigation of these bacteria may elucidate if and how these groups contribute to different oncogenic processes on the respective sides of the colon. 
+
+Words: 260/260
+
+Keywords: microbiome; colon cancer; proximal and distal colon
 
 ### Introduction
 

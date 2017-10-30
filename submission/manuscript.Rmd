@@ -1,5 +1,5 @@
 ---
-title: "The microbiota of the proximal and distal human colon"
+title: "Spatial variation of the native colon microbiota in healthy adults"
 csl: gastro.csl
 fontsize: 12pt
 output:
@@ -20,7 +20,7 @@ bibliography: references.bib
 ---
 \vspace{35mm}
 
-Running title: The microbiota of the proximal and distal human colon
+Running title: Spatial variation of native colon microbiota
 
 \vspace{35mm}
 
@@ -53,7 +53,7 @@ knitr::opts_chunk$set("cache" = FALSE)
 ```
 
 ```{r dependencies, echo=FALSE, warning = FALSE, message=FALSE}
-pack_used <- c('randomForest','ggplot2', 'pROC', 'knitr','dplyr','AUCRF', 'tidyr', 'caret', 'RColorBrewer', 'reshape2', 'wesanderson')
+pack_used <- c('randomForest','ggplot2', 'pROC', 'knitr','dplyr','AUCRF', 'tidyr', 'caret', 'RColorBrewer', 'reshape2', 'wesanderson', 'vegan', 'cowplot')
 for (dep in pack_used){
   if (dep %in% installed.packages()[,"Package"] == FALSE){
     install.packages(as.character(dep), repos = 'http://cran.us.r-project.org', 
@@ -195,164 +195,7 @@ inter_medians <- aggregate(thetayc ~ same_pt, alltyc, median)
 
 ```{r randomforest, echo=FALSE}
 
-#make OTU abundance file
-#Create df with relative abundances
-shared_file_rf <- subset(shared_file, select = -c(numOtus, label))
-shared_meta_rf <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
-
-#create dataframe with relative abundances
-rel_abund <- 100*shared_file_rf/unique(apply(shared_file_rf, 1, sum))
-
-#Create vector of OTUs with median abundances >1%
-OTUs_1 <- apply(rel_abund, 2, max) > 1
-OTU_list <- colnames(rel_abund)[OTUs_1]
-#get df of just top OTUs
-rel_abund_top <- rel_abund[, OTUs_1]
-rel_meta <- merge(meta_file, rel_abund_top, by.x='group', by.y="row.names")
-
-seed <- 1
-n_trees <- 2001
-
-source('../code/random_functions.R')
-source('../code/tax_level.R')
-
-#####RandomForest###########################################################################################
-#build randomForest model for each location comparison using randomize_loc function 
-rf_distal <- randomize_loc(rel_meta, "LB", "LS") #OOB 10.26%
-rf_proximal <- randomize_loc(rel_meta, "RB", "RS") #OOB 53%
-rf_bowel <- randomize_loc(rel_meta, "LB", "RB") #OOB 25.64%
-rf_lumen <- randomize_loc(rel_meta, "LS", "RS") #OOB 69.23%
-
-#and for each site
-rf_all <- randomize_site(rel_meta, "mucosa", "stool")
-
-
-#####AUCRF#####################################################################################
-
-# create RF model with AUCRF outputs top OTUs
-aucrf_data_distal_bs <- auc_loc(rel_meta, "LB", "LS")
-aucrf_data_LRbowel <- auc_loc(rel_meta, "LB", "RB")
-aucrf_data_proximal_bs <- auc_loc(rel_meta, "RB", "RS")
-aucrf_data_LRlumen <- auc_loc(rel_meta, "LS", "RS")
-aucrf_data_allum <- auc_site(rel_meta, "mucosa", "stool")
-
-########Cross-Validation#################################################################
-#10 fold cross validation for all lumen vs mucosa 
-iters <- 100
-cv10f_aucs <- c()
-cv10f_all_resp <- c()
-cv10f_all_pred <- c()
-for(j in 1:iters){
-  set.seed(j)
-  sampling <- sample(1:nrow(aucrf_data_allum),nrow(aucrf_data_allum),replace=F)
-  cv10f_probs <- rep(NA,78)
-  for(i in seq(1,77,7)){
-    train <- aucrf_data_allum[sampling[-(i:(i+6))],]
-    test <- aucrf_data_allum[sampling[i:(i+6)],]
-    set.seed(seed)
-    temp_model <- AUCRF(site~., data=train, pdel=0.99, ntree=500)
-    cv10f_probs[sampling[i:(i+6)]] <- predict(temp_model$RFopt, test, type='prob')[,2]
-  }
-  cv10f_roc <- roc(aucrf_data_allum$site~cv10f_probs)
-  cv10f_all_pred <- c(cv10f_all_pred, cv10f_probs)
-  cv10f_all_resp <- c(cv10f_all_resp, aucrf_data_allum$site)
-  cv10f_aucs[j] <- cv10f_roc$auc #stores aucs for all iterations, can use to calc IQR
-}
-cv10f_roc <- roc(cv10f_all_resp~cv10f_all_pred)
-
-#10fold CV for L lumen vs L mucosa
-iters <- 100
-cv10f_aucs <- c()
-cv10f_all_resp_distal_bs <- c()
-cv10f_all_pred_distal_bs <- c()
-for(j in 1:iters){
-  set.seed(j)
-  sampling <- sample(1:nrow(aucrf_data_distal_bs),nrow(aucrf_data_distal_bs),replace=F)
-  cv10f_probs <- rep(NA,39)
-  for(i in seq(1,36,4)){
-    train_distal_bs <- aucrf_data_distal_bs[sampling[-(i:(i+3))],]
-    test_distal_bs <- aucrf_data_distal_bs[sampling[i:(i+3)],]
-    set.seed(seed)
-    temp_model_distal_bs <- AUCRF(location~., data=train_distal_bs, pdel=0.99, ntree=500)
-    cv10f_probs[sampling[i:(i+3)]] <- predict(temp_model_distal_bs$RFopt, test_distal_bs, type='prob')[,2]
-  }
-  cv10f_roc_distal_bs <- roc(aucrf_data_distal_bs$location~cv10f_probs)
-  cv10f_all_pred_distal_bs <- c(cv10f_all_pred_distal_bs, cv10f_probs)
-  cv10f_all_resp_distal_bs <- c(cv10f_all_resp_distal_bs, aucrf_data_distal_bs$location)
-  cv10f_aucs[j] <- cv10f_roc_distal_bs$auc #stores aucs for all iterations, can use to calc IQR
-}
-cv10f_roc_distal_bs <- roc(cv10f_all_resp_distal_bs~cv10f_all_pred_distal_bs)
-
-#10fold CV for R lumen vs R mucosa
-iters <- 100
-cv10f_aucs <- c()
-cv10f_all_resp_proximal_bs <- c()
-cv10f_all_pred_proximal_bs <- c()
-for(j in 1:iters){
-  set.seed(j)
-  sampling <- sample(1:nrow(aucrf_data_proximal_bs),nrow(aucrf_data_proximal_bs),replace=F)
-  cv10f_probs <- rep(NA,39)
-  for(i in seq(1,36,4)){
-    train_proximal_bs <- aucrf_data_proximal_bs[sampling[-(i:(i+3))],]
-    test_proximal_bs <- aucrf_data_proximal_bs[sampling[i:(i+3)],]
-    set.seed(seed)
-    temp_model_proximal_bs <- AUCRF(location~., data=train_proximal_bs, pdel=0.99, ntree=500)
-    cv10f_probs[sampling[i:(i+3)]] <- predict(temp_model_proximal_bs$RFopt, test_proximal_bs, type='prob')[,2]
-  }
-  cv10f_roc_proximal_bs <- roc(aucrf_data_proximal_bs$location~cv10f_probs)
-  cv10f_all_pred_proximal_bs <- c(cv10f_all_pred_proximal_bs, cv10f_probs)
-  cv10f_all_resp_proximal_bs <- c(cv10f_all_resp_proximal_bs, aucrf_data_proximal_bs$location)
-  cv10f_aucs[j] <- cv10f_roc_proximal_bs$auc #stores aucs for all iterations, can use to calc IQR
-}
-cv10f_roc_proximal_bs <- roc(cv10f_all_resp_proximal_bs~cv10f_all_pred_proximal_bs)
-
-#10 fold cross validation for L vs R mucosa
-
-iters <- 100
-cv10f_aucs_muc <- c()
-cv10f_all_resp_muc <- c()
-cv10f_all_pred_muc <- c()
-for(j in 1:iters){
-  set.seed(j)
-  sampling_muc <- sample(1:nrow(aucrf_data_LRbowel),nrow(aucrf_data_LRbowel),replace=F)
-  cv10f_probs_muc <- rep(NA,39)
-  for(i in seq(1,36,4)){
-    train_muc <- aucrf_data_LRbowel[sampling_muc[-(i:(i+3))],]
-    test_muc <- aucrf_data_LRbowel[sampling_muc[i:(i+3)],]
-    set.seed(seed)
-    temp_model_muc <- AUCRF(location~., data=train_muc, pdel=0.99, ntree=500)
-    cv10f_probs_muc[sampling_muc[i:(i+3)]] <- predict(temp_model_muc$RFopt, test_muc, type='prob')[,2]
-  }
-  cv10f_roc_muc <- roc(aucrf_data_LRbowel$location~cv10f_probs_muc)
-  cv10f_all_pred_muc <- c(cv10f_all_pred_muc, cv10f_probs_muc)
-  cv10f_all_resp_muc <- c(cv10f_all_resp_muc, aucrf_data_LRbowel$location)
-  cv10f_aucs_muc[j] <- cv10f_roc_muc$auc #stores aucs for all iterations, can use to calc IQR
-}
-cv10f_roc_muc <- roc(cv10f_all_resp_muc~cv10f_all_pred_muc)
-
-
-#10 fold cross validation for L vs R lumen
-iters <- 100
-cv10f_aucs_lum <- c()
-cv10f_all_resp_lum <- c()
-cv10f_all_pred_lum <- c()
-for(j in 1:iters){
-  set.seed(j)
-  sampling_lum <- sample(1:nrow(aucrf_data_LRlumen),nrow(aucrf_data_LRlumen),replace=F)
-  cv10f_probs_lum <- rep(NA,39)
-  for(i in seq(1,36,4)){
-    train_lum <- aucrf_data_LRlumen[sampling_lum[-(i:(i+3))],]
-    test_lum <- aucrf_data_LRlumen[sampling_lum[i:(i+3)],]
-    set.seed(seed)
-    temp_model_lum <- AUCRF(location~., data=train_lum, pdel=0.99, ntree=500)
-    cv10f_probs_lum[sampling_lum[i:(i+3)]] <- predict(temp_model_lum$RFopt, test_lum, type='prob')[,2]
-  }
-  cv10f_roc_lum <- roc(aucrf_data_LRlumen$location~cv10f_probs_lum)
-  cv10f_all_pred_lum <- c(cv10f_all_pred_lum, cv10f_probs_lum)
-  cv10f_all_resp_lum <- c(cv10f_all_resp_lum, aucrf_data_LRlumen$location)
-  cv10f_aucs_lum[j] <- cv10f_roc_lum$auc #stores aucs for all iterations, can use to calc IQR
-}
-cv10f_roc_lum <- roc(cv10f_all_resp_lum~cv10f_all_pred_lum)
+#update this to just be importing end files off of optimization scripts to pull AUCs from
 ```
 ```{r important_otus, echo=FALSE}
 #just LB vs LS 
@@ -385,52 +228,29 @@ rsls_abunds <- shared_meta[shared_meta$location=='RS', LRlumen_otu_feat]/10000 +
 ```
 
 
-```{r oncogenic_otus, echo=FALSE}
-subsampled_meta <- merge(meta_file, subsample, by.x='group', by.y='row.names')
-fuso179 <- subsampled_meta[, colnames(subsampled_meta) %in% c("group", "patient", "location", "Otu00179")]
-subsampled_to = 4231
-
-fuso179[,5] <- (fuso179[,4]/subsampled_to)*100
-names(fuso179)[5] <- "Otu00179_relAbund"
-
-p_152 <-subsampled_meta[, colnames(subsampled_meta) %in% c("Group", "patient", "location", "Otu00152")]
-
-p_152[,5] <- (p_152[,4]/subsampled_to) *100
-names(p_152)[5] <- "Otu152_abund"
-
-fusoviv <- subsampled_meta[, colnames(subsampled_meta) %in% c("group", "patient", "location", "Otu00472")]
-fusoviv[,5] <- (fusoviv[,4]/4321)*100
-names(fusoviv)[5] <- "Otu00472_relAbund"
-```
-
-
 ### Abstract
 
-**Background and Aims:**
-The microbiome has been implicated in the development of colorectal cancer (CRC). CRC tumors of the proximal and distal colon are morphologically and genetically distinct but the microbes that reside in each location are not well described. Prior studies have used fecal samples from healthy and CRC patients to examine disease-associated microbes, which cannot reflect different biogeographic sites in the colon. Here we profile the microbes of the healthy proximal and distal mucosa and lumen.  
+**Background and Aims:** The microbiome has been implicated in the development of colorectal cancer (CRC) and inflammatory bowel diseases (IBD). The specific traits of these diseases vary along the axis of the digestive tract. Further, variation in the structure of the gut microbiota has been associated with both diseases. Here we profiled the microbiota of the healthy proximal and distal mucosa and lumen to better understand how bacterial populations vary along the colon.
 
-**Methods:**
-We used a two-colonoscope sampling approach on 20 healthy subjects that had not undergone any bowel preparation procedure. 16S rRNA gene sequencing was performed on proximal and distal mucosal and luminal biopsies and home-collected stool. Alpha and beta diversity metrics for each site were calculated. Random Forest classification models were built using taxa abundance and sample location.
+**Methods:** We used a two-colonoscope approach to sample proximal and distal mucosal and luminal contents from the colons of 20 healthy subjects that had not undergone any bowel preparation procedure. The biopsies and home-collected stool were subjected to 16S rRNA gene sequencing and Random Forest classification models were built using taxa abundance and location to identify microbiota specific to each site. 
 
-**Results:**
-Beta diversity analysis showed that the right mucosa and lumen were the most similar to each other. The distal mucosa had higher abundance of _Finegoldia, Murdochiella_, _Peptoniphilus_, _Porphyromonas_ and  _Anaerococcus_. The proximal mucosa had more of the genera _Enterobacteriaceae_, _Bacteroides_ and _Psuedomonas_. The classification model performed well when classifying mucosal samples into proximal or distal sides (AUC = 0.8500). Separating proximal and distal luminal samples proved more challenging (AUC = 0.5803) and specific microbiota that differentiated the two were hard to identify. 
+**Results:** : The right mucosa and lumen had the most similar community structures of the five sites we considered from each subject. The distal mucosa had higher relative abundance of Finegoldia, Murdochiella, Peptoniphilus, Porphyromonas and Anaerococcus. The proximal mucosa had more of the genera Enterobacteriaceae, Bacteroides and Pseudomonas. The classification model performed well when classifying mucosal samples into proximal or distal sides (AUC=0.850). Separating proximal and distal luminal samples proved more challenging (AUC=0.580) and specific microbiota that differentiated the two were hard to identify.
 
-**Conclusions:**
-By sampling the unprepped human colon, we identified distinct bacterial populations native to the proximal and distal sides. Further investigation of these bacteria may elucidate if and how these groups contribute to different oncogenic processes on the respective sides of the colon. 
+**Conclusions:** By sampling the unprepped colon, we identified distinct bacterial populations native to the proximal and distal sides. Further investigation of these bacteria may elucidate if and how these groups contribute to different disease processes on their respective sides of the colon.
+ 
+Words: 259/260
 
-Words: 260/260
-
-Keywords: microbiome; colon cancer; proximal and distal colon
+**Keywords**: microbiome; colon cancer; proximal and distal colon
 
 ### Introduction
 
-The human colon is an ecosystem comprised of several different microenvironments inhabited by resident bacterial members of the microbiome. Concentrations of oxygen, water and anti-microbial peptides change along the gut axis and influence what populations of microbes reside in each location. Microenvironments differ not only longitudinally along the colon, but latitudinally from the epithelium to mucosa to intestinal lumen, offering several sites for different microbial communities to flourish. The identity of these specific microbes and communities are important for understanding the etiology of complex colon diseases such as Inflammatory Bowel Disease (IBD) and Colorectal Cancer (CRC). IBD and CRC are known to be preceded or accelerated by perturbations in gut microbes [@Yamauchi2012; @Forbes2016; @Halfvarson2017]. The manifestations of these diseases are known to vary based upon the biogeographical location in which they occur. For instance, CRC that arise in the distal (left) colon are of hindgut origin and tend to have large chromosomal alterations indicative of chromosomal instability @Yamauchi2012. In contrast, CRCs arising in the proximal (right) colon tumors are of midgut origin and tend to be sessile and microsatellite instable (MSI with BRAF and KRAS mutations) @Yamauchi2012. The distal and proximal sides of the colon differ in the amount of inflammation present and the genomic instability of precancerous cells, respectively, in addition to variation in the previously mentioned chemical gradients [@Yamauchi2012; @Albenberg2014; @Donaldson2015]. In IBD patients, disease occurring in the distal colon extending proximally is usually indicative of ulcerative colitis (UC), whereas Crohn's disease (CD) can occur anywhere along the GI tract, most commonly in the ileum and the cecum @Forbes2016. UC presents as continuous disease with only mucosal involvement, where as CD has skip lesions and full thickness involvement that may cause abscesses, strictures and fistulas @Forbes2016. Thus, given the varied physiology of the proximal-distal axis of the colon and known differences in disease patterns at these sites, symbiotic microbes and their metabolites likely vary as well, and may influence the heterogenous disease prognoses of IBD and CRC. Because CRC can be a long-term complication of IBD, the distribution of microbes is important to understanding the pathophysiology of both diseases. 
+The human colon is an ecosystem comprised of numerous microenvironments that select for different microbiota. Concentrations of oxygen, water and anti-microbial peptides change along the gut axis and influence which microbiota reside in each location. Microenvironments differ not only longitudinally along the colon, but also radially from the epithelium to mucosa to intestinal lumen, offering several sites for different microbial communities to flourish. The identity of these specific microbiota and communities are important for understanding the etiology of complex colon diseases such as Colorectal Cancer (CRC) and Inflammatory Bowel Disease (IBD). CRC and IBD can be preceded or accelerated by perturbations the structure of the gut microbiota [@Yamauchi2012; @Forbes2016; @Halfvarson2017]. The manifestations of these diseases are known to vary based upon the location in which they occur. For instance, CRC that arises in the distal (left) colon are of hindgut origin and tend to have large chromosomal alterations indicative of chromosomal instability @Yamauchi2012. In contrast, CRC arising in the proximal (right) colon tumors are of midgut origin and tend to be sessile and microsatellite instable (MSI with BRAF and KRAS mutations) @Yamauchi2012. In addition to the environmental gradients within the colon, the distal and proximal sides of the colon differ in the amount of inflammation present and the genomic instability of precancerous cells, respectively [@Yamauchi2012; @Albenberg2014; @Donaldson2015]. In IBD patients, disease occurring in the distal colon extending proximally is usually indicative of ulcerative colitis (UC), whereas Crohn's disease (CD) can occur anywhere along the GI tract, most commonly in the ileum and the cecum @Forbes2016. UC presents as continuous disease with only mucosal involvement, where as CD has skip lesions and full thickness involvement that may cause abscesses, strictures and fistulas @Forbes2016. Thus, given the varied physiology of the proximal-distal axis of the colon and known differences in disease patterns at these sites, symbiotic microbiota and their metabolites likely vary as well, and may influence the heterogeneous disease prognoses of IBD and CRC. Because CRC can be a long-term complication of IBD, the distribution of microbiota is important to understanding the pathophysiology of both diseases. 
 
-Several recent findings have shown that development and progression of IBD or CRC can be attributed to specific molecular events as a result of interactions between the gut microbiota and human host [@Yamauchi2012; @Halfvarson2017]. For instance, comparison of the bacteria present on CRC tumors with those found on nearby healthy tissue has identified specific species that are tumor-associated @Dejea2014. These species include the oral pathogens _Fusobacterium nucleatum_ and _Porphyromonas asacharolytica_. Interestingly, these periodontal pathogens have been highly predictive of whether a patient had CRC tumors or not in our prior human stool classification studies @Baxter2016. _F. nucleatum_ has also been found to be elevated in the stool and biopsies of patients with IBD as compared to healthy controls @Strauss2011. Furthermore, studies of _F. nucleatum_ isolated from mucosal biopsies showed that more invasive  _F. nucleatum_ positively correlates with IBD disease level @Strauss2011. Like many intestinal pathogens, the bacteria appear to have a high-impact despite being lowly-abundant in the community @Forbes2016. The physiology of these rare taxa may contribute to the colonic disease state. These studies often examined only shed human stool or the small intestine, preventing fine-resolution analysis of paired samples from the proximal and distal sides of the colon. Similarly, comparisons of on- or off-tumor/lesion bacteria rarely have matched tissue from the other side of the colon from the same patient, limiting what conclusions can be drawn about the colonic microbiome overall, let alone at that specific site. Due to these limitations, the contribution of the gut microbiota to IBD and CRC disease location in the colon is largely undefined. Characterizing these communities could provide needed insight into disease etiology, including how the disruption of the healthy community could promote the initiation or proliferation of the distinct proximal and distal CRC tumors or IBD flares.
+Several recent findings have shown that development and progression of IBD or CRC can be attributed to specific molecular events as a result of interactions between the gut microbiota and human host [@Yamauchi2012; @Halfvarson2017]. For instance, comparison of the bacteria present on CRC tumors with those found on nearby healthy tissue has identified specific species that are tumor-associated @Dejea2014. Specific bacteria have also been identified in fecal samples of patients with varying stages of colon tumorigenesis @Baxter2016. These species include the oral pathogens _Fusobacterium nucleatum_ and _Porphyromonas asacharolytica_.  _F. nucleatum_ has also been found to be elevated in the stool and biopsies of patients with IBD as compared to healthy controls @Strauss2011. Furthermore, studies of _F. nucleatum_ isolated from mucosal biopsies showed that more invasive  _F. nucleatum_ positively correlates with IBD disease level @Strauss2011. Like many intestinal pathogens, the bacteria appear to have a high-impact despite being lowly-abundant in the community @Forbes2016. The physiology of these rare taxa may contribute to the colonic disease state. These studies often examined only shed human stool or the small intestine, preventing fine-resolution analysis of paired samples from the proximal and distal sides of the colon. Similarly, comparisons of on- or off-tumor/lesion bacteria rarely have matched tissue from the other side of the colon from the same, disease-baring patient, limiting what conclusions can be drawn about the colonic microbiome overall, let alone at that specific site. Due to these limitations, the contribution of the gut microbiota to CRC and IBD disease location in the colon is largely undefined. Characterizing these communities in healthy individuals could provide needed insight into disease etiology, including how the disruption of the healthy community could promote the initiation or proliferation of the distinct proximal and distal CRC tumors or IBD flares.
 
-The few existing profiles of the microbial biogeography of the gut have been limited by sample collection methods. The majority of human gut microbiome studies have been performed on whole shed feces or on samples collected during colonoscopy or surgery. While the latter method allows investigators to acquire samples from inside the human colon, typically these procedures are preceded by the use of bowel preparation methods such as the consumption of laxatives to cleanse the bowel. Bowel preparation is essential for detecting cancerous or precancerous lesions in the colon, but complicates microbiome profiling as the chemicals strip the bowel of contents and disrupt the mucosal layer [@Jalanka2014; @Harrell2012]. As such, what little information we do have about the biogeographical distribution of the microbes in the proximal and distal colon is confounded by the bowel preparation procedure. 
+The few existing profiles of the microbial spatial variation of the colon have been limited by sample collection methods. The majority of human gut microbiome studies have been performed on whole shed feces or on samples collected during colonoscopy or surgery. While the latter method allows investigators to acquire samples from inside the human colon, typically these procedures are preceded by the use of bowel preparation methods such as the consumption of laxatives to cleanse the bowel. Bowel preparation is essential for detecting cancerous or precancerous lesions in the colon, but complicates microbiome profiling as the chemicals strip the bowel of contents and disrupt the mucosal layer [@Jalanka2014; @Harrell2012]. As such, what little information we do have about the spatial distribution of the microbiota in the proximal and distal colon is confounded by the bowel preparation procedure. 
 
-Here we address the limitations of previous studies and effectively identify the microbes specific to the lumen and mucosa of the proximal and distal healthy human colon. We used an unprepared colonoscopy technique to sample the natural community of each location of the gut without prior disruption of the native bacteria in 20 healthy volunteers. To address the inherent inter-individual variation in human microbiomes, we used a machine-learning classification algorithm trained on curated 16S rRNA sequencing reads to identify microbes specific to each location. We found that our classification models were able to separate mucosal and lumenal samples as well as differentiate between sides of the colon based on populations of specific microbes. By identifying the specific microbes we are poised to ask if and how the presence or disruption of the microbes at each site contribute to the development of the specific tumor subtypes of CRC in the proximal and distal human colon. 
+Here we address the limitations of previous studies and identify the microbes specific to the lumen and mucosa of the proximal and distal healthy human colon. We used an unprepared colonoscopy technique to sample the natural community of each location of the gut without prior disruption of the native bacteria in 20 healthy volunteers. To address the inherent inter-individual variation in microbiota, we used a machine-learning classification algorithm trained on curated 16S rRNA sequencing reads to identify the microbiota that were specific to each location. We found that our classification models were able to separate mucosal and luminal samples as well as differentiate between sides of the colon based on populations of particular microbiota. By identifying the distinguishing microbiota we are poised to ask if and how the presence or disruption of the microbiota at each site contribute to the development of the tumor subtypes of CRC in the proximal and distal human colon. 
 
 
 ### Results

@@ -3,7 +3,7 @@
 
 ###########################################################
 
-pack_used <- c('ggplot2','dplyr', 'tidyr', 'RColorBrewer', 'reshape2', 'wesanderson', 'cowplot')
+pack_used <- c('ggplot2','dplyr', 'tidyr', 'RColorBrewer', 'reshape2', 'wesanderson', 'cowplot', 'vegan')
 for (dep in pack_used){
   if (dep %in% installed.packages()[,"Package"] == FALSE){
     install.packages(as.character(dep), repos = 'http://cran.us.r-project.org', 

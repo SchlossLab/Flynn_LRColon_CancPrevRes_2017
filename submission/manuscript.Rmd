@@ -1,13 +1,13 @@
 ---
 title: "Spatial variation of the native colon microbiota in healthy adults"
-csl: gastro.csl
+csl: aacr.csl
 fontsize: 12pt
 output:
-  word_document: default
   pdf_document:
     includes: null
     keep_tex: yes
   html_document: default
+  word_document: default
 header-includes:
 - \usepackage{setspace}
 - \doublespacing
@@ -18,25 +18,35 @@ header-includes:
 geometry: margin=1.0in
 bibliography: references.bib
 ---
-\vspace{35mm}
+\vspace{15mm}
 
 Running title: Spatial variation of native colon microbiota
 
-\vspace{35mm}
+\vspace{15mm}
 
 
 Kaitlin J. Flynn^1^, Charles C. Koumpouras^1^, Mack T. Ruffin IV^2^, D. Kim Turgeon^3$\dagger$^, and Patrick D. Schloss^1$\dagger$^
 
-\vspace{35mm}
+\vspace{15mm}
 
 $\dagger$ Corresponding authors: kturgeon@umich.edu and pschloss@umich.edu
 
 
 1\. Department of Microbiology and Immunology, University of Michigan Medical School, Ann Arbor, Michigan 48109
 
-2\. Pennsylvania State University, Hershey, Pennsylvania ??
+2\. Department of Family and Community Medicine, College of Medicine, Pennsylvania State University, Hershey, Pennsylvania 17033
 
 3\. Department of Internal Medicine, Division of Gastroenterology, University of Michigan Medical School, Ann Arbor, Michigan
+
+Grant support: Rose and Lawrence C. Page Foundation
+
+Disclosures: nothing to disclose
+
+Word count:
+
+Figures: 
+
+Supplementary figures: 
 
 
 \newpage
@@ -197,35 +207,6 @@ inter_medians <- aggregate(thetayc ~ same_pt, alltyc, median)
 
 #update this to just be importing end files off of optimization scripts to pull AUCs from
 ```
-```{r important_otus, echo=FALSE}
-#just LB vs LS 
-distal_otu_feat <- colnames(aucrf_data_distal_bs[2:6])
-otu_taxa_distal <- get_tax(1, distal_otu_feat, tax_file)
-#Abundance stripchart or most predictive otus
-ls_abunds <- shared_meta[shared_meta$location=='LS', distal_otu_feat]/10000 + 1e-4
-lb_abunds <- shared_meta[shared_meta$location=='LB', distal_otu_feat]/10000 + 1e-4
-
-proximal_otu_feat <- colnames(aucrf_data_proximal_bs[2:6])
-otu_taxa_proximal <- get_tax(1, proximal_otu_feat, tax_file)
-#Abundance stripchart or most predictive otus
-rs_abunds <- shared_meta[shared_meta$location=='RS', proximal_otu_feat]/10000 + 1e-4
-rb_abunds <- shared_meta[shared_meta$location=='RB', proximal_otu_feat]/10000 + 1e-4
-
-#Lb vs Rb
-LRbowel_otu_feat <- colnames(aucrf_data_LRbowel[2:6])
-otu_taxa_LRbowel <- get_tax(1, LRbowel_otu_feat, tax_file)
-#Abundance stripchart or most predictive otus 
-lb_abunds <- shared_meta[shared_meta$location=='LB', LRbowel_otu_feat]/10000 + 1e-4
-rblb_abunds <- shared_meta[shared_meta$location=='RB', LRbowel_otu_feat]/10000 + 1e-4
-
-#LS vs RS
-LRlumen_otu_feat <- colnames(aucrf_data_LRlumen[2:6])
-otu_taxa_LRlumen <- get_tax(1, LRlumen_otu_feat, tax_file)
-#Abundance stripchart or most predictive otus 
-lsrs_abunds <- shared_meta[shared_meta$location=='LS', LRlumen_otu_feat]/10000 + 1e-4
-rsls_abunds <- shared_meta[shared_meta$location=='RS', LRlumen_otu_feat]/10000 + 1e-4
-
-```
 
 
 ### Abstract
@@ -246,7 +227,7 @@ Words: 259/260
 
 The human colon is an ecosystem comprised of numerous microenvironments that select for different microbiota. Concentrations of oxygen, water and anti-microbial peptides change along the gut axis and influence which microbiota reside in each location. Microenvironments differ not only longitudinally along the colon, but also radially from the epithelium to mucosa to intestinal lumen, offering several sites for different microbial communities to flourish. The identity of these specific microbiota and communities are important for understanding the etiology of complex colon diseases such as Colorectal Cancer (CRC) and Inflammatory Bowel Disease (IBD). CRC and IBD can be preceded or accelerated by perturbations the structure of the gut microbiota [@Yamauchi2012; @Forbes2016; @Halfvarson2017]. The manifestations of these diseases are known to vary based upon the location in which they occur. For instance, CRC that arises in the distal (left) colon are of hindgut origin and tend to have large chromosomal alterations indicative of chromosomal instability @Yamauchi2012. In contrast, CRC arising in the proximal (right) colon tumors are of midgut origin and tend to be sessile and microsatellite instable (MSI with BRAF and KRAS mutations) @Yamauchi2012. In addition to the environmental gradients within the colon, the distal and proximal sides of the colon differ in the amount of inflammation present and the genomic instability of precancerous cells, respectively [@Yamauchi2012; @Albenberg2014; @Donaldson2015]. In IBD patients, disease occurring in the distal colon extending proximally is usually indicative of ulcerative colitis (UC), whereas Crohn's disease (CD) can occur anywhere along the GI tract, most commonly in the ileum and the cecum @Forbes2016. UC presents as continuous disease with only mucosal involvement, where as CD has skip lesions and full thickness involvement that may cause abscesses, strictures and fistulas @Forbes2016. Thus, given the varied physiology of the proximal-distal axis of the colon and known differences in disease patterns at these sites, symbiotic microbiota and their metabolites likely vary as well, and may influence the heterogeneous disease prognoses of IBD and CRC. Because CRC can be a long-term complication of IBD, the distribution of microbiota is important to understanding the pathophysiology of both diseases. 
 
-Several recent findings have shown that development and progression of IBD or CRC can be attributed to specific molecular events as a result of interactions between the gut microbiota and human host [@Yamauchi2012; @Halfvarson2017]. For instance, comparison of the bacteria present on CRC tumors with those found on nearby healthy tissue has identified specific species that are tumor-associated @Dejea2014. Specific bacteria have also been identified in fecal samples of patients with varying stages of colon tumorigenesis @Baxter2016. These species include the oral pathogens _Fusobacterium nucleatum_ and _Porphyromonas asacharolytica_.  _F. nucleatum_ has also been found to be elevated in the stool and biopsies of patients with IBD as compared to healthy controls @Strauss2011. Furthermore, studies of _F. nucleatum_ isolated from mucosal biopsies showed that more invasive  _F. nucleatum_ positively correlates with IBD disease level @Strauss2011. Like many intestinal pathogens, the bacteria appear to have a high-impact despite being lowly-abundant in the community @Forbes2016. The physiology of these rare taxa may contribute to the colonic disease state. These studies often examined only shed human stool or the small intestine, preventing fine-resolution analysis of paired samples from the proximal and distal sides of the colon. Similarly, comparisons of on- or off-tumor/lesion bacteria rarely have matched tissue from the other side of the colon from the same, disease-baring patient, limiting what conclusions can be drawn about the colonic microbiome overall, let alone at that specific site. Due to these limitations, the contribution of the gut microbiota to CRC and IBD disease location in the colon is largely undefined. Characterizing these communities in healthy individuals could provide needed insight into disease etiology, including how the disruption of the healthy community could promote the initiation or proliferation of the distinct proximal and distal CRC tumors or IBD flares.
+Several recent findings have shown that development and progression of IBD or CRC can be attributed to specific molecular events as a result of interactions between the gut microbiota and human host [@Yamauchi2012; @Kostic_2013; @Halfvarson2017]. For instance, comparison of the bacteria present on CRC tumors with those found on nearby healthy tissue has identified specific species that are tumor-associated @Dejea2014. Specific bacteria have also been identified in fecal samples of patients with varying stages of colon tumorigenesis [@McCoy_2013; @Baxter2016]. These species include the oral pathogens _Fusobacterium nucleatum_ and _Porphyromonas asacharolytica_.  _F. nucleatum_ has also been found to be elevated in the stool and biopsies of patients with IBD as compared to healthy controls [@Strauss2011; @Brennan_2016]. Furthermore, studies of _F. nucleatum_ isolated from mucosal biopsies showed that more invasive  _F. nucleatum_ positively correlates with IBD disease level @Strauss2011. Like many intestinal pathogens, the bacteria appear to have a high-impact despite being lowly-abundant in the community @Forbes2016. The physiology of these rare taxa may contribute to the colonic disease state. These studies often examined only shed human stool or the small intestine, preventing fine-resolution analysis of paired samples from the proximal and distal sides of the colon. Similarly, comparisons of on- or off-tumor/lesion bacteria rarely have matched tissue from the other side of the colon from the same, disease-baring patient, limiting what conclusions can be drawn about the colonic microbiome overall, let alone at that specific site. Due to these limitations, the contribution of the gut microbiota to CRC and IBD disease location in the colon is largely undefined. Characterizing these communities in healthy individuals could provide needed insight into disease etiology, including how the disruption of the healthy community could promote the initiation or proliferation of the distinct proximal and distal CRC tumors or IBD flares.
 
 The few existing profiles of the microbial spatial variation of the colon have been limited by sample collection methods. The majority of human gut microbiome studies have been performed on whole shed feces or on samples collected during colonoscopy or surgery. While the latter method allows investigators to acquire samples from inside the human colon, typically these procedures are preceded by the use of bowel preparation methods such as the consumption of laxatives to cleanse the bowel. Bowel preparation is essential for detecting cancerous or precancerous lesions in the colon, but complicates microbiome profiling as the chemicals strip the bowel of contents and disrupt the mucosal layer [@Jalanka2014; @Harrell2012]. As such, what little information we do have about the spatial distribution of the microbiota in the proximal and distal colon is confounded by the bowel preparation procedure. 
 
@@ -283,7 +264,7 @@ To get around the noisiness from a diverse set of samples, we built Random Fores
 
 In addition to identifying features that are specific to each side of the gut, the ability of the Random Forest to classify samples can serve as a proxy for similarity. That is, a higher AUC value indicates the samples are more efficiently classfied (and thus more different) than a model with a lower AUC value. For instance, the model separating the proximal and distal mucosa had an AUC of 0.850 whereas the model for classifying the proximal and distal lumen had a much lower AUC of 0.580. Further, the latter model required 44 OTUs to best separate the samples whereas the models separating the mucosa only needed 10 OTUs. The much lower AUC and need for a high number of features compared to other models suggest these locations are the most similar of the comparisons tested. We speculate that the model was less effective at classifying the proximal and distal luminal contents because the mucosal microenvironments have variable selective pressure along the colon than the luminal microenvironments. 
 
-We detected _F. nucleatum_ and _P. asacharolytica_ in 8 and 5 of our subjects, respectively. These bacteria have been shown to be predictive of colorectal cancer in humans @Baxter2016 and have oncogenic properties in cell culture and in mice @Sears2014. Interestingly, while _F. nucleatum_ was found on both sides of the colon, _P. asacharolytica_ was only detected in the distal mucosa. Not much is known about the distribution of _P. asacharolytica_ along the colon, but given its anaerobic lifestyle and asacharolytic metabolism, it is not surprising that it resides in the less-oygen-rich and protein-rich distal mucosa @Albenberg2014. In studies examining bacteria on colorectal cancer tumors, _F. nucleatum_ is more commonly detected on proximal-sided tumors, and distribution of _F. nucleatum_ decreases along the colon to rectum @Mima2016.  Of the 8 (40%) individuals positive for _F. nucleatum_ in this study, the bacterium was spread across the proximal mucosa, distal lumen and distal mucosa. Data examining bacterial biofilms on the mucosa of CRC tumors suggests that _Fusobacteria_ species are more commonly found on proximal tumors and in biofilms, indicating that it is not only the presence of the bacterium but the structure of the tumor community that contributes to _Fusobacterium's_ role in tumorigenesis @Dejea2014. Finally, _Fusobacterium_ and _Porphyromonas_ populations not only co-occur on CRC tumors but also to synergize to promote tumorigenesis in an oral cancer model @Whitmore2014 @Flynn2016. Further analysis of the distribution and activities of these pathogens along the colon is needed to elucidate a mechanism for development of CRC or IBD subtypes in the proximal or distal colon. 
+We detected _F. nucleatum_ and _P. asacharolytica_ in 8 and 5 of our subjects, respectively. These bacteria have been shown to be predictive of colorectal cancer in humans @Baxter2016 and have oncogenic properties in cell culture and in mice @Sears2014. Interestingly, while _F. nucleatum_ was found on both sides of the colon, _P. asacharolytica_ was only detected in the distal mucosa. Not much is known about the distribution of _P. asacharolytica_ along the colon, but given its anaerobic lifestyle and asacharolytic metabolism, it is not surprising that it resides in the less-oygen-rich and protein-rich distal mucosa @Albenberg2014. In studies examining bacteria on colorectal cancer tumors, _F. nucleatum_ was more commonly detected on proximal-sided tumors, and distribution of _F. nucleatum_ decreased along the colon to rectum @Mima2016. In another study, _Fusobacterium_ was associated with MSI with BRAF and KRAS mutations, molecular features of proximal CRC @Tahara_2014. Of the 8 (40%) individuals positive for _F. nucleatum_ in the present study, the bacterium was spread across the proximal mucosa, distal lumen and distal mucosa. Data examining bacterial biofilms on the mucosa of CRC tumors suggests that _Fusobacteria_ species are more commonly found on proximal tumors and in biofilms, indicating that it is not only the presence of the bacterium but the structure of the tumor community that contributes to _Fusobacterium's_ role in tumorigenesis @Dejea2014. Finally, _Fusobacterium_ and _Porphyromonas_ populations not only co-occur on CRC tumors but also to synergize to promote tumorigenesis in an oral cancer model @Whitmore2014 @Flynn2016. Further analysis of the distribution and activities of these pathogens along the colon is needed to elucidate a mechanism for development of CRC or IBD subtypes in the proximal or distal colon. 
 
 The _Fusobacterium_ species _nucleatum_ and _varium_ have been commonly isolated from mucosal biopsies of patients with IBD @Lee2016. Laboratory experiments with these isolates have shown that disease-isolated _F. nucleatum_ are more invasive and stimulate more TNF-$\alpha$ production than strains from healthy individuals @Strauss2011, suggesting the bacteria may increase inflammation in the gut as well @Dharmani2011. _F. varium_ isolated from UC patients caused colonic ulcers in an experimental mouse model @Ohkusa2003. _F. varium_ was only detected in three subjects and two of those samples were isolated form the proximal mucosa (Figure S2B).  _F. varium_ is most commonly isolated from UC patient biopsies from the ileum or cecum @Ohkusa2002, suggesting this species may exhibit preference for the different environmental conditions of these gastrointestinal sites. Further work will assess how gut environment may select for species which may then cause localized disease. 
 

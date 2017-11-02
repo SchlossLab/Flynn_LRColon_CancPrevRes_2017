@@ -148,7 +148,7 @@ legend('bottom', legend=c(sprintf('P lumen vs D lumen, hold-one-out, AUC = 0.580
 
 ###########saving figures as proper size
 
-plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_S1.pdf'
+plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_4.pdf'
 pdf(file=plot_file, width=7, height=9)
 layout(matrix(c(1,
                 2), 

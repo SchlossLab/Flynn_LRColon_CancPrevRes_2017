@@ -78,5 +78,5 @@ dev.off()
 
 ##### Cowplot way to save the plots! 
 fig2 <- plot_grid(phy_plot, simp_plot, labels = c("A", "B"), label_size=16, ncol = 1, align = "v")  
-save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_2.pdf', fig2, ncol=1, nrow=2, base_width=7, base_height = 4)
+save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_2.pdf', fig2, ncol=1, nrow=2, base_width=6, base_height = 3)
 

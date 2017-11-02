@@ -591,7 +591,7 @@ legend('topright', legend=c("Left lumen", "Right lumen"), pch=c(21, 21), pt.bg=c
 ######################################################## build and export figure 
 #export as PDF
 
-plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_4.pdf'
+plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_5.pdf'
 pdf(file=plot_file, width=7, height=9)
 layout(matrix(c(1,
                 2), 
@@ -646,10 +646,10 @@ mtext('B', side=2, line=7.5, las=1, adj=2, padj=-6.5, cex=2, font=2)
 
 dev.off()
 
-####################################### Figure 5 - updated 
+####################################### Figure 6 - updated 
 #export as PDF
 
-plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_5.pdf'
+plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_6.pdf'
 pdf(file=plot_file, width=7, height=9)
 layout(matrix(c(1,
                 2), 

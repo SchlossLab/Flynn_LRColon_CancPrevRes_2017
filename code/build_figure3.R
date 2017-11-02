@@ -36,19 +36,19 @@ exittyc <- subset(tyc, samp2 == 'SS')
 #plots
 tycpositions <- c("RB_RS", "LS_RS", "LB_RB", "LB_LS")
 lvr_plot <- ggplot(lvsr, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) +theme_bw() + 
-  theme(legend.position="none", axis.title.x=element_blank(), axis.line = element_line(colour = "black"), axis.text = element_text(size= 10), axis.title= element_text(size=12), panel.grid.major = element_blank(),panel.grid.minor = element_blank()) + 
+  theme(legend.position="none", axis.title.x=element_blank(), axis.line = element_line(colour = "black"), panel.grid.major = element_blank(),panel.grid.minor = element_blank()) + 
   scale_x_discrete(limits = tycpositions, breaks = tycpositions,
-                   labels=c("P Mucosa vs P Lumen", "D Lumen vs P Lumen", "D Mucosa vs P Mucosa", "D Mucosa vs D Lumen")) +
-  ylab("ThetaYC distance") 
+                   labels=c("P Muc vs P Lum", "D Lum vs P Lum", "D Muc vs P Muc", "D Muc vs D Lum")) +
+  ylab(expression(theta["YC"]* " dissimilarity"))
 
 
 
 exitpositions <- c("RB_SS", "RS_SS", "LB_SS", "LS_SS")
 exit_plot <- ggplot(exittyc, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) +theme_bw() +
-  theme(legend.position="none", axis.title.x=element_blank(), axis.line = element_line(colour = "black"), axis.text = element_text(size= 10), axis.title= element_text(size=12), panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
+  theme(legend.position="none", axis.title.x=element_blank(), axis.line = element_line(colour = "black"), panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
   scale_x_discrete(limits=exitpositions, breaks=exitpositions,
-                   labels=c("P Mucosa vs Stool", "P Lumen vs Stool", "D Mucosa vs Stool", "D Lumen vs Stool")) +
-  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")
+                   labels=c("P Muc vs Feces", "P Lum vs Feces", "D Muc vs Feces", "D Lum vs Feces")) +
+  theme(axis.title.x=element_blank()) +ylab(expression(theta["YC"]* " dissimilarity"))
 
 #trying to get adonis to work for comparisons 
 
@@ -132,13 +132,15 @@ for (i in 1:nrow(alltyc)){
 alltyc[10] <- as.factor(alltyc[10])
 
 inter_plot <- ggplot(alltyc, aes(x=as.factor(same_pt), y=thetayc)) + geom_boxplot(width=0.5) + theme_bw()+
-  theme(legend.position="none", axis.title.x=element_blank(), axis.line = element_line(colour = "black"), axis.text = element_text(size= 10), axis.title= element_text(size=12), panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
+  theme(legend.position="none", axis.title.x=element_blank(), axis.line = element_line(colour = "black"), panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
   scale_x_discrete(labels=c("Interpersonal", "Intrapersonal")) +
-  theme(axis.title.x=element_blank()) +ylab("ThetaYC distance")
+  theme(axis.title.x=element_blank()) +ylab(expression(theta["YC"]* " dissimilarity"))
 
 inter_medians <- aggregate(thetayc ~ same_pt, alltyc, median)
   
 wilcox.test(thetayc ~ same_pt, data = alltyc)
+
+#axis.text = element_text(size= 10), axis.title= element_text(size=12),
 
 # build and export figure 
 #export as PDF
@@ -165,6 +167,6 @@ dev.off()
 
 
 fig3 <- plot_grid(lvr_plot, exit_plot, inter_plot, labels = c("A", "B", "C"), label_size= 16, ncol = 1, align = "v")  
-save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_3.pdf', fig3, ncol=1, nrow=3, base_width=7, base_height = 4)
+save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_3.pdf', fig3, ncol=1, nrow=3, base_width=5, base_height = 3)
 
 

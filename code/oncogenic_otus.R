@@ -107,7 +107,7 @@ dev.off()
 
 ####Cowplot way!
 
-figS2 <- plot_grid(fuso_plot, fusoviv_plot, porphy_plot, labels = c("A", "B", "C"), ncol = 1, align = "v")  
-save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_S2.pdf', figS2, ncol=1, nrow=3, base_width = 6, base_height=3)
+figS1 <- plot_grid(fuso_plot, fusoviv_plot, porphy_plot, labels = c("A", "B", "C"), ncol = 1, align = "v")  
+save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_S1.pdf', figS1, ncol=1, nrow=3, base_width = 6, base_height=3)
 
 

@@ -592,7 +592,7 @@ legend('topright', legend=c("Left lumen", "Right lumen"), pch=c(21, 21), pt.bg=c
 #export as PDF
 
 plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_5.pdf'
-pdf(file=plot_file, width=7, height=9)
+pdf(file=plot_file, width=6, height=7)
 layout(matrix(c(1,
                 2), 
               nrow=2, byrow = TRUE))
@@ -601,6 +601,8 @@ layout(matrix(c(1,
 
 right_otu_feat <- colnames(aucrf_data_right_bs[2:6])
 otu_taxa_right <- get_tax(1, right_otu_feat, tax_file)
+otu_taxa_right <- separate(otu_taxa_right, tax_label, into = c("OTU", "otu_num"), sep = "\\(")
+formatted4 <- lapply(1:nrow(otu_taxa_right), function(i) bquote(paste(italic(.(otu_taxa_right$OTU[i])), "(", .(otu_taxa_right$otu_num[i]), sep=" ")))
 #Abundance stripchart or most predictive otus
 rs_abunds <- shared_meta[shared_meta$location=='RS', right_otu_feat]/10000 + 1e-4
 rb_abunds <- shared_meta[shared_meta$location=='RB', right_otu_feat]/10000 + 1e-4
@@ -615,7 +617,7 @@ for(i in right_otu_feat){
   segments(median(rb_abunds[,i]),index+0.7,median(rb_abunds[,i]),index, lwd=3)
   index <- index + 2
 }
-axis(2, at=seq(1,index-2,2), labels=otu_taxa_right$tax_label, las=1, line=-0.5, tick=F, cex.axis=0.9)
+axis(2, at=seq(1,index-2,2), labels=do.call(expression,formatted4), las=1, line=-0.5, tick=F, cex.axis=0.9)
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
 legend('topright', legend=c("P Mucosa", "P Lumen"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
 
@@ -624,6 +626,8 @@ mtext('A', side=2, line=7.5, las=1, adj=2, padj=-6.5, cex=2, font=2)
 #just LB vs LS 
 left_otu_feat <- colnames(aucrf_data_left_bs[2:6])
 otu_taxa_left <- get_tax(1, left_otu_feat, tax_file)
+otu_taxa_left <- separate(otu_taxa_left, tax_label, into = c("OTU", "otu_num"), sep = "\\(")
+formatted3 <- lapply(1:nrow(otu_taxa_left), function(i) bquote(paste(italic(.(otu_taxa_left$OTU[i])), "(", .(otu_taxa_left$otu_num[i]), sep=" ")))
 #Abundance stripchart or most predictive otus
 ls_abunds <- shared_meta[shared_meta$location=='LS', left_otu_feat]/10000 + 1e-4
 lb_abunds <- shared_meta[shared_meta$location=='LB', left_otu_feat]/10000 + 1e-4
@@ -638,7 +642,7 @@ for(i in left_otu_feat){
   segments(median(lb_abunds[,i]),index+0.7,median(lb_abunds[,i]),index, lwd=2)
   index <- index + 2
 }
-axis(2, at=seq(1,index-2,2), labels=otu_taxa_left$tax_label, las=1, line=-0.5, tick=F, cex.axis=0.9)
+axis(2, at=seq(1,index-2,2), labels=do.call(expression, formatted3), las=1, line=-0.5, tick=F, cex.axis=0.9)
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
 legend('topright', legend=c("D Mucosa", "D Lumen"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
 
@@ -658,6 +662,8 @@ layout(matrix(c(1,
 #Lb vs Rb
 LRbowel_otu_feat <- colnames(aucrf_data_LRbowel[2:6])
 otu_taxa_LRbowel <- get_tax(1, LRbowel_otu_feat, tax_file)
+otu_taxa_LRbowel <- separate(otu_taxa_LRbowel, tax_label, into = c("OTU", "otu_num"), sep = "\\(")
+formatted1 <- lapply(1:nrow(otu_taxa_LRbowel), function(i) bquote(paste(italic(.(otu_taxa_LRbowel$OTU[i])), "(", .(otu_taxa_LRbowel$otu_num[i]), sep=" ")))
 #Abundance stripchart or most predictive otus 
 lb_abunds <- shared_meta[shared_meta$location=='LB', LRbowel_otu_feat]/10000 + 1e-4
 rblb_abunds <- shared_meta[shared_meta$location=='RB', LRbowel_otu_feat]/10000 + 1e-4
@@ -672,7 +678,7 @@ for(i in LRbowel_otu_feat){
   segments(median(rblb_abunds[,i]),index+0.7,median(rblb_abunds[,i]),index, lwd=3)
   index <- index + 2
 }
-axis(2, at=seq(1,index-2,2), labels=otu_taxa_LRbowel$tax_label, las=1, line=-0.5, tick=F, cex.axis=0.9)
+axis(2, at=seq(1,index-2,2), labels=do.call(expression,formatted1), las=1, line=-0.5, tick=F, cex.axis=0.9)
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
 legend('topright', legend=c("D mucosa", "P mucosa"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
 
@@ -682,6 +688,8 @@ mtext('A', side=2, line=7.5, las=1, adj=2, padj=-6.5, cex=2, font=2)
 #LS vs RS
 LRlumen_otu_feat <- colnames(aucrf_data_LRlumen[2:6])
 otu_taxa_LRlumen <- get_tax(1, LRlumen_otu_feat, tax_file)
+otu_taxa_LRlumen <- separate(otu_taxa_LRlumen, tax_label, into = c("OTU", "otu_num"), sep = "\\(")
+formatted <- lapply(1:nrow(otu_taxa_LRlumen), function(i) bquote(paste(italic(.(otu_taxa_LRlumen$OTU[i])), "(", .(otu_taxa_LRlumen$otu_num[i]), sep=" ")))
 #Abundance stripchart or most predictive otus 
 lsrs_abunds <- shared_meta[shared_meta$location=='LS', LRlumen_otu_feat]/10000 + 1e-4
 rsls_abunds <- shared_meta[shared_meta$location=='RS', LRlumen_otu_feat]/10000 + 1e-4
@@ -696,7 +704,7 @@ for(i in LRlumen_otu_feat){
   segments(median(rsls_abunds[,i]),index+0.7,median(rsls_abunds[,i]),index, lwd=3)
   index <- index + 2
 }
-axis(2, at=seq(1,index-2,2), labels=otu_taxa_LRlumen$tax_label, las=1, line=-0.5, tick=F, cex.axis=0.9)
+axis(2, at=seq(1,index-2,2), labels=do.call(expression, formatted), las=1, line=-0.5, tick=F, cex.axis=0.9)
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
 legend('topright', legend=c("D Lumen", "P Lumen"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
 

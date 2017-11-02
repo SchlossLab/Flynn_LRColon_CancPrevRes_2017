@@ -167,6 +167,6 @@ dev.off()
 
 
 fig3 <- plot_grid(lvr_plot, exit_plot, inter_plot, labels = c("A", "B", "C"), label_size= 16, ncol = 1, align = "v")  
-save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_3.pdf', fig3, ncol=1, nrow=3, base_width=5, base_height = 3)
+save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_3.pdf', fig3, ncol=1, nrow=3, base_width=5, base_height = 2)
 
 

@@ -18,16 +18,16 @@ header-includes:
 geometry: margin=1.0in
 bibliography: references.bib
 ---
-\vspace{15mm}
+\vspace{8mm}
 
 Running title: Spatial variation of native colon microbiota
 
-\vspace{15mm}
+\vspace{8mm}
 
 
 Kaitlin J. Flynn^1^, Charles C. Koumpouras^1^, Mack T. Ruffin IV^2^, D. Kim Turgeon^3$\dagger$^, and Patrick D. Schloss^1$\dagger$^
 
-\vspace{15mm}
+\vspace{8mm}
 
 $\dagger$ Corresponding authors: kturgeon@umich.edu and pschloss@umich.edu
 
@@ -44,9 +44,7 @@ Disclosures: nothing to disclose
 
 Word count:
 
-Fig.s: 
-
-Supplementary Fig.s: 
+Figures: 6
 
 
 \newpage

@@ -149,7 +149,7 @@ legend('bottom', legend=c(sprintf('P lumen vs D lumen, hold-one-out, AUC = 0.580
 ###########saving figures as proper size
 
 plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_4.pdf'
-pdf(file=plot_file, width=7, height=9)
+pdf(file=plot_file, width=4, height=6)
 layout(matrix(c(1,
                 2), 
               nrow=2, byrow = TRUE))
@@ -158,30 +158,30 @@ layout(matrix(c(1,
 #Left and right new method plot
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
-plot(left_roc, col='red', lwd=3, add=T, lty=1)
-plot(right_roc, col = 'blue', lwd=3, add=T, lty=1)
+plot(left_roc, col='red', add=T, lty=1)
+plot(right_roc, col = 'blue', add=T, lty=1)
 mtext(side=2, text="Sensitivity", line=2.5)
 mtext(side=1, text="Specificity", line=2.5)
-legend('bottom', legend=c(
-  sprintf('D Lumen vs D Mucosa, AUC = 0.9079'),
-  sprintf('P Lumen vs P Mucosa, AUC = 0.7645')
-),lty=c(1, 1, 1), lwd=3, col=c('red', 'blue'), bty='n')
+legend('bottomright', legend=c(
+  sprintf('D Lum vs D Muc, AUC = 0.908'),
+  sprintf('P Lum vs P Muc, AUC = 0.764')
+),lty=1, cex=0.8, col=c('red', 'blue'), bty='n')
 
-mtext('A', side=2, line=1.5, las=1, adj=1.7, padj=-7, cex=2, font=2)
+mtext('A', side=2, line=2, las=1, adj=1.5, padj=-5, cex=1.5, font=2)
 
 #stool and mucosa new method plot 
 par(mar=c(4,4,1,1))
 plot(c(1,0),c(0,1), type='l', lty=3, xlim=c(1.01,0), ylim=c(-0.01,1.01), xaxs='i', yaxs='i', ylab='', xlab='')
-plot(muc_roc, col='darkgreen', lwd=3, add=T, lty=1)
-plot(stool_roc, col = 'purple', lwd=3, add=T, lty=1)
+plot(muc_roc, col='darkgreen', add=T, lty=1)
+plot(stool_roc, col = 'purple', add=T, lty=1)
 mtext(side=2, text="Sensitivity", line=2.5)
 mtext(side=1, text="Specificity", line=2.5)
-legend('bottom', legend=c(
-  sprintf('D Mucosa vs P Mucosa, AUC = 0.8500'),
-  sprintf('D Lumen vs P Lumen, AUC = 0.5803')
-),lty=c(1, 1, 1), lwd=3, col=c('darkgreen', 'purple'), bty='n')
+legend('bottomright', legend=c(
+  sprintf('D Muc vs P Muc, AUC = 0.850'),
+  sprintf('D Lum vs P Lum, AUC = 0.580')
+), lty=1, cex=0.8, col=c('darkgreen', 'purple'), bty='n')
 
-mtext('B', side=2, line=1.5, las=1, adj=1.7, padj=-8, cex=2, font=2)
+mtext('B', side=2, line=2, las=1, adj=1.5, padj=-5, cex=1.5, font=2)
 
 dev.off()
 

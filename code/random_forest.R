@@ -619,9 +619,9 @@ for(i in right_otu_feat){
 }
 axis(2, at=seq(1,index-2,2), labels=do.call(expression,formatted4), las=1, line=-0.5, tick=F, cex.axis=0.9)
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
-legend('topright', legend=c("P Mucosa", "P Lumen"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
+legend('topright', legend=c("P Muc", "P Lum"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
 
-mtext('A', side=2, line=7.5, las=1, adj=2, padj=-6.5, cex=2, font=2)
+mtext('A', side=2, line=7.5, las=1, adj=2, padj=-4.5, cex=2, font=2)
 
 #just LB vs LS 
 left_otu_feat <- colnames(aucrf_data_left_bs[2:6])
@@ -644,9 +644,9 @@ for(i in left_otu_feat){
 }
 axis(2, at=seq(1,index-2,2), labels=do.call(expression, formatted3), las=1, line=-0.5, tick=F, cex.axis=0.9)
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
-legend('topright', legend=c("D Mucosa", "D Lumen"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
+legend('topright', legend=c("D Muc", "D Lum"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
 
-mtext('B', side=2, line=7.5, las=1, adj=2, padj=-6.5, cex=2, font=2)
+mtext('B', side=2, line=7.5, las=1, adj=2, padj=-4.5, cex=2, font=2)
 
 dev.off()
 
@@ -654,7 +654,7 @@ dev.off()
 #export as PDF
 
 plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_6.pdf'
-pdf(file=plot_file, width=7, height=9)
+pdf(file=plot_file, width=6, height=7)
 layout(matrix(c(1,
                 2), 
               nrow=2, byrow = TRUE))
@@ -680,9 +680,9 @@ for(i in LRbowel_otu_feat){
 }
 axis(2, at=seq(1,index-2,2), labels=do.call(expression,formatted1), las=1, line=-0.5, tick=F, cex.axis=0.9)
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
-legend('topright', legend=c("D mucosa", "P mucosa"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
+legend('topright', legend=c("D Muc", "P Muc"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
 
-mtext('A', side=2, line=7.5, las=1, adj=2, padj=-6.5, cex=2, font=2)
+mtext('A', side=2, line=7.5, las=1, adj=2, padj=-4.5, cex=2, font=2)
 
 
 #LS vs RS
@@ -706,8 +706,8 @@ for(i in LRlumen_otu_feat){
 }
 axis(2, at=seq(1,index-2,2), labels=do.call(expression, formatted), las=1, line=-0.5, tick=F, cex.axis=0.9)
 axis(1, at=c(1e-4, 1e-3, 1e-2, 1e-1, 1), label=c("0", "0.1", "1", "10", "100"))
-legend('topright', legend=c("D Lumen", "P Lumen"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
+legend('topright', legend=c("D Lum", "P Lum"), pch=c(21, 21), pt.bg=c("black","white"), cex=0.8)
 
-mtext('B', side=2, line=7.5, las=1, adj=2, padj=-6.5, cex=2, font=2)
+mtext('B', side=2, line=7.5, las=1, adj=2, padj=-4.5, cex=2, font=2)
 
 dev.off()

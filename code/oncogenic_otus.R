@@ -34,12 +34,14 @@ fuso179 <- subsampled_meta[, colnames(subsampled_meta) %in% c("group", "patient"
 fuso179[,5] <- (fuso179[,4]/4321)*100
 names(fuso179)[5] <- "Otu00179_relAbund"
 
+fuso_y_title <- expression(paste(italic("F. nucleatum"), " Rel. Abund."))
 positions <- c("RB", "RS", "LB", "LS", "SS")
 fuso_plot <- ggplot(fuso179, aes(x=location, y=Otu00179_relAbund)) +geom_jitter(width=0.3) +theme_bw() +
-  ylab("F. nucleatum Relative Abundance") +
+  ylab(fuso_y_title) +
   scale_x_discrete(limits = positions, breaks=positions, 
-                   labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
-  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=10), panel.grid.major = element_blank(),panel.grid.minor = element_blank())
+                   labels=c("P Muc", "P Lum", "D Muc", "D Lum", "Feces")) +
+  theme(legend.position='none', axis.title.x=element_blank(), axis.title.y=element_text(size=8),panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
+  scale_y_log10()
 
 #IBD fuso OTU - F. varium 
 
@@ -47,12 +49,15 @@ fusoviv <- subsampled_meta[, colnames(subsampled_meta) %in% c("group", "patient"
 fusoviv[,5] <- (fusoviv[,4]/4321)*100
 names(fusoviv)[5] <- "Otu00472_relAbund"
 
+fusoviv_y_title <- expression(paste(italic("F. varium"), " Rel. Abund."))
+
 positions <- c("RB", "RS", "LB", "LS", "SS")
 fusoviv_plot <- ggplot(fusoviv, aes(x=location, y=Otu00472_relAbund)) +geom_jitter(width=0.3) +theme_bw() +
-  ylab("F. varium Relative Abundance") +
+  ylab(fusoviv_y_title) +
   scale_x_discrete(limits = positions, breaks=positions, 
-                   labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
-  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=10), panel.grid.major = element_blank(),panel.grid.minor = element_blank())
+                   labels=c("P Muc", "P Lum", "D Muc", "D Lum", "Feces")) +
+  theme(legend.position='none', axis.title.x=element_blank(), axis.title.y=element_text(size=8), panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
+  scale_y_log10()
 
 
 
@@ -72,12 +77,15 @@ ggplot(p_152, aes(x=location, y=Otu152_abund)) +geom_jitter() +theme_bw()
 
 ggplot(p_asach, aes(x=location, y=Otu00152_abund)) +geom_jitter() +theme_bw()
 
+porph_y_title <- expression(paste(italic("P. asacharolytica"), " Rel. Abund."))
+
 positions <- c("RB", "RS", "LB", "LS", "SS")
 porphy_plot <- ggplot(p_152, aes(x=location, y=Otu152_abund)) +geom_jitter(width=0.3) +theme_bw() +
-  ylab("P. asacharolytica Relative Abundance") +
+  ylab(porph_y_title) +
   scale_x_discrete(limits = positions, breaks=positions, 
-                   labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
-  theme(legend.position='none', axis.title.x=element_blank(), axis.text = element_text(size= 10), axis.title= element_text(size=10), panel.grid.major = element_blank(),panel.grid.minor = element_blank())
+                   labels=c("P Muc", "P Lum", "D Muc", "D Lum", "Feces")) +
+  theme(legend.position='none', axis.title.x=element_blank(), axis.title.y=element_text(size=8),panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
+  scale_y_log10()
 
 
 
@@ -108,6 +116,6 @@ dev.off()
 ####Cowplot way!
 
 figS1 <- plot_grid(fuso_plot, fusoviv_plot, porphy_plot, labels = c("A", "B", "C"), ncol = 1, align = "v")  
-save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_S1.pdf', figS1, ncol=1, nrow=3, base_width = 6, base_height=3)
+save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_S1.pdf', figS1, ncol=1, nrow=3, base_width = 3, base_height=2)
 
 

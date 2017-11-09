@@ -165,7 +165,7 @@ mtext(side=1, text="Specificity", line=2.5)
 legend('bottomright', legend=c(
   sprintf('D Lum vs D Muc, AUC = 0.908'),
   sprintf('P Lum vs P Muc, AUC = 0.764')
-),lty=1, cex=0.8, col=c('red', 'blue'), bty='n')
+),lty=1, lwd = 2, cex=0.7, col=c('red', 'blue'), bty='n')
 
 mtext('A', side=2, line=2, las=1, adj=1.5, padj=-5, cex=1.5, font=2)
 
@@ -179,7 +179,7 @@ mtext(side=1, text="Specificity", line=2.5)
 legend('bottomright', legend=c(
   sprintf('D Muc vs P Muc, AUC = 0.850'),
   sprintf('D Lum vs P Lum, AUC = 0.580')
-), lty=1, cex=0.8, col=c('darkgreen', 'purple'), bty='n')
+), lty=1, lwd=2, cex=0.7, col=c('darkgreen', 'purple'), bty='n')
 
 mtext('B', side=2, line=2, las=1, adj=1.5, padj=-5, cex=1.5, font=2)
 

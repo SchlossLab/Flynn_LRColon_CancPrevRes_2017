@@ -41,7 +41,7 @@ positions <- c("RB", "RS", "LB", "LS", "SS")
 phy_plot <- ggplot(phyla_RAmelt, aes(x=location, y=value)) + geom_boxplot(aes(color=variable)) + 
   scale_color_discrete(guide=FALSE)+
   geom_boxplot(aes(fill=variable), outlier.shape=21) + theme_bw() + 
-  theme(axis.text = element_text(size= 10), axis.title= element_text(size=12)) +
+  theme(axis.text = element_text(size= 10), axis.title= element_text(size=12), panel.border = element_blank()) + 
   scale_x_discrete(limits = positions, breaks=positions, 
                    labels=c("P Mucosa", "P Lumen", "D Mucosa", "D Lumen", "Stool")) +
   theme(axis.title.x=element_blank(), panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) + scale_fill_brewer(palette="Dark2", name="Phylum") +
@@ -77,6 +77,24 @@ simp_plot
 dev.off()
 
 ##### Cowplot way to save the plots! 
-fig2 <- plot_grid(phy_plot, simp_plot, labels = c("A", "B"), label_size=16, ncol = 1, align = "v")  
+#fig2 <- plot_grid(phy_plot, simp_plot, labels = c("A", "B"), label_size=16, ncol = 1, align = "v") 
+
+theme_set(theme_minimal())
+
+fig2 <- plot_grid(
+  plot_grid(
+    phy_plot + theme(legend.position = "none")
+    , simp_plot
+    , ncol = 1
+    , align = "hv"
+    , labels=c("A", "B")
+    , label_size = 16)
+  , plot_grid(
+    get_legend(phy_plot)
+    , ggplot()
+    , ncol =1)
+  , rel_widths = c(7,3)
+)
+
 save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_2.pdf', fig2, ncol=1, nrow=2, base_width=6, base_height = 3)
 

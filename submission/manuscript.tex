@@ -120,7 +120,7 @@ Grant support: Rose and Lawrence C. Page Foundation
 
 Disclosures: nothing to disclose
 
-Word count:
+Word count: 3,965/5,000
 
 Figures: 6
 
@@ -142,18 +142,18 @@ rRNA gene sequencing and Random Forest classification models were built
 using taxa abundance and location to identify microbiota specific to
 each site. The right mucosa and lumen had the most similar community
 structures of the five sites we considered from each subject. The distal
-mucosa had higher relative abundance of Finegoldia, Murdochiella,
-Peptoniphilus, Porphyromonas and Anaerococcus. The proximal mucosa had
-more of the genera Enterobacteriaceae, Bacteroides and Pseudomonas. The
-classification model performed well when classifying mucosal samples
-into proximal or distal sides (AUC=0.850). Separating proximal and
-distal luminal samples proved more challenging (AUC=0.580) and specific
-microbiota that differentiated the two were hard to identify. By
-sampling the unprepped colon, we identified distinct bacterial
-populations native to the proximal and distal sides. Further
-investigation of these bacteria may elucidate if and how these groups
-contribute to different disease processes on their respective sides of
-the colon.
+mucosa had higher relative abundance of \emph{Finegoldia, Murdochiella,
+Peptoniphilus, Porphyromonas} and \emph{Anaerococcus}. The proximal
+mucosa had more of the genera \emph{Enterobacteriaceae, Bacteroides} and
+\emph{Pseudomonas}. The classification model performed well when
+classifying mucosal samples into proximal or distal sides (AUC=0.850).
+Separating proximal and distal luminal samples proved more challenging
+(AUC=0.580) and specific microbiota that differentiated the two were
+hard to identify. By sampling the unprepped colon, we identified
+distinct bacterial populations native to the proximal and distal sides.
+Further investigation of these bacteria may elucidate if and how these
+groups contribute to different disease processes on their respective
+sides of the colon.
 
 Words: 259/260
 
@@ -316,28 +316,29 @@ rarefied to 4231 sequences per sample in order to reduce uneven sampling
 bias.
 
 Diversity analysis was performed using the Simpson diversity calculator
-and \(\theta\)YC calculator metrics in mothur version 1.39.5 (15).
-\(\theta\)YC distances were calculated to determine the dissimilarity
-between two samples. Random Forest classification models were built
-using the AUCRF R package using a leave-one-subject out approach (17).
-For each model the data was split into a 19-subject training set and a
-1-subject test set. The model was built and cross-validated using
-AUCRFcv on the training set. The model was then tested on the left-out
-patient. This process was repeated iteratively for all subjects and
-results plotted as Reciever Operator Characteristic curves using the
-pROC R package (18). Resultant models were used to identify the OTUs
-that were most important for classifying each location. Species-level
-information for sequences of interest was obtained by aligning the
-sequences to the GenBank nucleotide databse using blastn. The species
-name was only used if the identity score was \(\ge\) 99\% over the
-full-length of the contig and matched a single reference.
+and \(\theta\)\textsubscript{YC} calculator metrics in mothur version
+1.39.5 (15). \(\theta\)\textsubscript{YC} distances were calculated to
+determine the dissimilarity between two samples. Random Forest
+classification models were built using the AUCRF R package using a
+leave-one-subject out approach (17). For each model the data was split
+into a 19-subject training set and a 1-subject test set. The model was
+built and cross-validated using AUCRFcv on the training set. The model
+was then tested on the left-out patient. This process was repeated
+iteratively for all subjects and results plotted as Reciever Operator
+Characteristic curves using the pROC R package (18). Resultant models
+were used to identify the OTUs that were most important for classifying
+each location. Species-level information for sequences of interest was
+obtained by aligning the sequences to the GenBank nucleotide databse
+using blastn. The species name was only used if the identity score was
+\(\ge\) 99\% over the full-length of the contig and matched a single
+reference.
 
 \paragraph{Statistical analysis}\label{statistical-analysis}
 
 Differences in community membership at the phyla level were tested using
 the analysis of molecular variance (AMOVA) metric in mothur. Differences
-in \(\theta\)YC distances by location were tested using the Wilcoxon
-rank-sum test adjusted for multiple comparisons using the
+in \(\theta\)\textsubscript{YC} distances by location were tested using
+the Wilcoxon rank-sum test adjusted for multiple comparisons using the
 Benjamini-Hochberg procedure.
 
 \paragraph{Data availability}\label{data-availability}

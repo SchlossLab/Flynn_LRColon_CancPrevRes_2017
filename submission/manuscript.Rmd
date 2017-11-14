@@ -8,6 +8,7 @@ output:
     keep_tex: yes
   html_document: default
   word_document: default
+sansfont: Arial
 header-includes:
 - \usepackage{setspace}
 - \doublespacing
@@ -25,7 +26,7 @@ Running title: Spatial variation of native colon microbiota
 \vspace{8mm}
 
 
-Kaitlin J. Flynn^1^, Charles C. Koumpouras^1^, Mack T. Ruffin IV^2^, D. Kim Turgeon^3$\dagger$^, and Patrick D. Schloss^1$\dagger$^
+Kaitlin J. Flynn^1^, Mack T. Ruffin IV^2^, D. Kim Turgeon^3$\dagger$^, and Patrick D. Schloss^1$\dagger$^
 
 \vspace{8mm}
 
@@ -227,7 +228,7 @@ Here we address the limitations of previous studies and identify the microbes sp
 
 ### Methods
 #### Human subjects
-The procedures in this study and consent were approved by the Institutional Review Board at the University of Michigan Health System with protocol number HUM00082721. Subjects were recruited using the online recruitment platform and were pre-screened prior to enrollment in the study. Exclusion criteria included: use of asprin or NSAIDs within 7 days, use of antibiotics within 3 months, current use of anticoagulants, known allergies to Fentanyl or Benadryl, prior history of colon disease, diabetes, abdominal surgery, respiratory, liver, kidney or brain impairments, undergoing current chemotherapy or radiation treatment and subjects that were pregnant or trying to conceive. 20 subjects that met the criteria were selected and provided signed informed consent prior to the procedure. There were 13 female and 7 male subjects ranging in age from 25 to 64. 
+The procedures in this study and consent were approved by the Institutional Review Board at the University of Michigan Health System with protocol number HUM00082721. Subjects were recruited using the online recruitment platform and were pre-screened prior to enrollment in the study. Exclusion criteria included: use of asprin or NSAIDs within 7 days, use of antibiotics within 3 months, current use of anticoagulants, known allergies to Fentanyl, Versed and Benadryl, prior history of colon disease, diabetes, abdominal surgery, respiratory, liver, kidney or brain impairments, undergoing current chemotherapy or radiation treatment and subjects that were pregnant or trying to conceive. 20 subjects that met the criteria were selected and provided signed informed consent prior to the procedure. There were 13 female and 7 male subjects ranging in age from 25 to 64. 
 
 #### Sample collection
 At a baseline visit, subjects gave consent and were given a home collection stool kit (Zymo). At least one week prior to the scheduled colonoscopy, subjects collected whole stool at home and shipped the samples to a research coordinator on ice. Notably, subjects did not undergo any bowel preparation method prior to sampling. On the procedure day, subjects reported to the Michigan Clinical Research Unit at the University of Michigan Health System. Subjects were consciously sedated using Fentanyl, Versed and/or Benadryl as appropriate. A flexible sigmoidoscope was first inserted about 25cm into the colon and jumbo biopsy forceps used to collect the luminal contents. Two luminal samples were collected and the contents immediately deposited into RNAlater (Fisher) and flash-frozen in liquid nitrogen. The forceps were withdrawn and new biopsy forceps were used to collect mucosal biopsies on sections of the colon that were pink and free of stool matter. Three mucosal biopsies were collected and flash-frozen in RNAlater. These samples comprised the distal colon samples. The sigmoidoscope was then withdrawn and a pediatric colonoscope was inserted to reach the proximal colon. Samples were then collected in the same manner as was done in the distal colon and the colonoscope withdrawn. All samples were stored at -80$^\circ$C.
@@ -241,7 +242,7 @@ Diversity analysis was performed using the Simpson diversity calculator and $\th
 Differences in community membership at the phyla level were tested using the analysis of molecular variance (AMOVA) metric in mothur. Differences in $\theta$~YC~ distances by location were tested using the Wilcoxon rank-sum test adjusted for multiple comparisons using the Benjamini-Hochberg procedure.
 
 #### Data availability
-16S rRNA gene sequence reads and experiment metadata are available on the NCBI Sequence Read Archive (SRA) with accession number XXXX. A reproducible data analysis pipeline can be found at https://github.com/SchlossLab/Flynn_LRColon_CancPrevRes_2017.
+16S rRNA gene sequence reads and experiment metadata are available on the NCBI Sequence Read Archive (SRA) with accession number SRP124947 and PRJNA418115. A reproducible data analysis pipeline can be found at https://github.com/SchlossLab/Flynn_LRColon_CancPrevRes_2017.
 
 ### Results
 
@@ -282,7 +283,7 @@ Specific comparisons of our findings to previously published studies of spatial 
 By revealing specific differences in microbial populations at each location in the gut via sampling an unprepared bowel, we can begin to form hypotheses about how specific host-microbe interactions can affect disease progression of proximal and distal CRC and IBD subtypes. A better understanding of microbial activities in the gut can enhance microbiome-based screening and treatment modalities for these colon diseases.   
 
 ### Acknowledgments 
-We thank all the individuals who volunteered for the study. This work was supported by the Rose and Lawrence C. Page Foundation (DKT). We would also like to thank Brian Kleiner, Chelsea Crofoot, and Kirk Herman for their roles in study coordination, subject recruitment, sample collection and sample processing.
+We thank all the individuals who volunteered for the study. This work was supported by the Rose and Lawrence C. Page Foundation (DKT). We would also like to thank Brian Kleiner, Chelsea Crofoot, and Kirk Herman for their roles in study coordination, subject recruitment, sample collection and sample processing. Thanks also to GI Fellows Drs Amy Hosmer, Alexander Larson and Anna Tavakkoli who assisted Dr. Turgeon with the colonoscopies.
 
 
 \newpage

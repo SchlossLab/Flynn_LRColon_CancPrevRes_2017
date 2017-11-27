@@ -1,8 +1,7 @@
-#looking for cancer OTUs in KWS samples
+#####################################################
+# Builds Figure S1 - oncogenic OTUs 
+#####################################################
 
-#first gotta find the OTU numbers for the cancer bugs
-
-#fuso OTU numbers: Otu00179, Otu00184, Otu00314, Otu00472, Otu01440
 library(cowplot)
 
 meta_file <- read.table(file='data/raw/kws_metadata.tsv', header = T)
@@ -13,22 +12,10 @@ subsampled_file <- read.table(file='data/mothur/kws_final.an.0.03.subsample.shar
 shared_meta <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
 subsampled_meta <- merge(meta_file, subsampled_file, by.x='group', by.y='row.names')
 
+#Fusobacterium OTUs
+#fuso OTU numbers: Otu00179, Otu00184, Otu00314, Otu00472, Otu01440
 
-only_fuso <- shared_meta[, colnames(shared_meta) %in% c('group', 'location', 'Otu00179', 'Otu00184', 'Otu00314', 'Otu00472', 'Otu01440')]
-
-only_subsampled_fuso <- subsampled_meta[, colnames(subsampled_meta) %in% c('group', 'location', 'Otu00179', 'Otu00184', 'Otu00314', 'Otu00472', 'Otu01440')]
-
-only_fuso[,8] <- only_fuso[,3] + only_fuso[,4] + only_fuso[,5] + only_fuso[,6] + only_fuso[,7]
-
-names(only_fuso)[8] <- "total_fuso"
-
-ggplot(only_fuso, aes(x=location, y=total_fuso)) + geom_point() +geom_jitter()
-
-ggplot(only_fuso, aes(x=location, y=Otu00179)) +geom_point() + geom_jitter()
-
-ggplot(only_subsampled_fuso, aes(x=location, y=Otu00179)) +geom_point() + geom_jitter() +theme_bw()
-
-
+# Fusobacterium nucleatum plot - OTU00179
 fuso179 <- subsampled_meta[, colnames(subsampled_meta) %in% c("group", "patient", "location", "Otu00179")]
 
 fuso179[,5] <- (fuso179[,4]/4321)*100
@@ -43,8 +30,8 @@ fuso_plot <- ggplot(fuso179, aes(x=location, y=Otu00179_relAbund)) +geom_jitter(
   theme(legend.position='none', axis.title.x=element_blank(), axis.title.y=element_text(size=8),panel.grid.major = element_blank(),panel.grid.minor = element_blank()) +
   scale_y_log10()
 
-#IBD fuso OTU - F. varium 
 
+#IBD fuso OTU - F. varium OTU00472
 fusoviv <- subsampled_meta[, colnames(subsampled_meta) %in% c("group", "patient", "location", "Otu00472")]
 fusoviv[,5] <- (fusoviv[,4]/4321)*100
 names(fusoviv)[5] <- "Otu00472_relAbund"
@@ -60,22 +47,13 @@ fusoviv_plot <- ggplot(fusoviv, aes(x=location, y=Otu00472_relAbund)) +geom_jitt
   scale_y_log10()
 
 
-
-#other oncogenic otus - Otu00152 is P. asaccharolytica. Otu00248 is p micra
-
-p_asach <- shared_meta[, colnames(shared_meta) %in% c("Group", "patient", "location", "Otu00152")]
-
-p_asach[,4] <- (p_asach[,3]/4321) *100
-names(p_asach)[4] <- "Otu00152_abund"
+#Other oncogenic OTUs
+#Otu00152 is P. asaccharolytica. 
 
 p_152 <-subsampled_meta[, colnames(subsampled_meta) %in% c("Group", "patient", "location", "Otu00152")]
 
 p_152[,4] <- (p_152[,3]/4321) *100
 names(p_152)[4] <- "Otu152_abund"
-
-ggplot(p_152, aes(x=location, y=Otu152_abund)) +geom_jitter() +theme_bw()
-
-ggplot(p_asach, aes(x=location, y=Otu00152_abund)) +geom_jitter() +theme_bw()
 
 porph_y_title <- expression(paste(italic("P. asacharolytica"), " Rel. Abund."))
 
@@ -88,32 +66,15 @@ porphy_plot <- ggplot(p_152, aes(x=location, y=Otu152_abund)) +geom_jitter(width
   scale_y_log10()
 
 
-
+#Otu00248 is P.  micra
 p_micra <- shared_meta[, colnames(shared_meta) %in% c("Group", "patient", "location", "Otu00248")]
-
 p_micra[,4] <- (p_micra[,3]/4321) *100
 names(p_micra)[4] <- "Otu00248_abund"
 
-ggplot(p_micra, aes(x=location, y=Otu00248_abund)) +geom_jitter() +theme_bw()
+ggplot(p_micra, aes(x=location, y=Otu00248_abund)) +geom_jitter() +theme_bw() +scale_y_log10()
 
-########################################Build figure 6 
-#export as PDF
-
-plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_6.pdf'
-pdf(file=plot_file, width=7, height=9)
-layout(matrix(c(1,
-                2), 
-              nrow=2, byrow = TRUE))
-
-fuso_plot
-
-fusoviv_plot
-
-porphy_plot
-
-dev.off()
-
-####Cowplot way!
+########################################
+#Build figure S1 and export as PDF
 
 figS1 <- plot_grid(fuso_plot, fusoviv_plot, porphy_plot, labels = c("A", "B", "C"), ncol = 1, align = "v")  
 save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_S1.pdf', figS1, ncol=1, nrow=3, base_width = 3, base_height=2)

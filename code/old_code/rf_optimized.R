@@ -146,7 +146,8 @@ legend('bottom', legend=c(sprintf('P lumen vs D lumen, hold-one-out, AUC = 0.580
                           sprintf('P lumen vs D lumen, unoptimized, AUC = 0.7551')
 ),lty=c(1, 1), lwd=2, col=c('lightblue', 'darkblue'), bty='n', cex=1.2)
 
-###########saving figures as proper size
+#########################################################################
+# Save and export Figure 4
 
 plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_4.pdf'
 pdf(file=plot_file, width=4, height=6)

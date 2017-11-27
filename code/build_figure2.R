@@ -62,22 +62,9 @@ simp_plot <- ggplot(simpmeta, aes(x=location, y=invsimpson, group =1)) +geom_poi
         panel.grid.minor = element_blank(), axis.line = element_line(colour = "black")) +
   stat_summary(aes(x=location, y=invsimpson), data = simpmeta, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4)
 
-#export as PDF
 
-plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_2.pdf'
-pdf(file=plot_file, width=12, height=7)
-layout(matrix(c(1,
-                2), 
-              nrow=2, byrow = TRUE))
 
-phy_plot
-
-simp_plot 
-
-dev.off()
-
-##### Cowplot way to save the plots! 
-#fig2 <- plot_grid(phy_plot, simp_plot, labels = c("A", "B"), label_size=16, ncol = 1, align = "v") 
+##### Save and export plots for publication
 
 theme_set(theme_minimal())
 

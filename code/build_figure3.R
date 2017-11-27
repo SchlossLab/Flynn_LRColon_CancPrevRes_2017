@@ -50,9 +50,9 @@ exit_plot <- ggplot(exittyc, aes(x=match, y=thetayc)) + geom_boxplot(width=0.8) 
                    labels=c("P Muc vs Feces", "P Lum vs Feces", "D Muc vs Feces", "D Lum vs Feces")) +
   theme(axis.title.x=element_blank()) +ylab(expression(theta["YC"]* " dissimilarity"))
 
-#trying to get adonis to work for comparisons 
+#adonis? 
 
-#for now just do paired wilcoxon with multiple comparisons 
+#paired wilcoxon with multiple comparisons 
 
 pvalues <- c()
 
@@ -116,10 +116,6 @@ alltyc <- separate(alltyc, comparison, into= c('pt2', 'samp2'), sep="-", remove=
 alltyc <- alltyc[-1]
 alltyc <- alltyc[-7]
 
-#ultimately want a plot of all points where pt1 == pt2 in one bar and all of the others in another column 
-#unite and make column of 0/1 for matches? then can plot 1 and 0s 
-#should i separate out lumen and mucosa ? sure or no not for now
-
 alltyc["same_pt"] <- NA
 
 for (i in 1:nrow(alltyc)){
@@ -140,31 +136,8 @@ inter_medians <- aggregate(thetayc ~ same_pt, alltyc, median)
   
 wilcox.test(thetayc ~ same_pt, data = alltyc)
 
-#axis.text = element_text(size= 10), axis.title= element_text(size=12),
-
-# build and export figure 
-#export as PDF
-
-plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_3.pdf'
-pdf(file=plot_file, width=12, height=11)
-layout(matrix(c(1,
-                2,
-                3), 
-              nrow=3, byrow = TRUE))
-
-lvr_plot 
-ggdraw(lvr_plot) + 
-  draw_plot_label("A", size = 14)
-
-exit_plot
-
-inter_plot
-
-dev.off()
-
-
-#cowplot way- use this way!!
-
+#########################################################################
+# build and export figure as PDF
 
 fig3 <- plot_grid(lvr_plot, exit_plot, inter_plot, labels = c("A", "B", "C"), label_size= 16, ncol = 1, align = "v")  
 save_plot('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_3.pdf', fig3, ncol=1, nrow=3, base_width=5, base_height = 2)

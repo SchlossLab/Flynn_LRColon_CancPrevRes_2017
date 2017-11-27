@@ -32,7 +32,6 @@ auc_loc <- function(yourdata, samp1, samp2){
   otu_feat <- rf_aucrf$Xopt
   aucrf_data <- subsetted[, c('location', otu_feat)]
   return(aucrf_data)
-  #also should store this data somewhere. maybe as unique values or within a list?
 }
 
 #generate AUCRF model for 2 sites and return top OTUs

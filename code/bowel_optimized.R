@@ -1,6 +1,6 @@
 ### optimizing RF models by doing leave-one-out, per reviewers suggestions on marc's papers
 
-#Kaitlin Flynn, Schloss lab, updated 9-23-17
+#Kaitlin Flynn, Schloss lab, updated 11-27-17
 
 #Load packages, files, make OTU table 
 pack_used <- c('randomForest','ggplot2', 'pROC', 'knitr','dplyr','AUCRF', 'tidyr', 'caret')
@@ -39,15 +39,6 @@ n_trees <- 2001
 
 source('code/random_functions.R')
 source('code/tax_level.R')
-
-#iteratively, do the following:
-#1) select 19 samples (patients) from the 20, hold out the other one
-#2) train the model using AUCRF and cross validation.
-#3) from that model, will have an AUCRF object that i can use to predict/test on the held out sample
-#4) record the n of variables used in each model, the AUC of the training model and the mtry. Store in a list the value (0/1) that was predicted for the sample from the model
-#5) do that 20x
-#6) aggregate all of the models from the left-out-list to get the AUC table to plot a curve and get an AUC value for the whole model
-# do that for all of the models we have
 
 testsub <- subset(rel_meta, location %in% c("LB", "RB"))
 testsub$location <- factor(testsub$location)

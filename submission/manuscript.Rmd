@@ -294,54 +294,28 @@ We thank all the individuals who volunteered for the study. This work was suppor
 
 \newpage
 
-### Figures
+### Figure legends
 
 ####Figure 1
 Sampling strategy. A flexible sigmoidoscope was used to sample the distal colonic luminal contents and mucosa. The scope was inserted ~ 25cm into the subject and biopsy forceps were used to sample the luminal contents (D, inset). A separate set of biopsy forceps was used to sample the distal mucosa (D, inset). The sigmoidoscope was removed. A pediatric colonoscope was inserted and used to access the proximal colon (P, inset). Biopsies were taken of the proximal luminal contents and mucosa as described. One week prior to the procedure stool was collected at home and sent into the laboratory. Representative images from one individual are shown.
 
-![Fig 1](../submission/fig1.jpg)
-
-\newpage
-
 ####Figure 2
 Phylum-level relative abundance and diversity in the proximal and distal human colon. A) Relative abundance of the top five bacterial phyla in each sampling site. Each box represents the median and interquartile range. B) Simpson diversity of the microbial communities at each location. The horizontal lines represent the median values. 
-
-![Fig 2](../submission/figure_2.pdf)
-
-\newpage
 
 ####Figure 3
 Comparison of microbial community structure between sites of the gut. $\theta$~YC~ distances are shown to indicate the interpersonal dissimilarities between two sites – each point represents one individual. In (A), comparisons of the proximal and distal mucosal and lumen are shown. In (B), comparisons of each site to the exit stool are shown. In (C), comparisons of samples from all subjects to each other (interpersonal) or within one subject (intrapersonal) are shown. 
 
-![Fig 3](../submission/figure_3.pdf)
-
-\newpage
-
 ####Figure 4
 Random Forest classifies locations in the colon. A) Receiver Operator Characteristic curves are shown for the Random Forest model classifying lumen and mucosal samples for the distal (red) and proximal (blue) sides of the colon. (B) Receiver Operator Characteristic curves are shown for the 10-fold cross validation of the Random Forest model classifying distal mucosa vs proximal mucosa (green) and distal lumen versus proximal lumen (purple).
 
-![Fig 4](../submission/figure_4.pdf)
-
-\newpage
 ####Figure 5
 Taxa specific to the distal and proximal sides of the colon. Top five OTUs that are most important for the classification model for the distal mucosa and lumen (A) and the proximal mucosa and lumen (B). The vertical lines represent the median values for each OTU. 
-
-![Fig 5](../submission/figure_5.pdf)
-
-\newpage
 
 ####Figure 6 
 Taxa specific to the distal and proximal mucosa and lumen. The five OTUs that were most important differentiating the distal and proximal mucosa (A) and the distal and proximal lumen (B). The vertical lines represent the median values for each OTU.
 
-![Fig 6](../submission/figure_6.pdf)
-
-\newpage
-
 ####Figure S1
 Location and relative abundance of cancer-associated OTUs. Relative abundance was calculated and plotted by sample site for each OTU of interest: (A) _Fusobacterium nucleatum subsp. animalis_ (B) _Fusobacterium varium_ and (C) _Porphyromonas asacharolytica_ 
-![Fig S1](../submission/figure_S1.pdf)
-
-\newpage
 
 
 

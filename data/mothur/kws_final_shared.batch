@@ -1,0 +1,6 @@
+set.dir(input=/mnt/EXT/Schloss-data/kaitlin/kws_final, output=/mnt/EXT/Schloss-data/kaitlin/kws_final)
+make.shared(list=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.pick.an.unique_list.list, count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.pick.pick.count_table, label=0.03)
+classify.otu(list=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.pick.an.unique_list.list, count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.pick.pick.count_table, taxonomy=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pds.wang.pick.pick.taxonomy, label=0.03)
+system(mv /mnt/EXT/Schloss-data/kaitlin/kws_final/kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.pick.an.unique_list.shared /mnt/EXT/Schloss-data/kaitlin/kws_final/kws_final.an.shared)
+system(mv /mnt/EXT/Schloss-data/kaitlin/kws_final/kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.pick.an.unique_list.0.03.cons.taxonomy /mnt/EXT/Schloss-data/kaitlin/kws_final/kws_final.an.cons.taxonomy)
+count.groups(shared=kws_final.an.shared)

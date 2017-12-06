@@ -242,7 +242,7 @@ labels <- c("LM/LM", "LM/RM", "RM/RM", "LS/LS", "LS/RS", "RS/RS", "LS/SS", "RS/S
 boxplot(left2left, left2right, right2right, LS2LS, LS2RS, RS2RS, LS2SS, RS2SS, SS2SS, main="dissimilarity between sample sites, all patients", ylab="theta YC distance", names=labels)
 
 ## now do simpson diversity per patient
-metasimp <- merge(metadata, simps)
+metasimp <- merge(meta_file, simps)
 
 #want to plot diversity side by side for each patient.
 #plotted with a loop
@@ -274,7 +274,7 @@ ggplot(simpmeta, aes(x=location, y=invsimpson, group =1)) +geom_point() +geom_ji
   stat_summary(aes(x=location, y=invsimpson), data = simpmeta, fun.y=median, fun.ymin=median, fun.ymax=median, geom="crossbar", width=0.4) +
   theme(axis.text = element_text(size= 16), axis.title= element_text(size=18))
 
-
+ggplot(simpmeta, aes(x=site, y=invsimpson)) +geom_boxplot()
 
 
 

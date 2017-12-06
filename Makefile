@@ -2,10 +2,9 @@
 
 # Set local variables
 REFS = data/references
-FIGS = results/figures
-TABLES = data/process/tables
+FIGS = submission
 PROC = data/process
-FINAL = submission
+MOTHUR = data/mothur
 CODE = code
 METADATA = data/raw/metadata
 GZ_FILES = $(wildcard data/raw/*.fastq.gz)
@@ -73,7 +72,8 @@ $(REFS)/trainset14_032015.% :
 	kws_final.files
 
 #run kws batch file up until cluster.split
-
+	bash $(MOTHUR)/kws_final.batch
+	
 #run cluster.split command (in pbs file directly)
 run_mothur_kws_all.PBS
 	#cluster.split(file=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.pick.file, processors=1)
@@ -97,7 +97,7 @@ run_mothur_kws_all-1.PBS
 	
 	R -e "source('code/build_figure3.R')"
 	
-	#random forest model building
+	#random forest model building - make rules for the batch files here 
 	
 	R -e "source('code/build_figure4.R')"
 	
@@ -107,7 +107,7 @@ run_mothur_kws_all-1.PBS
 
 
 
-#where do I put HPC stuff?
+#for HPC stuff? call make mothur.batch within pbs script. but dont want pbs for most people. ? 
 
 
 
@@ -122,8 +122,7 @@ run_mothur_kws_all-1.PBS
 write.paper : $(FINAL)/manuscript.Rmd\
 		$(FIGS)/Figure1.pdf $(FIGS)/Figure2.pdf\
 		$(FIGS)/Figure3.pdf $(FIGS).Figure4.pdf\
-		$(FIGS)/FigureS2.pdf\ $(FIGS)/FigureS3.pdf 
-		$(FIGS)/FigureS4.pdf code/Run_render_paper.R
+		$(FIGS)/FigureS1.pdf code/Run_render_paper.R
 	R -e "source('code/Run_render_paper.R')"
 
 

@@ -1,3 +1,15 @@
+#bashmodule
+
+#set local variables
+DOWNDIR = data/raw
+WORKDIR = data/mothur
+
+#Download data from SRA
+wget -r -q -np -nd -k -P $DOWNDIR ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP062/SRP062005/
+wget -r -q -np -nd -k -P $DOWNDIR ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP096/SRP096978/
+
+
+
 set.dir(input=/mnt/EXT/Schloss-data/kaitlin/kws_final, output=/mnt/EXT/Schloss-data/kaitlin/kws_final)
 make.contigs(file=kws_final.files, processors=8)
 set.dir(input=/mnt/EXT/Schloss-data/kaitlin/kws_final, output=/mnt/EXT/Schloss-data/kaitlin/kws_final)
@@ -22,10 +34,3 @@ summary.seqs(fasta=kws_final.trim.contigs.good.unique.good.filter.unique.preclus
 classify.seqs(fasta=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.fasta, count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.count_table, reference=/mnt/EXT/Schloss-data/kaitlin/trainset14_032015.pds.fasta, taxonomy=/mnt/EXT/Schloss-data/kaitlin/trainset14_032015.pds.tax, cutoff=80, processors=8)
 remove.lineage(fasta=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.fasta, count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.count_table, taxonomy=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pds.wang.taxonomy, taxon=Chloroplast-Mitochondria-unknown-Archaea-Eukaryota)
 remove.groups(count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.pick.count_table, fasta=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.fasta, taxonomy=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pds.wang.pick.taxonomy, groups=MOCK1-MOCK2-MOCK3-MOCK4)
-cluster.split(fasta=gf_fulldata.unique.fasta, count=gf_fulldata.count_table, taxonomy=gf_fulldata.taxonomy, splitmethod=classify, taxlevel=4, cutoff=0.15)
-make.shared(list=gf_fulldata.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.an.unique_list.list, count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.pick.count_table, label=0.03)
-classify.otu(list=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.an.unique_list.list, count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.pick.count_table, taxonomy=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pds.wang.pick.taxonomy, label=0.03)
-system(mv /mnt/EXT/Schloss-data/kaitlin/kws_final/kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.an.unique_list.shared /mnt/EXT/Schloss-data/kaitlin/kws_final/kws_final.an.shared)
-system(mv /mnt/EXT/Schloss-data/kaitlin/kws_final/kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.an.unique_list.0.03.cons.taxonomy /mnt/EXT/Schloss-data/kaitlin/kws_final/kws_final.an.cons.taxonomy)
-count.groups(shared=kws_final.an.shared)
-#phylotype(taxonomy=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pds.wang.pick.pick.taxonomy)

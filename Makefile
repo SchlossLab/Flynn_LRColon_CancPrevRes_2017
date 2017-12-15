@@ -68,13 +68,13 @@ $(REFS)/trainset14_032015.% :
 #																				 #
 ##################################################################################
 
-#need to get fastqs 
-	kws_final.files
-
+#with the fastq.gzs downloaded into data/raw,
 #run kws batch file up until cluster.split
+run.mothur : $(MOTHUR)/kws_final.files\
+$(GZ_FILES)
 	bash $(MOTHUR)/kws_final.batch
 	
-#run cluster.split command (in pbs file directly)
+#run cluster.split command to make the .file, then cluster.split 
 run_mothur_kws_all.PBS
 	#cluster.split(file=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.pick.file, processors=1)
 

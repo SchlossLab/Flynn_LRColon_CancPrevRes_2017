@@ -5,32 +5,36 @@ DOWNDIR = data/raw
 WORKDIR = data/mothur
 
 #Download data from SRA
-wget -r -q -np -nd -k -P $DOWNDIR ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP062/SRP062005/
-wget -r -q -np -nd -k -P $DOWNDIR ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP096/SRP096978/
+wget -r -q -np -nd -k -P $DOWNDIR ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP124/SRP124947/
 
+#Unzip fastq files and place them in work directory
+#for sample in $DOWNDIR/*.sra
+#do
+#	fastq-dump --split-files $sample -O $WORKDIR
+#
+#done
 
-
-set.dir(input=/mnt/EXT/Schloss-data/kaitlin/kws_final, output=/mnt/EXT/Schloss-data/kaitlin/kws_final)
-make.contigs(file=kws_final.files, processors=8)
-set.dir(input=/mnt/EXT/Schloss-data/kaitlin/kws_final, output=/mnt/EXT/Schloss-data/kaitlin/kws_final)
-summary.seqs(fasta=kws_final.trim.contigs.fasta)
-screen.seqs(fasta=kws_final.trim.contigs.fasta, group=kws_final.contigs.groups, summary=kws_final.trim.contigs.summary, maxambig=0, maxlength=275, processors=8)
-summary.seqs(fasta=kws_final.trim.contigs.good.fasta)
-unique.seqs(fasta=kws_final.trim.contigs.good.fasta)
-count.seqs(name=kws_final.trim.contigs.good.names, group=kws_final.contigs.good.groups)
-summary.seqs(count=kws_final.trim.contigs.good.count_table)
-pcr.seqs(fasta=/mnt/EXT/Schloss-data/kaitlin/silva.bacteria.fasta, start=11894, end=25319, keepdots=F, processors=8)
-system(mv /mnt/EXT/Schloss-data/kaitlin/kws_final/silva.bacteria.pcr.fasta /mnt/EXT/Schloss-data/kaitlin/kws_final/silva.v4.fasta)
-align.seqs(fasta=kws_final.trim.contigs.good.unique.fasta, reference=/mnt/EXT/Schloss-data/kaitlin/kws_final/silva.v4.fasta, processors=8)
-summary.seqs(fasta=kws_final.trim.contigs.good.unique.align, count=kws_final.trim.contigs.good.count_table, processors=8)
-screen.seqs(fasta=kws_final.trim.contigs.good.unique.align, count=kws_final.trim.contigs.good.count_table, summary=kws_final.trim.contigs.good.unique.summary, start=1968, end=11550, maxhomop=8)
-summary.seqs(fasta=current, count=current)
-filter.seqs(fasta=kws_final.trim.contigs.good.unique.good.align, vertical=T, trump=.)
-unique.seqs(fasta=kws_final.trim.contigs.good.unique.good.filter.fasta, count=kws_final.trim.contigs.good.good.count_table)
-pre.cluster(fasta=/mnt/EXT/Schloss-data/kaitlin/kws_final/kws_final.trim.contigs.good.unique.good.filter.unique.fasta, count=/mnt/EXT/Schloss-data/kaitlin/kws_final/kws_final.trim.contigs.good.unique.good.filter.count_table, diffs=2, processors=2)
-chimera.uchime(fasta=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.fasta, count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.count_table, dereplicate=t, processors=8)
-remove.seqs(fasta=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.fasta, accnos=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.accnos)
-summary.seqs(fasta=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.fasta, count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.pick.count_table, processors=8)
-classify.seqs(fasta=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.fasta, count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.count_table, reference=/mnt/EXT/Schloss-data/kaitlin/trainset14_032015.pds.fasta, taxonomy=/mnt/EXT/Schloss-data/kaitlin/trainset14_032015.pds.tax, cutoff=80, processors=8)
-remove.lineage(fasta=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.fasta, count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.count_table, taxonomy=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pds.wang.taxonomy, taxon=Chloroplast-Mitochondria-unknown-Archaea-Eukaryota)
-remove.groups(count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.pick.count_table, fasta=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.fasta, taxonomy=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pds.wang.pick.taxonomy, groups=MOCK1-MOCK2-MOCK3-MOCK4)
+mothur "#set.dir(input=$DOWNDIR, output=$WORKDIR);
+		make.contigs(file=kws_final.files, processors=8);
+		set.dir(input=$DOWNDIR, output=$WORKDIR);
+		summary.seqs(fasta=kws_final.trim.contigs.fasta);
+		screen.seqs(fasta=kws_final.trim.contigs.fasta, group=kws_final.contigs.groups, summary=kws_final.trim.contigs.summary, maxambig=0, maxlength=275, processors=8);
+		summary.seqs(fasta=kws_final.trim.contigs.good.fasta);
+		unique.seqs(fasta=kws_final.trim.contigs.good.fasta);
+		count.seqs(name=kws_final.trim.contigs.good.names, group=kws_final.contigs.good.groups);
+		summary.seqs(count=kws_final.trim.contigs.good.count_table);
+		pcr.seqs(fastasilva.bacteria.fasta, start=11894, end=25319, keepdots=F, processors=8);
+		system(mv /mnt/EXT/Schloss-data/kaitlin/kws_final/silva.bacteria.pcr.fasta /mnt/EXT/Schloss-data/kaitlin/kws_final/silva.v4.fasta);
+		align.seqs(fasta=kws_final.trim.contigs.good.unique.fasta, reference=/mnt/EXT/Schloss-data/kaitlin/kws_final/silva.v4.fasta, processors=8);
+		summary.seqs(fasta=kws_final.trim.contigs.good.unique.align, count=kws_final.trim.contigs.good.count_table, processors=8);
+		screen.seqs(fasta=kws_final.trim.contigs.good.unique.align, count=kws_final.trim.contigs.good.count_table, summary=kws_final.trim.contigs.good.unique.summary, start=1968, end=11550, maxhomop=8);
+		summary.seqs(fasta=current, count=current);
+		filter.seqs(fasta=kws_final.trim.contigs.good.unique.good.align, vertical=T, trump=.);
+		unique.seqs(fasta=kws_final.trim.contigs.good.unique.good.filter.fasta, count=kws_final.trim.contigs.good.good.count_table);
+		pre.cluster(fasta=/mnt/EXT/Schloss-data/kaitlin/kws_final/kws_final.trim.contigs.good.unique.good.filter.unique.fasta, count=/mnt/EXT/Schloss-data/kaitlin/kws_final/kws_final.trim.contigs.good.unique.good.filter.count_table, diffs=2, processors=2);
+		chimera.uchime(fasta=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.fasta, count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.count_table, dereplicate=t, processors=8);
+		remove.seqs(fasta=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.fasta, accnos=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.accnos);
+		summary.seqs(fasta=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.fasta, count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.pick.count_table, processors=8);
+		classify.seqs(fasta=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.fasta, count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.count_table, reference=/mnt/EXT/Schloss-data/kaitlin/trainset14_032015.pds.fasta, taxonomy=/mnt/EXT/Schloss-data/kaitlin/trainset14_032015.pds.tax, cutoff=80, processors=8);
+		remove.lineage(fasta=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.fasta, count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.count_table, taxonomy=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pds.wang.taxonomy, taxon=Chloroplast-Mitochondria-unknown-Archaea-Eukaryota);
+		remove.groups(count=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.pick.count_table, fasta=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.fasta, taxonomy=kws_final.trim.contigs.good.unique.good.filter.unique.precluster.pick.pds.wang.pick.taxonomy, groups=MOCK1-MOCK2-MOCK3-MOCK4);

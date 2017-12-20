@@ -70,4 +70,8 @@ for(p in unique(testsub$patient)){
   test_results <- rbind(test_results, held_out_results)
 }
 
+right_xopt <- aucrf_test$Xopt
+right_imp_otus <- testsub[,c('location', right_xopt)]
+
+r_imp_otus <- write.table(right_imp_otus, file = 'data/process/r_imp_otus.tsv', sep = '\t')
 right_optimized <- write.table(test_results, file = 'data/process/right_optimized.tsv', sep = '\t')

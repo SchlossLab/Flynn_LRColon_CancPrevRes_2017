@@ -525,6 +525,8 @@ legend('topright', legend=c("Left mucosa", "Left lumen"), pch=c(21, 21), pt.bg=c
 right_otu_feat <- colnames(aucrf_data_right_bs[2:6])
 otu_taxa_right <- get_tax(1, right_otu_feat, tax_file)
 #Abundance stripchart or most predictive otus
+rs_test <- shared_meta[shared_meta$location=='RS', right_otu_feat]/10000 + 1e-4
+
 rs_abunds <- shared_meta[shared_meta$location=='RS', right_otu_feat]/10000 + 1e-4
 rb_abunds <- shared_meta[shared_meta$location=='RB', right_otu_feat]/10000 + 1e-4
 

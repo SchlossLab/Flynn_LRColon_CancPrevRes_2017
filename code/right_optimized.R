@@ -1,6 +1,6 @@
 ### optimizing RF models by doing leave-one-out, per reviewers suggestions on marc's papers
 
-#Kaitlin Flynn, Schloss lab, updated 9-23-17
+#Kaitlin Flynn, Schloss lab, updated 2-1-8
 
 #Load packages, files, make OTU table 
 pack_used <- c('randomForest','ggplot2', 'pROC', 'knitr','dplyr','AUCRF', 'tidyr', 'caret')
@@ -17,6 +17,15 @@ for (dep in pack_used){
 meta_file <- read.table(file='data/raw/kws_metadata.tsv', header = T)
 shared_file <- read.table(file='data/mothur/kws_final.an.shared', sep = '\t', header=T, row.names=2)
 tax_file <- read.table(file='data/mothur/kws_final.an.cons.taxonomy', sep = '\t', header=T, row.names=1)
+
+# do with filtered, then subsampled file
+filter_sub_shared <- read.table(file='data/mothur/kws_final.an.0.03.filter.0.03.subsample.shared', sep = '\t', header=T, row.names=2)
+
+
+
+# or do with subsampled, then filtered file 
+sub_filter_shared <- read.table(file='data/mothur/kws_final.an.0.03.subsample.0.03.filter.shared', sep = '\t', header=T, row.names=2)
+
 
 #make OTU abundance file
 #Create df with relative abundances

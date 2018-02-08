@@ -64,7 +64,7 @@ source('code/tax_level.R')
 #6) aggregate all of the models from the left-out-list to get the AUC table to plot a curve and get an AUC value for the whole model
 # do that for all of the models we have
 
-testsub <- subset(subs_meta, location %in% c("RB", "RS"))
+testsub <- subset(subs_meta, location %in% c("LB", "LS"))
 testsub$location <- factor(testsub$location)
 levels(testsub$location) <- c(1:length(levels(testsub$location))-1)
 
@@ -85,8 +85,8 @@ for(p in unique(testsub$patient)){
   test_results <- rbind(test_results, held_out_results)
 }
 
-right_xopt <- aucrf_test$Xopt
-right_imp_otus <- testsub[,c('location', right_xopt)]
+left_xopt <- aucrf_test$Xopt
+left_imp_otus <- testsub[,c('location', left_xopt)]
 
-r_imp_otus <- write.table(right_imp_otus, file = 'data/process/r_imp_otus.tsv', sep = '\t')
-right_optimized <- write.table(test_results, file = 'data/process/right_optimized.tsv', sep = '\t')
+l_imp_otus <- write.table(left_imp_otus, file = 'data/process/l_imp_otus.tsv', sep = '\t')
+left_optimized <- write.table(test_results, file = 'data/process/left_optimized.tsv', sep = '\t')

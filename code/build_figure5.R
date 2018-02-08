@@ -2,7 +2,7 @@
 # Build figure 5 - abundance charts of feature selected OTUs from RF models
 # Kaitlin Flynn, Schloss lab, updated 12-20-17
 
-PUT TAX FILE AND SHARED META UP IN HURR
+# PUT TAX FILE AND SHARED META UP IN HURR
 source('code/random_functions.R')
 source('code/tax_level.R')
 #from optimized model code that is run on the cluster, import file with OTUs and abundances 

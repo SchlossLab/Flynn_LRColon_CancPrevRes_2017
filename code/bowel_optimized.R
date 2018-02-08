@@ -18,19 +18,34 @@ meta_file <- read.table(file='data/raw/kws_metadata.tsv', header = T)
 shared_file <- read.table(file='data/mothur/kws_final.an.shared', sep = '\t', header=T, row.names=2)
 tax_file <- read.table(file='data/mothur/kws_final.an.cons.taxonomy', sep = '\t', header=T, row.names=1)
 
+subs_file <- read.table(file='data/mothur/kws_final.an.0.03.subsample.shared', sep = '\t', header = T, row.names=2)
+
 #make OTU abundance file
 #Create df with relative abundances
 shared_file <- subset(shared_file, select = -c(numOtus, label))
 shared_meta <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
-
 rel_abund <- 100*shared_file/unique(apply(shared_file, 1, sum))
+
+#do rel abund calcs for subsampled
+subs_file <- subset(subs_file, select = -c(numOtus, label))
+subs_meta <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
+subs_abund <- 100*subs_file/unique(apply(subs_file, 1, sum))
+
 
 #Create vector of OTUs with median abundances >1%
 OTUs_1 <- apply(rel_abund, 2, max) > 1
 OTU_list <- colnames(rel_abund)[OTUs_1]
+
+OTUs_sub <- apply(subs_abund, 2, max) > 1
+OTU_list_sub <- colnames(subs_abund)[OTUs_sub]
+
 #get df of just top OTUs
 rel_abund_top <- rel_abund[, OTUs_1]
 rel_meta <- merge(meta_file, rel_abund_top, by.x='group', by.y="row.names")
+
+subs_abund_top <- subs_abund[, OTUs_sub]
+subs_meta <- merge(meta_file, subs_abund_top, by.x='group', by.y="row.names")
+
 
 print("loaded and organized data")
 
@@ -40,7 +55,7 @@ n_trees <- 2001
 source('code/random_functions.R')
 source('code/tax_level.R')
 
-testsub <- subset(rel_meta, location %in% c("LB", "RB"))
+testsub <- subset(subs_meta, location %in% c("LB", "RB"))
 testsub$location <- factor(testsub$location)
 levels(testsub$location) <- c(1:length(levels(testsub$location))-1)
 

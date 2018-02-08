@@ -99,6 +99,14 @@ run_mothur_kws_all-1.PBS
 	
 	#random forest model building - make rules for the batch files here 
 	
+leftPBS_optimized.pbs : $(CODE)/left_optimized.R\
+
+rightPBS_optimized.pbs : $(CODE)/right_optimized.R\
+
+stoolPBS_optimized.pbs : $(CODE)/stool_optimized.R\
+
+bowelPBS_optimized.pbs : $(CODE)/bowel_optimized.R\
+	
 	R -e "source('code/build_figure4.R')"
 	
 	R -e "source('code/build_figure5.R')"

@@ -79,8 +79,24 @@ right_optimized_results <- read.table(file = 'data/process/right_optimized.tsv',
 bowel_optimized_results <- read.table(file = 'data/process/bowel_optimized.tsv', sep = '\t')
 stool_optimized_results <- read.table(file = 'data/process/stool_optimized.tsv', sep = '\t')
 
+##############
+# make test datasets for each
+
+testsubS <- subset(subs_meta, location %in% c("RS", "LS"))
+testsubS$location <- factor(testsubS$location)
+levels(testsubS$location) <- c(1:length(levels(testsubS$location))-1)
+
+testsubM <- subset(subs_meta, location %in% c("RB", "LB"))
+testsubM$location <- factor(testsubM$location)
+levels(testsubM$location) <- c(1:length(levels(testsubM$location))-1)
+
+
+
+
 left_roc <- roc(testsub$location ~ left_optimized_results$one)
 right_roc <- roc(testsubR$location ~ right_optimized_results$one)
+
+bowel_optimized_results <- bowel_optimized_results[-13,]
 
 muc_roc <- roc(testsubM$location ~ bowel_optimized_results$one)
 stool_roc <- roc(testsubS$location ~ stool_optimized_results$one)

@@ -90,16 +90,29 @@ testsubM <- subset(subs_meta, location %in% c("RB", "LB"))
 testsubM$location <- factor(testsubM$location)
 levels(testsubM$location) <- c(1:length(levels(testsubM$location))-1)
 
+testsubR <- subset(subs_meta, location %in% c("RB", "RS"))
+testsubR$location <- factor(testsubR$location)
+levels(testsubR$location) <- c(1:length(levels(testsubR$location))-1)
+
+testsubL <- subset(subs_meta, location %in% c("LB", "LS"))
+testsubL$location <- factor(testsubL$location)
+levels(testsubL$location) <- c(1:length(levels(testsubL$location))-1)
 
 
-
-left_roc <- roc(testsub$location ~ left_optimized_results$one)
+left_roc <- roc(testsubL$location ~ left_optimized_results$one)
 right_roc <- roc(testsubR$location ~ right_optimized_results$one)
 
 bowel_optimized_results <- bowel_optimized_results[-13,]
 
 muc_roc <- roc(testsubM$location ~ bowel_optimized_results$one)
 stool_roc <- roc(testsubS$location ~ stool_optimized_results$one)
+
+#print AUCs
+auc_muc <- auc(muc_roc)
+auc_stool <- auc(stool_roc)
+
+auc_right <- auc(right_roc)
+auc_left <- auc(left_roc)
 
 #########################################################################
 # Save and export Figure 4
@@ -120,7 +133,7 @@ mtext(side=2, text="Sensitivity", line=2.5)
 mtext(side=1, text="Specificity", line=2.5)
 legend('bottomright', legend=c(
   sprintf('D Lum vs D Muc, AUC = 0.908'),
-  sprintf('P Lum vs P Muc, AUC = 0.764')
+  sprintf('P Lum vs P Muc, AUC = 0.716')
 ),lty=1, lwd = 2, cex=0.7, col=c('red', 'blue'), bty='n')
 
 mtext('A', side=2, line=2, las=1, adj=1.5, padj=-5, cex=1.5, font=2)

@@ -2,7 +2,7 @@
 
 #PBS -N left_optimized
 
-#PBS -l nodes=1:ppn=8,mem=99gb
+#PBS -l nodes=1:ppn=8,mem=46gb
 #PBS -l walltime=476:00:00
 
 #PBS -j oe

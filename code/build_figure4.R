@@ -11,19 +11,34 @@ meta_file <- read.table(file='data/raw/kws_metadata.tsv', header = T)
 shared_file <- read.table(file='data/mothur/kws_final.an.shared', sep = '\t', header=T, row.names=2)
 tax_file <- read.table(file='data/mothur/kws_final.an.cons.taxonomy', sep = '\t', header=T, row.names=1)
 
+subs_file <- read.table(file='data/mothur/kws_final.an.0.03.subsample.shared', sep = '\t', header = T, row.names=2)
+
 #make OTU abundance file
 #Create df with relative abundances
 shared_file <- subset(shared_file, select = -c(numOtus, label))
 shared_meta <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
-
 rel_abund <- 100*shared_file/unique(apply(shared_file, 1, sum))
+
+#do rel abund calcs for subsampled
+subs_file <- subset(subs_file, select = -c(numOtus, label))
+subs_meta <- merge(meta_file, shared_file, by.x='group', by.y='row.names')
+subs_abund <- 100*subs_file/unique(apply(subs_file, 1, sum))
+
 
 #Create vector of OTUs with median abundances >1%
 OTUs_1 <- apply(rel_abund, 2, max) > 1
 OTU_list <- colnames(rel_abund)[OTUs_1]
+
+OTUs_sub <- apply(subs_abund, 2, max) > 1
+OTU_list_sub <- colnames(subs_abund)[OTUs_sub]
+
 #get df of just top OTUs
 rel_abund_top <- rel_abund[, OTUs_1]
 rel_meta <- merge(meta_file, rel_abund_top, by.x='group', by.y="row.names")
+
+subs_abund_top <- subs_abund[, OTUs_sub]
+subs_meta <- merge(meta_file, subs_abund_top, by.x='group', by.y="row.names")
+
 
 print("loaded and organized data")
 
@@ -47,7 +62,7 @@ source('code/tax_level.R')
 # code needs to be run on a high performance computer cluster - takes too much memory and time
 
 ################ Run the following on HPCC / flux
-testsub <- subset(rel_meta, location %in% c("LB", "LS"))
+testsub <- subset(subs_meta, location %in% c("LB", "LS"))
 testsub$location <- factor(testsub$location)
 levels(testsub$location) <- c(1:length(levels(testsub$location))-1)
 
@@ -132,7 +147,7 @@ plot(right_roc, col = 'blue', add=T, lty=1)
 mtext(side=2, text="Sensitivity", line=2.5)
 mtext(side=1, text="Specificity", line=2.5)
 legend('bottomright', legend=c(
-  sprintf('D Lum vs D Muc, AUC = 0.908'),
+  sprintf('D Lum vs D Muc, AUC = 0.863'),
   sprintf('P Lum vs P Muc, AUC = 0.716')
 ),lty=1, lwd = 2, cex=0.7, col=c('red', 'blue'), bty='n')
 
@@ -146,8 +161,8 @@ plot(stool_roc, col = 'purple', add=T, lty=1)
 mtext(side=2, text="Sensitivity", line=2.5)
 mtext(side=1, text="Specificity", line=2.5)
 legend('bottomright', legend=c(
-  sprintf('D Muc vs P Muc, AUC = 0.850'),
-  sprintf('D Lum vs P Lum, AUC = 0.580')
+  sprintf('D Muc vs P Muc, AUC = 0.808'),
+  sprintf('D Lum vs P Lum, AUC = 0.599')
 ), lty=1, lwd=2, cex=0.7, col=c('darkgreen', 'purple'), bty='n')
 
 mtext('B', side=2, line=2, las=1, adj=1.5, padj=-5, cex=1.5, font=2)

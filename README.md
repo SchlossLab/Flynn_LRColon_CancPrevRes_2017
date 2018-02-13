@@ -8,10 +8,6 @@ Overview
     project
     |- README          # the top level description of content
     |
-    |- doc/            # documentation for the study
-    |  |- notebook/    # preliminary analyses (dead branches of analysis)
-    |  +- paper/       # manuscript(s), whether generated or not
-    |
     |- data            # raw and primary data, are not changed once created
     |  |- references/  # reference files to be used in analysis
     |  |- raw/         # raw data, will not be altered
@@ -20,15 +16,12 @@ Overview
     |                  # will be committed to repo
     |
     |- code/           # any programmatic code
-    |- results         # all output from workflows and analyses
-    |  |- tables/      # text version of tables to be rendered with kable in R
-    |  |- figures/     # graphs, likely designated for manuscript figures
-    |  +- pictures/    # diagrams, images, and other non-graph graphics
+    |  |- old_code     # old or prelimary branches of analysis
+    |  |- PBS_scripts  # scripts for running on the HPCC
     |
-    |- scratch/        # temporary files that can be safely deleted or lost
+    |- doc/            # protocol, IRB and other documents
     |
-    |- study.Rmd       # executable Rmarkdown for this study, if applicable
-    |- study.md        # Markdown (GitHub) version of the *Rmd file
-    |- study.html      # HTML version of *.Rmd file
+    |- submission/     # submission documents, including figures and responses to reviewers
+    |  |- manuscript.* # executable Rmarkdown and pdf for this study
     |
     +- Makefile        # executable Makefile for this study, if applicable

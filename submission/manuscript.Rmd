@@ -3,11 +3,11 @@ title: "Spatial variation of the native colon microbiota in healthy adults"
 csl: aacr.csl
 fontsize: 12pt
 output:
-  word_document: default
   pdf_document:
     includes: null
     keep_tex: yes
   html_document: default
+  word_document: default
 header-includes:
 - \usepackage{setspace}
 - \doublespacing

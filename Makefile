@@ -115,10 +115,6 @@ bowelPBS_optimized.pbs : $(CODE)/bowel_optimized.R\
 
 
 
-#for HPC stuff? call make mothur.batch within pbs script. but dont want pbs for most people. ? 
-
-
-
 #####################################################################################
 #																					#
 # Part 4: Pull it all together 														#
@@ -128,12 +124,9 @@ bowelPBS_optimized.pbs : $(CODE)/bowel_optimized.R\
 #####################################################################################
 
 write.paper : $(FINAL)/manuscript.Rmd\
-		$(FIGS)/Figure1.pdf $(FIGS)/Figure2.pdf\
-		$(FIGS)/Figure3.pdf $(FIGS).Figure4.pdf\
-		$(FIGS)/FigureS1.pdf code/Run_render_paper.R
-	R -e "source('code/Run_render_paper.R')"
-
-
+		$(FIGS)/fig1.jpg $(FIGS)/figure_2.pdf\
+		$(FIGS)/figure_3.pdf $(FIGS).figure_4.pdf\
+		$(FIGS)/figure_S1.pdf 
 
 
 

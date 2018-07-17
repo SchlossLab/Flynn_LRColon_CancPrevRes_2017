@@ -6,6 +6,10 @@
 source('code/random_functions.R')
 source('code/tax_level.R')
 
+library(AUCRF)
+library(dplyr)
+library(pROC)
+
 #load in all of the files, get rel abund of >1% 
 
 meta_file <- read.table(file='data/raw/kws_metadata.tsv', header = T)
@@ -55,6 +59,14 @@ aucrf_data_LRlumen <- auc_loc(subs_meta, "LS", "RS")
 
 plot_file <- '~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_5.pdf'
 pdf(file=plot_file, width=6, height=7)
+layout(matrix(c(1,
+                2), 
+              nrow=2, byrow = TRUE))
+
+#try exporting as jpg for poster
+
+
+jpeg('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_5.jpg', width=6, height=7, units='in', res=300)
 layout(matrix(c(1,
                 2), 
               nrow=2, byrow = TRUE))
@@ -124,6 +136,13 @@ layout(matrix(c(1,
                 2), 
               nrow=2, byrow = TRUE))
 
+#for exporting as Jpeg for poster
+jpeg('~/Documents/Flynn_LRColon_XXXX_2017/submission/figure_6.jpg', width=6, height=7, units='in', res=300)
+layout(matrix(c(1,
+                2), 
+              nrow=2, byrow = TRUE))
+
+
 #Lb vs Rb
 LRbowel_otu_feat <- colnames(aucrf_data_LRbowel[2:6])
 otu_taxa_LRbowel <- get_tax(1, LRbowel_otu_feat, tax_file)
@@ -151,7 +170,7 @@ mtext('A', side=2, line=7.5, las=1, adj=2, padj=-4.5, cex=2, font=2)
 
 
 #LS vs RS
-LRlumen_otu_feat <- colnames(aucrf_data_LRlumen[2:6])
+LRlumen_otu_feat <- colnames(aucrf_data_LRlumen[2:5])
 otu_taxa_LRlumen <- get_tax(1, LRlumen_otu_feat, tax_file)
 otu_taxa_LRlumen <- separate(otu_taxa_LRlumen, tax_label, into = c("OTU", "otu_num"), sep = "\\(")
 formatted <- lapply(1:nrow(otu_taxa_LRlumen), function(i) bquote(paste(italic(.(otu_taxa_LRlumen$OTU[i])), "(", .(otu_taxa_LRlumen$otu_num[i]), sep=" ")))

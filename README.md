@@ -24,4 +24,3 @@ Overview
     |- submission/     # submission documents, including figures and responses to reviewers
     |  |- manuscript.* # executable Rmarkdown and pdf for this study
     |
-    +- Makefile        # executable Makefile for this study, if applicable
